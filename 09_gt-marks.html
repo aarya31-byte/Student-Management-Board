@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        GT Upload Marks
+    </title>
+
+
+    <!-- GOOGLE FONT -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- PANEL CSS -->
+<link rel="stylesheet" href="16_panel.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+                        MAIN PANEL
+===================================================== -->
+
+<div class="panel">
+
+
+    <!-- =================================================
+                        SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="sidebar-logo-icon">
+
+                <i class="fa-solid fa-laptop-code"></i>
+
+            </div>
+
+        </div>
+
+
+        <h2>
+            Ganishka Technology
+        </h2>
+
+
+        <p>
+            Admin Panel
+        </p>
+
+
+        <ul class="sidebar-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <li
+                onclick="window.location.href='06_gt-dashboard.html'">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </li>
+
+
+            <!-- STUDENTS -->
+
+            <li
+                onclick="window.location.href='07_gt-students.html'">
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+                <span>
+                    Students
+                </span>
+
+            </li>
+            <!-- ATTENDANCE -->
+
+<li onclick="goToPage('11_gt-attendance.html')">
+
+    <i class="fa-solid fa-calendar-check"></i>
+
+    <span>
+        Attendance
+    </span>
+
+</li>
+
+
+            <!-- ASSIGNMENTS -->
+
+           <li
+    onclick="window.location.href='08_gt-assignments.html'">
+
+    <i class="fa-solid fa-list-check"></i>
+
+    <span>
+        Assignments
+    </span>
+
+</li>
+
+
+            <!-- MARKS -->
+
+            <li class="active">
+
+                <i class="fa-solid fa-pen-to-square"></i>
+
+                <span>
+                    Upload Marks
+                </span>
+
+            </li>
+
+
+            <!-- RESULTS -->
+
+            <li
+                onclick="window.location.href='10_gt-results.html'">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>
+                    Results
+                </span>
+
+            </li>
+
+
+            <!-- MAIN DASHBOARD -->
+
+            <li
+                onclick="window.location.href='04_dashboard.html'">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <span>
+                    Main Dashboard
+                </span>
+
+            </li>
+
+
+        </ul>
+
+
+        <!-- LOGOUT -->
+
+        <div class="sidebar-logout">
+
+            <button onclick="logout()">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================================
+                        CONTENT
+    ================================================== -->
+
+    <main class="content">
+
+
+        <!-- =================================================
+                        TOP HEADER
+        ================================================== -->
+
+        <div class="top">
+
+
+            <div class="top-title">
+
+                <span>
+                    GANISHKA TECHNOLOGY
+                </span>
+
+                <h1>
+                    Upload Marks
+                </h1>
+
+                <p>
+                    Add and manage student academic marks.
+                </p>
+
+            </div>
+
+
+            <div class="top-admin">
+
+
+                <div>
+
+                    <small>
+                        Welcome
+                    </small>
+
+                    <strong id="gtAdminName">
+                        Administrator
+                    </strong>
+
+                </div>
+
+
+                <div class="top-admin-icon">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                    MARKS FORM
+        ================================================== -->
+
+        <div class="form-box">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        STUDENT PERFORMANCE
+                    </span>
+
+                    <h2 id="marksFormTitle">
+                        Upload Student Marks
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <form id="marksForm">
+
+
+                <div class="form-grid">
+
+
+                    <!-- STUDENT -->
+
+                    <div class="form-group">
+
+                        <label for="marksStudent">
+
+                            Student
+
+                        </label>
+
+
+                        <select
+                            id="marksStudent"
+                            required>
+
+
+                            <option value="">
+
+                                Select Student
+
+                            </option>
+
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- WORK -->
+
+                    <div class="form-group">
+
+                        <label for="marksWork">
+
+                            Assignment / Project
+
+                        </label>
+
+
+                        <select
+                            id="marksWork"
+                            required>
+
+
+                            <option value="">
+
+                                Select Assignment / Project
+
+                            </option>
+
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- OBTAINED MARKS -->
+
+                    <div class="form-group">
+
+                        <label for="obtainedMarks">
+
+                            Obtained Marks
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="obtainedMarks"
+                            placeholder="Enter obtained marks"
+                            min="0"
+                            required>
+
+                    </div>
+
+
+
+                    <!-- TOTAL MARKS -->
+
+                    <div class="form-group">
+
+                        <label for="totalMarks">
+
+                            Total Marks
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="totalMarks"
+                            placeholder="Example: 100"
+                            min="1"
+                            required>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- BUTTONS -->
+
+                <div class="form-buttons">
+
+
+                    <button
+                        type="submit"
+                        class="primary-btn"
+                        id="marksSubmitBtn">
+
+
+                        <i class="fa-solid fa-plus"></i>
+
+
+                        <span>
+                            Upload Marks
+                        </span>
+
+
+                    </button>
+
+
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        id="marksResetBtn">
+
+
+                        <i class="fa-solid fa-rotate-left"></i>
+
+
+                        Reset
+
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                    MARKS TABLE
+        ================================================== -->
+
+        <div class="table-box">
+
+
+            <div class="table-header">
+
+
+                <div>
+
+                    <span class="section-label">
+                        MARKS RECORD
+                    </span>
+
+                    <h2>
+                        Student Marks
+                    </h2>
+
+                </div>
+
+
+                <div class="search-wrapper">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+
+                    <input
+                        type="text"
+                        id="marksSearch"
+                        placeholder="Search student or assignment...">
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="table-responsive">
+
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Student ID
+                            </th>
+
+                            <th>
+                                Student Name
+                            </th>
+
+                            <th>
+                                Work
+                            </th>
+
+                            <th>
+                                Marks
+                            </th>
+
+                            <th>
+                                Percentage
+                            </th>
+
+                            <th>
+                                Grade
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="marksTable">
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+            <div
+                id="marksEmpty"
+                class="empty-message">
+
+
+                <i class="fa-solid fa-pen-to-square"></i>
+
+                <p>
+                    No marks uploaded yet.
+                </p>
+
+                <span>
+                    Upload marks using the form above.
+                </span>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- =====================================================
+                    JAVASCRIPT
+===================================================== -->
+
+<script src="17_script.js"></script>
+
+
+<script>
+
+
+/* =========================================
+            LOGIN CHECK
+========================================= */
+
+
+if (
+
+    localStorage.getItem(
+        "isLoggedIn"
+    )
+
+    !==
+
+    "true"
+
+) {
+
+    window.location.href =
+        "01_index.html";
+
+}
+
+
+
+/* =========================================
+            ADMIN NAME
+========================================= */
+
+
+const adminName =
+
+    localStorage.getItem(
+        "adminName"
+    );
+
+
+if (adminName) {
+
+
+    const adminElement =
+
+        document.getElementById(
+            "gtAdminName"
+        );
+
+
+    if (adminElement) {
+
+        adminElement.textContent =
+            adminName;
+
+    }
+
+}
+
+
+
+/* =========================================
+                LOGOUT
+========================================= */
+
+
+function logout() {
+
+
+    localStorage.removeItem(
+        "isLoggedIn"
+    );
+
+
+    localStorage.removeItem(
+        "adminName"
+    );
+
+
+    window.location.href =
+        "01_index.html";
+
+}
+
+
+
+/* =========================================
+          MARKS VARIABLES
+========================================= */
+
+
+let editingMarksId = null;
+
+
+
+/* =========================================
+          GET STUDENTS
+========================================= */
+
+
+function getStudentsForMarks() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gtStudents"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =========================================
+              GET WORK
+========================================= */
+
+
+function getWorkForMarks() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gtWork"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =========================================
+              GET MARKS
+========================================= */
+
+
+function getGTMarks() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gtMarks"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =========================================
+              SAVE MARKS
+========================================= */
+
+
+function saveGTMarks(
+    marks
+) {
+
+
+    localStorage.setItem(
+
+        "gtMarks",
+
+        JSON.stringify(
+            marks
+        )
+
+    );
+
+}
+
+
+
+/* =========================================
+        LOAD STUDENTS IN SELECT
+========================================= */
+
+
+function loadMarksStudents() {
+
+
+    const studentSelect =
+
+        document.getElementById(
+            "marksStudent"
+        );
+
+
+    if (!studentSelect) {
+
+        return;
+
+    }
+
+
+    const students =
+        getStudentsForMarks();
+
+
+    studentSelect.innerHTML = `
+
+        <option value="">
+
+            Select Student
+
+        </option>
+
+    `;
+
+
+    students.forEach(
+
+        function(student) {
+
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                student._id;
+
+
+            option.textContent =
+
+                student.studentId +
+
+                " - " +
+
+                student.name;
+
+
+            studentSelect.appendChild(
+                option
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =========================================
+        LOAD ASSIGNMENTS / PROJECTS
+========================================= */
+
+
+function loadMarksWork() {
+
+
+    const workSelect =
+
+        document.getElementById(
+            "marksWork"
+        );
+
+
+    if (!workSelect) {
+
+        return;
+
+    }
+
+
+    const work =
+        getWorkForMarks();
+
+
+    workSelect.innerHTML = `
+
+        <option value="">
+
+            Select Assignment / Project
+
+        </option>
+
+    `;
+
+
+    work.forEach(
+
+        function(item) {
+
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                item._id;
+
+
+            option.textContent =
+
+                item.type +
+
+                " - " +
+
+                item.title;
+
+
+            workSelect.appendChild(
+                option
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =========================================
+        INITIALIZE MARKS PAGE
+========================================= */
+
+
+function initializeMarksPage() {
+
+
+    const marksForm =
+
+        document.getElementById(
+            "marksForm"
+        );
+
+
+    const resetButton =
+
+        document.getElementById(
+            "marksResetBtn"
+        );
+
+
+    const searchInput =
+
+        document.getElementById(
+            "marksSearch"
+        );
+
+
+    loadMarksStudents();
+
+
+    loadMarksWork();
+
+
+    renderMarks();
+
+
+
+    if (marksForm) {
+
+
+        marksForm.addEventListener(
+
+            "submit",
+
+            handleMarksSubmit
+
+        );
+
+    }
+
+
+
+    if (resetButton) {
+
+
+        resetButton.addEventListener(
+
+            "click",
+
+            resetMarksForm
+
+        );
+
+    }
+
+
+
+    if (searchInput) {
+
+
+        searchInput.addEventListener(
+
+            "input",
+
+            function() {
+
+
+                renderMarks(
+
+                    searchInput.value
+
+                );
+
+            }
+
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+          ADD / UPDATE MARKS
+========================================= */
+
+
+function handleMarksSubmit(
+    event
+) {
+
+
+    event.preventDefault();
+
+
+
+    const studentId =
+
+        document.getElementById(
+            "marksStudent"
+        ).value;
+
+
+
+    const workId =
+
+        document.getElementById(
+            "marksWork"
+        ).value;
+
+
+
+    const obtained =
+
+        Number(
+
+            document.getElementById(
+                "obtainedMarks"
+            ).value
+
+        );
+
+
+
+    const total =
+
+        Number(
+
+            document.getElementById(
+                "totalMarks"
+            ).value
+
+        );
+
+
+
+    if (
+
+        !studentId ||
+
+        !workId ||
+
+        isNaN(obtained) ||
+
+        isNaN(total)
+
+    ) {
+
+
+        alert(
+
+            "Please fill all marks details."
+
+        );
+
+
+        return;
+
+    }
+
+
+
+    if (
+
+        obtained < 0 ||
+
+        total <= 0 ||
+
+        obtained > total
+
+    ) {
+
+
+        alert(
+
+            "Please enter valid marks."
+
+        );
+
+
+        return;
+
+    }
+
+
+
+    const students =
+        getStudentsForMarks();
+
+
+    const work =
+        getWorkForMarks();
+
+
+    const marks =
+        getGTMarks();
+
+
+
+    const student =
+
+        students.find(
+
+            function(item) {
+
+                return (
+
+                    item._id ===
+                    studentId
+
+                );
+
+            }
+
+        );
+
+
+
+    const selectedWork =
+
+        work.find(
+
+            function(item) {
+
+                return (
+
+                    item._id ===
+                    workId
+
+                );
+
+            }
+
+        );
+
+
+
+    if (
+
+        !student ||
+
+        !selectedWork
+
+    ) {
+
+
+        alert(
+
+            "Student or work not found."
+
+        );
+
+
+        return;
+
+    }
+
+
+
+    const percentage =
+
+        (
+
+            obtained /
+
+            total
+
+        ) *
+
+        100;
+
+
+
+    let grade;
+
+
+
+    if (
+        percentage >= 90
+    ) {
+
+        grade = "A+";
+
+    }
+
+    else if (
+        percentage >= 80
+    ) {
+
+        grade = "A";
+
+    }
+
+    else if (
+        percentage >= 70
+    ) {
+
+        grade = "B+";
+
+    }
+
+    else if (
+        percentage >= 60
+    ) {
+
+        grade = "B";
+
+    }
+
+    else if (
+        percentage >= 50
+    ) {
+
+        grade = "C";
+
+    }
+
+    else if (
+        percentage >= 40
+    ) {
+
+        grade = "D";
+
+    }
+
+    else {
+
+        grade = "F";
+
+    }
+
+
+
+    /* =====================================
+                UPDATE MARKS
+    ===================================== */
+
+
+    if (
+        editingMarksId !== null
+    ) {
+
+
+        const index =
+
+            marks.findIndex(
+
+                function(item) {
+
+                    return (
+
+                        item._id ===
+                        editingMarksId
+
+                    );
+
+                }
+
+            );
+
+
+
+        if (
+            index !== -1
+        ) {
+
+
+            marks[index] = {
+
+                ...marks[index],
+
+                studentId:
+                    studentId,
+
+                workId:
+                    workId,
+
+                obtained:
+                    obtained,
+
+                total:
+                    total,
+
+                percentage:
+                    percentage,
+
+                grade:
+                    grade
+
+            };
+
+
+            saveGTMarks(
+                marks
+            );
+
+
+            alert(
+
+                "Marks updated successfully!"
+
+            );
+
+
+            resetMarksForm();
+
+
+            renderMarks();
+
+
+            return;
+
+        }
+
+    }
+
+
+
+    /* =====================================
+                ADD MARKS
+    ===================================== */
+
+
+    const newMarks = {
+
+
+        _id:
+
+            Date.now().toString(),
+
+
+        studentId:
+
+            studentId,
+
+
+        workId:
+
+            workId,
+
+
+        obtained:
+
+            obtained,
+
+
+        total:
+
+            total,
+
+
+        percentage:
+
+            percentage,
+
+
+        grade:
+
+            grade
+
+
+    };
+
+
+
+    marks.push(
+        newMarks
+    );
+
+
+
+    saveGTMarks(
+        marks
+    );
+
+
+
+    alert(
+
+        "Marks uploaded successfully!"
+
+    );
+
+
+
+    resetMarksForm();
+
+
+    renderMarks();
+
+}
+
+
+
+/* =========================================
+              RENDER MARKS
+========================================= */
+
+
+function renderMarks(
+
+    searchTerm = ""
+
+) {
+
+
+    const table =
+
+        document.getElementById(
+            "marksTable"
+        );
+
+
+    const empty =
+
+        document.getElementById(
+            "marksEmpty"
+        );
+
+
+    if (!table) {
+
+        return;
+
+    }
+
+
+
+    const students =
+        getStudentsForMarks();
+
+
+    const work =
+        getWorkForMarks();
+
+
+    const marks =
+        getGTMarks();
+
+
+
+    const search =
+
+        searchTerm
+        .toLowerCase()
+        .trim();
+
+
+
+    const filteredMarks =
+
+        marks.filter(
+
+            function(mark) {
+
+
+                const student =
+
+                    students.find(
+
+                        function(item) {
+
+                            return (
+
+                                item._id ===
+                                mark.studentId
+
+                            );
+
+                        }
+
+                    );
+
+
+
+                const selectedWork =
+
+                    work.find(
+
+                        function(item) {
+
+                            return (
+
+                                item._id ===
+                                mark.workId
+
+                            );
+
+                        }
+
+                    );
+
+
+
+                if (
+
+                    !student ||
+
+                    !selectedWork
+
+                ) {
+
+                    return false;
+
+                }
+
+
+
+                const studentText =
+
+                    student.studentId +
+
+                    " " +
+
+                    student.name;
+
+
+
+                const workText =
+
+                    selectedWork.title;
+
+
+
+                return (
+
+                    studentText
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    workText
+                    .toLowerCase()
+                    .includes(search)
+
+                );
+
+            }
+
+        );
+
+
+
+    table.innerHTML = "";
+
+
+
+    if (
+
+        filteredMarks.length === 0
+
+    ) {
+
+
+        if (empty) {
+
+            empty.style.display =
+                "block";
+
+        }
+
+
+        return;
+
+    }
+
+
+
+    if (empty) {
+
+        empty.style.display =
+            "none";
+
+    }
+
+
+
+    filteredMarks.forEach(
+
+        function(mark) {
+
+
+            const student =
+
+                students.find(
+
+                    function(item) {
+
+                        return (
+
+                            item._id ===
+                            mark.studentId
+
+                        );
+
+                    }
+
+                );
+
+
+
+            const selectedWork =
+
+                work.find(
+
+                    function(item) {
+
+                        return (
+
+                            item._id ===
+                            mark.workId
+
+                        );
+
+                    }
+
+                );
+
+
+
+            const row =
+
+                document.createElement(
+                    "tr"
+                );
+
+
+
+            row.innerHTML = `
+
+                <td>
+
+                    ${student
+                        ? escapeHTML(
+                            student.studentId
+                        )
+                        : "-"
+                    }
+
+                </td>
+
+
+                <td>
+
+                    ${student
+                        ? escapeHTML(
+                            student.name
+                        )
+                        : "-"
+                    }
+
+                </td>
+
+
+                <td>
+
+                    ${selectedWork
+                        ? escapeHTML(
+                            selectedWork.title
+                        )
+                        : "-"
+                    }
+
+                </td>
+
+
+                <td>
+
+                    ${mark.obtained}
+
+                    /
+
+                    ${mark.total}
+
+                </td>
+
+
+                <td>
+
+                    ${mark.percentage.toFixed(2)}%
+
+                </td>
+
+
+                <td>
+
+                    <strong>
+
+                        ${mark.grade}
+
+                    </strong>
+
+                </td>
+
+
+                <td>
+
+
+                    <button
+
+                        class="edit-btn"
+
+                        onclick="editGTMarks('${mark._id}')">
+
+
+                        <i class="fa-solid fa-pen"></i>
+
+
+                    </button>
+
+
+
+                    <button
+
+                        class="delete-btn"
+
+                        onclick="deleteGTMarks('${mark._id}')">
+
+
+                        <i class="fa-solid fa-trash"></i>
+
+
+                    </button>
+
+
+                </td>
+
+            `;
+
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =========================================
+                EDIT MARKS
+========================================= */
+
+
+function editGTMarks(
+    marksId
+) {
+
+
+    const marks =
+        getGTMarks();
+
+
+
+    const mark =
+
+        marks.find(
+
+            function(item) {
+
+                return (
+
+                    item._id ===
+                    marksId
+
+                );
+
+            }
+
+        );
+
+
+
+    if (!mark) {
+
+        return;
+
+    }
+
+
+
+    document.getElementById(
+        "marksStudent"
+    ).value =
+
+        mark.studentId;
+
+
+
+    document.getElementById(
+        "marksWork"
+    ).value =
+
+        mark.workId;
+
+
+
+    document.getElementById(
+        "obtainedMarks"
+    ).value =
+
+        mark.obtained;
+
+
+
+    document.getElementById(
+        "totalMarks"
+    ).value =
+
+        mark.total;
+
+
+
+    editingMarksId =
+        marksId;
+
+
+
+    document.getElementById(
+        "marksFormTitle"
+    ).textContent =
+
+        "Update Student Marks";
+
+
+
+    document.getElementById(
+        "marksSubmitBtn"
+    ).innerHTML = `
+
+        <i class="fa-solid fa-pen-to-square"></i>
+
+        <span>
+            Update Marks
+        </span>
+
+    `;
+
+
+
+    document
+    .querySelector(".form-box")
+    ?.scrollIntoView({
+
+        behavior:
+            "smooth"
+
+    });
+
+}
+
+
+
+/* =========================================
+              DELETE MARKS
+========================================= */
+
+
+function deleteGTMarks(
+    marksId
+) {
+
+
+    const confirmation =
+
+        confirm(
+
+            "Are you sure you want to delete these marks?"
+
+        );
+
+
+
+    if (!confirmation) {
+
+        return;
+
+    }
+
+
+
+    const marks =
+        getGTMarks();
+
+
+
+    const updatedMarks =
+
+        marks.filter(
+
+            function(item) {
+
+                return (
+
+                    item._id !==
+                    marksId
+
+                );
+
+            }
+
+        );
+
+
+
+    saveGTMarks(
+        updatedMarks
+    );
+
+
+
+    renderMarks();
+
+
+
+    alert(
+
+        "Marks deleted successfully!"
+
+    );
+
+}
+
+
+
+/* =========================================
+              RESET MARKS FORM
+========================================= */
+
+
+function resetMarksForm() {
+
+
+    const form =
+
+        document.getElementById(
+            "marksForm"
+        );
+
+
+    if (form) {
+
+        form.reset();
+
+    }
+
+
+
+    editingMarksId =
+        null;
+
+
+
+    document.getElementById(
+        "marksFormTitle"
+    ).textContent =
+
+        "Upload Student Marks";
+
+
+
+    document.getElementById(
+        "marksSubmitBtn"
+    ).innerHTML = `
+
+        <i class="fa-solid fa-plus"></i>
+
+        <span>
+            Upload Marks
+        </span>
+
+    `;
+
+}
+
+
+
+/* =========================================
+              ESCAPE HTML
+========================================= */
+
+
+function escapeHTML(
+    value
+) {
+
+
+    const div =
+
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        value;
+
+
+    return div.innerHTML;
+
+}
+
+
+
+/* =========================================
+              INITIALIZE
+========================================= */
+
+
+initializeMarksPage();
+
+
+</script>
+
+
+</body>
+
+</html>

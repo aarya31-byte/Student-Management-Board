@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GA Final Exam</title>
+
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <link rel="stylesheet"
+          href="16_panel.css">
+
+</head>
+
+
+<body>
+
+
+<div class="panel">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="sidebar-logo-icon">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+        </div>
+
+
+        <h2>
+            Ganishka Academy
+        </h2>
+
+
+        <p>
+            Admin Panel
+        </p>
+
+
+
+        <ul class="sidebar-menu">
+
+
+            <li
+                onclick="window.location.href='11_ga-dashboard.html'">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </li>
+
+
+
+            <li
+                onclick="window.location.href='12_ga-students.html'">
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+                <span>
+                    Students
+                </span>
+
+            </li>
+
+
+
+            <li
+                onclick="window.location.href='13_ga-coding-practice.html'">
+
+                <i class="fa-solid fa-code"></i>
+
+                <span>
+                    Coding Practice
+                </span>
+
+            </li>
+
+<!-- ATTENDANCE -->
+
+<li onclick="goToPage('11_gt-attendance.html')">
+
+    <i class="fa-solid fa-calendar-check"></i>
+
+    <span>
+        Attendance
+    </span>
+
+</li>
+
+            <li class="active">
+
+                <i class="fa-solid fa-file-pen"></i>
+
+                <span>
+                    Final Exam
+                </span>
+
+            </li>
+
+
+
+            <li
+                onclick="window.location.href='15_ga-results.html'">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>
+                    Results
+                </span>
+
+            </li>
+
+
+
+            <li
+                onclick="window.location.href='04_dashboard.html'">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <span>
+                    Main Dashboard
+                </span>
+
+            </li>
+
+
+        </ul>
+
+
+
+        <div class="sidebar-logout">
+
+            <button onclick="logout()">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="content">
+
+
+        <!-- TOP HEADER -->
+
+        <div class="top">
+
+
+            <div class="top-title">
+
+
+                <span>
+                    GANISHKA ACADEMY
+                </span>
+
+
+                <h1>
+                    Final Exam
+                </h1>
+
+
+                <p>
+                    Manage final examination marks and performance.
+                </p>
+
+
+            </div>
+
+
+
+            <div class="top-admin">
+
+
+                <div>
+
+                    <small>
+                        Welcome
+                    </small>
+
+
+                    <strong id="gaAdminName">
+                        Administrator
+                    </strong>
+
+                </div>
+
+
+
+                <div class="top-admin-icon">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================= ADD EXAM RECORD ================= -->
+
+        <div class="form-box">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+
+                    <span class="section-label">
+                        FINAL EXAM
+                    </span>
+
+
+                    <h2>
+                        Add Final Exam Record
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <form id="examForm">
+
+
+                <div class="form-grid">
+
+
+                    <!-- STUDENT -->
+
+                    <div class="form-group">
+
+
+                        <label for="examStudent">
+
+                            Select Student
+
+                        </label>
+
+
+                        <select
+
+                            id="examStudent"
+
+                            required>
+
+
+                            <option value="">
+
+                                Select Student
+
+                            </option>
+
+
+                        </select>
+
+
+                    </div>
+
+
+
+                    <!-- SUBJECT -->
+
+                    <div class="form-group">
+
+
+                        <label for="examSubject">
+
+                            Subject
+
+                        </label>
+
+
+                        <select
+
+                            id="examSubject"
+
+                            required>
+
+
+                            <option value="">
+
+                                Select Subject
+
+                            </option>
+
+
+                            <option value="HTML & CSS">
+
+                                HTML & CSS
+
+                            </option>
+
+
+                            <option value="JavaScript">
+
+                                JavaScript
+
+                            </option>
+
+
+                            <option value="Python">
+
+                                Python
+
+                            </option>
+
+
+                            <option value="Java">
+
+                                Java
+
+                            </option>
+
+
+                            <option value="Web Development">
+
+                                Web Development
+
+                            </option>
+
+
+                        </select>
+
+
+                    </div>
+
+
+
+                    <!-- TOTAL MARKS -->
+
+                    <div class="form-group">
+
+
+                        <label for="examTotal">
+
+                            Total Marks
+
+                        </label>
+
+
+                        <input
+
+                            type="number"
+
+                            id="examTotal"
+
+                            min="1"
+
+                            placeholder="Enter total marks"
+
+                            required>
+
+
+                    </div>
+
+
+
+                    <!-- OBTAINED MARKS -->
+
+                    <div class="form-group">
+
+
+                        <label for="examObtained">
+
+                            Obtained Marks
+
+                        </label>
+
+
+                        <input
+
+                            type="number"
+
+                            id="examObtained"
+
+                            min="0"
+
+                            placeholder="Enter obtained marks"
+
+                            required>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- BUTTONS -->
+
+                <div class="form-buttons">
+
+
+                    <button
+
+                        type="submit"
+
+                        class="primary-btn">
+
+
+                        <i class="fa-solid fa-plus"></i>
+
+
+                        Add Exam Result
+
+
+                    </button>
+
+
+
+                    <button
+
+                        type="reset"
+
+                        class="secondary-btn">
+
+
+                        <i class="fa-solid fa-rotate-left"></i>
+
+
+                        Reset
+
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+
+        <!-- ================= EXAM TABLE ================= -->
+
+        <div class="table-box">
+
+
+            <div class="table-header">
+
+
+                <div>
+
+
+                    <span class="section-label">
+
+                        EXAM RECORDS
+
+                    </span>
+
+
+                    <h2>
+
+                        Final Exam Records
+
+                    </h2>
+
+
+                </div>
+
+
+
+                <div class="search-wrapper">
+
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+
+                    <input
+
+                        type="text"
+
+                        id="searchExam"
+
+                        placeholder="Search student, ID or subject...">
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="table-responsive">
+
+
+                <table>
+
+
+                    <thead>
+
+
+                        <tr>
+
+
+                            <th>
+                                Student ID
+                            </th>
+
+
+                            <th>
+                                Student Name
+                            </th>
+
+
+                            <th>
+                                Subject
+                            </th>
+
+
+                            <th>
+                                Total
+                            </th>
+
+
+                            <th>
+                                Obtained
+                            </th>
+
+
+                            <th>
+                                Percentage
+                            </th>
+
+
+                            <th>
+                                Grade
+                            </th>
+
+
+                            <th>
+                                Status
+                            </th>
+
+
+                            <th>
+                                Action
+                            </th>
+
+
+                        </tr>
+
+
+                    </thead>
+
+
+                    <tbody id="examTable">
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+
+            <div
+
+                id="examEmpty"
+
+                class="empty-message">
+
+
+                <i class="fa-solid fa-file-circle-xmark"></i>
+
+
+                <p>
+
+                    No final exam records found.
+
+                </p>
+
+
+                <span>
+
+                    Add an exam record using the form above.
+
+                </span>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- COMMON JS -->
+
+<script src="17_script.js"></script>
+
+
+
+<script>
+
+
+/* =========================================
+        LOGIN CHECK
+========================================= */
+
+
+if (
+
+    localStorage.getItem(
+        "isLoggedIn"
+    )
+
+    !==
+
+    "true"
+
+) {
+
+
+    window.location.href =
+        "01_index.html";
+
+}
+
+
+
+/* =========================================
+        GET STUDENTS
+========================================= */
+
+
+function getStudents() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gaStudents"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =========================================
+        GET EXAM RECORDS
+========================================= */
+
+
+function getExamRecords() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gaExams"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =========================================
+        SAVE EXAM RECORDS
+========================================= */
+
+
+function saveExamRecords(
+
+    records
+
+) {
+
+
+    localStorage.setItem(
+
+        "gaExams",
+
+        JSON.stringify(
+            records
+        )
+
+    );
+
+}
+
+
+
+/* =========================================
+        LOAD STUDENTS
+========================================= */
+
+
+function loadStudents() {
+
+
+    const select =
+
+        document.getElementById(
+            "examStudent"
+        );
+
+
+    const students =
+        getStudents();
+
+
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select Student
+
+        </option>
+
+    `;
+
+
+
+    students.forEach(
+
+        function(student) {
+
+
+            const option =
+
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+
+                student._id;
+
+
+
+            option.textContent =
+
+                student.studentId +
+
+                " - " +
+
+                student.name;
+
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =========================================
+        ADD EXAM RECORD
+========================================= */
+
+
+document
+
+.getElementById(
+    "examForm"
+)
+
+.addEventListener(
+
+    "submit",
+
+    function(event) {
+
+
+        event.preventDefault();
+
+
+
+        const studentId =
+
+            document.getElementById(
+                "examStudent"
+            )
+            .value;
+
+
+
+        const subject =
+
+            document.getElementById(
+                "examSubject"
+            )
+            .value;
+
+
+
+        const total =
+
+            Number(
+
+                document.getElementById(
+                    "examTotal"
+                )
+                .value
+
+            );
+
+
+
+        const obtained =
+
+            Number(
+
+                document.getElementById(
+                    "examObtained"
+                )
+                .value
+
+            );
+
+
+
+        /* VALIDATION */
+
+
+        if (
+
+            !studentId ||
+
+            !subject ||
+
+            !total
+
+        ) {
+
+
+            alert(
+
+                "Please fill all details."
+
+            );
+
+
+            return;
+
+        }
+
+
+
+        if (
+
+            obtained > total
+
+        ) {
+
+
+            alert(
+
+                "Obtained marks cannot be greater than total marks."
+
+            );
+
+
+            return;
+
+        }
+
+
+
+        if (
+
+            obtained < 0
+
+        ) {
+
+
+            alert(
+
+                "Obtained marks cannot be negative."
+
+            );
+
+
+            return;
+
+        }
+
+
+
+        /* PERCENTAGE */
+
+
+        const percentage =
+
+            (
+
+                obtained /
+
+                total
+
+            ) * 100;
+
+
+
+        /* GRADE */
+
+
+        let grade = "F";
+
+
+
+        if (
+
+            percentage >= 90
+
+        ) {
+
+            grade = "A+";
+
+        }
+
+        else if (
+
+            percentage >= 80
+
+        ) {
+
+            grade = "A";
+
+        }
+
+        else if (
+
+            percentage >= 70
+
+        ) {
+
+            grade = "B+";
+
+        }
+
+        else if (
+
+            percentage >= 60
+
+        ) {
+
+            grade = "B";
+
+        }
+
+        else if (
+
+            percentage >= 50
+
+        ) {
+
+            grade = "C";
+
+        }
+
+        else if (
+
+            percentage >= 40
+
+        ) {
+
+            grade = "D";
+
+        }
+
+
+
+        /* STATUS */
+
+
+        const status =
+
+            percentage >= 40
+
+                ?
+
+                "Passed"
+
+                :
+
+                "Needs Improvement";
+
+
+
+        /* GET RECORDS */
+
+
+        const records =
+            getExamRecords();
+
+
+
+        /* NEW RECORD */
+
+
+        const newRecord = {
+
+
+            _id:
+
+                Date.now().toString(),
+
+
+            studentId:
+
+                studentId,
+
+
+            subject:
+
+                subject,
+
+
+            total:
+
+                total,
+
+
+            obtained:
+
+                obtained,
+
+
+            percentage:
+
+                percentage,
+
+
+            grade:
+
+                grade,
+
+
+            status:
+
+                status,
+
+
+            createdAt:
+
+                new Date()
+                    .toISOString()
+
+
+        };
+
+
+
+        records.push(
+
+            newRecord
+
+        );
+
+
+
+        saveExamRecords(
+
+            records
+
+        );
+
+
+
+        alert(
+
+            "Final exam record added successfully!"
+
+        );
+
+
+
+        document
+
+        .getElementById(
+            "examForm"
+        )
+
+        .reset();
+
+
+
+        renderExamRecords();
+
+    }
+
+);
+
+
+
+/* =========================================
+        RENDER EXAM RECORDS
+========================================= */
+
+
+function renderExamRecords(
+
+    searchTerm = ""
+
+) {
+
+
+    const table =
+
+        document.getElementById(
+            "examTable"
+        );
+
+
+    const empty =
+
+        document.getElementById(
+            "examEmpty"
+        );
+
+
+    const students =
+        getStudents();
+
+
+    const records =
+        getExamRecords();
+
+
+
+    const search =
+
+        searchTerm
+        .toLowerCase()
+        .trim();
+
+
+
+    table.innerHTML = "";
+
+
+
+    const filteredRecords =
+
+        records.filter(
+
+            function(record) {
+
+
+                const student =
+
+                    students.find(
+
+                        function(item) {
+
+                            return (
+
+                                item._id ===
+                                record.studentId
+
+                            );
+
+                        }
+
+                    );
+
+
+
+                const studentName =
+
+                    student
+
+                    ?
+
+                    student.name
+
+                    :
+
+                    "";
+
+
+
+                const studentCode =
+
+                    student
+
+                    ?
+
+                    student.studentId
+
+                    :
+
+                    "";
+
+
+
+                const searchText =
+
+                    studentName +
+
+                    " " +
+
+                    studentCode +
+
+                    " " +
+
+                    record.subject;
+
+
+
+                return (
+
+                    searchText
+
+                    .toLowerCase()
+
+                    .includes(search)
+
+                );
+
+            }
+
+        );
+
+
+
+    /* EMPTY */
+
+
+    if (
+
+        filteredRecords.length === 0
+
+    ) {
+
+
+        empty.style.display =
+            "block";
+
+
+        return;
+
+    }
+
+
+
+    empty.style.display =
+        "none";
+
+
+
+    /* CREATE ROWS */
+
+
+    filteredRecords.forEach(
+
+        function(record) {
+
+
+            const student =
+
+                students.find(
+
+                    function(item) {
+
+                        return (
+
+                            item._id ===
+                            record.studentId
+
+                        );
+
+                    }
+
+                );
+
+
+
+            if (!student) {
+
+                return;
+
+            }
+
+
+
+            const row =
+
+                document.createElement(
+                    "tr"
+                );
+
+
+
+            row.innerHTML = `
+
+
+                <td>
+
+                    <strong>
+
+                        ${escapeHTML(
+
+                            student.studentId
+
+                        )}
+
+                    </strong>
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.name
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        record.subject
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${record.total}
+
+                </td>
+
+
+
+                <td>
+
+                    ${record.obtained}
+
+                </td>
+
+
+
+                <td>
+
+                    ${record.percentage.toFixed(2)}%
+
+                </td>
+
+
+
+                <td>
+
+                    <span class="result-status">
+
+                        ${record.grade}
+
+                    </span>
+
+                </td>
+
+
+
+                <td>
+
+                    <span class="badge ${
+                        
+                        record.status === "Passed"
+
+                        ?
+
+                        "badge-active"
+
+                        :
+
+                        "badge-pending"
+
+                    }">
+
+                        ${record.status}
+
+                    </span>
+
+                </td>
+
+
+
+                <td>
+
+
+                    <button
+
+                        class="delete-btn"
+
+                        onclick="deleteExamRecord('${record._id}')">
+
+
+                        <i class="fa-solid fa-trash"></i>
+
+
+                    </button>
+
+
+                </td>
+
+
+            `;
+
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =========================================
+        DELETE EXAM RECORD
+========================================= */
+
+
+function deleteExamRecord(
+
+    id
+
+) {
+
+
+    const confirmation =
+
+        confirm(
+
+            "Are you sure you want to delete this exam record?"
+
+        );
+
+
+
+    if (!confirmation) {
+
+        return;
+
+    }
+
+
+
+    const records =
+        getExamRecords();
+
+
+
+    const updatedRecords =
+
+        records.filter(
+
+            function(record) {
+
+                return (
+
+                    record._id !==
+                    id
+
+                );
+
+            }
+
+        );
+
+
+
+    saveExamRecords(
+
+        updatedRecords
+
+    );
+
+
+
+    renderExamRecords();
+
+
+
+    alert(
+
+        "Exam record deleted successfully!"
+
+    );
+
+}
+
+
+
+/* =========================================
+        SEARCH
+========================================= */
+
+
+document
+
+.getElementById(
+    "searchExam"
+)
+
+.addEventListener(
+
+    "input",
+
+    function() {
+
+
+        renderExamRecords(
+
+            this.value
+
+        );
+
+    }
+
+);
+
+
+
+/* =========================================
+        ESCAPE HTML
+========================================= */
+
+
+function escapeHTML(
+
+    value
+
+) {
+
+
+    const div =
+
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+
+        value || "-";
+
+
+    return div.innerHTML;
+
+}
+
+
+
+/* =========================================
+        LOGOUT
+========================================= */
+
+
+function logout() {
+
+
+    localStorage.removeItem(
+
+        "isLoggedIn"
+
+    );
+
+
+    localStorage.removeItem(
+
+        "adminName"
+
+    );
+
+
+    window.location.href =
+
+        "01_index.html";
+
+}
+
+
+
+/* =========================================
+        ADMIN NAME
+========================================= */
+
+
+const adminName =
+
+    localStorage.getItem(
+
+        "adminName"
+
+    );
+
+
+if (adminName) {
+
+
+    document.getElementById(
+
+        "gaAdminName"
+
+    ).textContent =
+
+        adminName;
+
+}
+
+
+
+/* =========================================
+        INITIALIZE
+========================================= */
+
+
+loadStudents();
+
+
+renderExamRecords();
+
+
+</script>
+
+
+</body>
+
+</html>

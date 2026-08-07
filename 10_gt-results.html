@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GT Results | Ganishka Technology</title>
+
+
+    <!-- GOOGLE FONT -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- IMPORTANT: YOUR ACTUAL CSS -->
+
+    <link rel="stylesheet"
+          href="16_panel.css">
+
+</head>
+
+
+<body>
+
+
+<div class="panel">
+
+
+    <!-- =====================================================
+                         SIDEBAR
+    ====================================================== -->
+
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="sidebar-logo">
+
+            <div class="sidebar-logo-icon">
+
+                <i class="fa-solid fa-laptop-code"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- BRAND -->
+
+        <h2>
+
+            Ganishka<br>
+
+            Technology
+
+        </h2>
+
+
+        <p>
+
+            Admin Panel
+
+        </p>
+
+
+
+        <!-- NAVIGATION -->
+
+        <ul class="sidebar-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <li onclick="goToPage('06_gt-dashboard.html')">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>
+
+                    Dashboard
+
+                </span>
+
+            </li>
+
+
+
+            <!-- STUDENTS -->
+
+            <li onclick="goToPage('07_gt-students.html')">
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+                <span>
+
+                    Students
+
+                </span>
+
+            </li>
+            <!-- ATTENDANCE -->
+
+<li onclick="goToPage('11_gt-attendance.html')">
+
+    <i class="fa-solid fa-calendar-check"></i>
+
+    <span>
+        Attendance
+    </span>
+
+</li>
+
+
+
+            <!-- ASSIGNMENTS -->
+
+            <li onclick="goToPage('08_gt-assignments.html')">
+
+                <i class="fa-solid fa-list-check"></i>
+
+                <span>
+
+                    Assignments
+
+                </span>
+
+            </li>
+
+
+
+            <!-- UPLOAD MARKS -->
+
+            <li onclick="goToPage('09_gt-marks.html')">
+
+                <i class="fa-solid fa-pen-to-square"></i>
+
+                <span>
+
+                    Upload Marks
+
+                </span>
+
+            </li>
+
+
+
+            <!-- RESULTS -->
+
+            <li class="active">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>
+
+                    Results
+
+                </span>
+
+            </li>
+
+
+
+            <!-- MAIN DASHBOARD -->
+
+            <li onclick="goToPage('04_dashboard.html')">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <span>
+
+                    Main Dashboard
+
+                </span>
+
+            </li>
+
+
+        </ul>
+
+
+
+        <!-- LOGOUT -->
+
+        <div class="sidebar-logout">
+
+            <button onclick="logout()">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+                         MAIN CONTENT
+    ====================================================== -->
+
+
+    <main class="content">
+
+
+
+        <!-- TOP HEADER -->
+
+
+        <div class="top">
+
+
+            <div class="top-title">
+
+
+                <span>
+
+                    GANISHKA TECHNOLOGY
+
+                </span>
+
+
+                <h1>
+
+                    Student Results
+
+                </h1>
+
+
+                <p>
+
+                    View student performance and results.
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- ADMIN -->
+
+
+            <div class="top-admin">
+
+
+                <div>
+
+
+                    <small>
+
+                        Welcome
+
+                    </small>
+
+
+                    <strong id="adminName">
+
+                        Administrator
+
+                    </strong>
+
+
+                </div>
+
+
+
+                <div class="top-admin-icon">
+
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =====================================================
+                         SELECT STUDENT
+        ====================================================== -->
+
+
+        <div class="form-box">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+
+                    <span class="section-label">
+
+                        RESULT MANAGEMENT
+
+                    </span>
+
+
+                    <h2>
+
+                        Select Student
+
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="form-grid">
+
+
+                <!-- STUDENT SELECT -->
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Select Student
+
+                    </label>
+
+
+                    <select id="studentSelect">
+
+
+                        <option value="">
+
+                            Select Student
+
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+
+                <!-- SEARCH -->
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Search Student
+
+                    </label>
+
+
+                    <input
+
+                        type="text"
+
+                        id="studentSearch"
+
+                        placeholder="Search by ID or name...">
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="form-buttons">
+
+
+                <button
+
+                    type="button"
+
+                    class="primary-btn"
+
+                    onclick="showResult()">
+
+
+                    <i class="fa-solid fa-eye"></i>
+
+
+                    View Result
+
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =====================================================
+                         RESULT
+        ====================================================== -->
+
+
+        <div
+
+            class="table-box"
+
+            id="resultBox"
+
+            style="display:none;">
+
+
+
+            <!-- RESULT HEADER -->
+
+
+            <div class="table-header">
+
+
+                <div>
+
+
+                    <span class="section-label">
+
+                        STUDENT RESULT
+
+                    </span>
+
+
+                    <h2 id="studentResultName">
+
+                        Student Result
+
+                    </h2>
+
+
+                </div>
+
+
+
+                <button
+
+                    class="primary-btn"
+
+                    onclick="downloadResult()">
+
+
+                    <i class="fa-solid fa-download"></i>
+
+
+                    Download Marksheet
+
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- STUDENT DETAILS -->
+
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Student ID
+
+                    </label>
+
+
+                    <input
+
+                        id="resultStudentId"
+
+                        readonly>
+
+
+                </div>
+
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Batch
+
+                    </label>
+
+
+                    <input
+
+                        id="resultBatch"
+
+                        readonly>
+
+
+                </div>
+
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Course
+
+                    </label>
+
+
+                    <input
+
+                        id="resultCourse"
+
+                        readonly>
+
+
+                </div>
+
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Duration
+
+                    </label>
+
+
+                    <input
+
+                        id="resultDuration"
+
+                        readonly>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =====================================================
+                    ASSIGNMENT MARKS
+        ====================================================== -->
+
+
+        <div
+
+            class="table-box"
+
+            id="marksBox"
+
+            style="display:none;">
+
+
+
+            <div class="table-header">
+
+
+                <div>
+
+
+                    <span class="section-label">
+
+                        PERFORMANCE
+
+                    </span>
+
+
+                    <h2>
+
+                        Assignment Marks
+
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="table-responsive">
+
+
+                <table>
+
+
+                    <thead>
+
+
+                        <tr>
+
+
+                            <th>
+
+                                Assignment
+
+                            </th>
+
+
+                            <th>
+
+                                Subject
+
+                            </th>
+
+
+                            <th>
+
+                                Total Marks
+
+                            </th>
+
+
+                            <th>
+
+                                Obtained Marks
+
+                            </th>
+
+
+                            <th>
+
+                                Remark
+
+                            </th>
+
+
+                        </tr>
+
+
+                    </thead>
+
+
+
+                    <tbody id="marksTable">
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =====================================================
+                         FINAL RESULT
+        ====================================================== -->
+
+
+        <div
+
+            class="table-box"
+
+            id="summaryBox"
+
+            style="display:none;">
+
+
+
+            <div class="table-header">
+
+
+                <div>
+
+
+                    <span class="section-label">
+
+                        FINAL RESULT
+
+                    </span>
+
+
+                    <h2>
+
+                        Result Summary
+
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Total Marks
+
+                    </label>
+
+
+                    <input
+
+                        id="totalMarks"
+
+                        readonly>
+
+
+                </div>
+
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Obtained Marks
+
+                    </label>
+
+
+                    <input
+
+                        id="obtainedMarks"
+
+                        readonly>
+
+
+                </div>
+
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Percentage
+
+                    </label>
+
+
+                    <input
+
+                        id="percentage"
+
+                        readonly>
+
+
+                </div>
+
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Overall Remark
+
+                    </label>
+
+
+                    <input
+
+                        id="overallRemark"
+
+                        readonly>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- EMPTY MESSAGE -->
+
+
+        <div
+
+            class="empty-message"
+
+            id="emptyMessage">
+
+
+            <i class="fa-solid fa-chart-column"></i>
+
+
+            <p>
+
+                Select a student to view the result.
+
+            </p>
+
+
+            <span>
+
+                Assignment marks will appear here automatically.
+
+            </span>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+                NAVIGATION
+===================================================== */
+
+
+function goToPage(page) {
+
+
+    window.location.href = page;
+
+
+}
+
+
+
+/* =====================================================
+                LOGOUT
+===================================================== */
+
+
+function logout() {
+
+
+    localStorage.removeItem(
+
+        "isLoggedIn"
+
+    );
+
+
+    localStorage.removeItem(
+
+        "adminName"
+
+    );
+
+
+    window.location.href =
+
+        "01_index.html";
+
+
+}
+
+
+
+/* =====================================================
+                ADMIN NAME
+===================================================== */
+
+
+const savedAdminName =
+
+    localStorage.getItem(
+
+        "adminName"
+
+    );
+
+
+if (savedAdminName) {
+
+
+    document.getElementById(
+
+        "adminName"
+
+    ).textContent =
+
+        savedAdminName;
+
+
+}
+
+
+
+/* =====================================================
+                GET STUDENTS
+===================================================== */
+
+
+function getStudents() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+
+            "gtStudents"
+
+        )
+
+    ) || [];
+
+
+}
+
+
+
+/* =====================================================
+                GET MARKS
+===================================================== */
+
+
+function getMarks() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+
+            "gtMarks"
+
+        )
+
+    ) || [];
+
+
+}
+
+
+
+/* =====================================================
+                LOAD STUDENTS
+===================================================== */
+
+
+function loadStudents() {
+
+
+    const students =
+
+        getStudents();
+
+
+    const select =
+
+        document.getElementById(
+
+            "studentSelect"
+
+        );
+
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select Student
+
+        </option>
+
+    `;
+
+
+
+    students.forEach(function(student) {
+
+
+        const option =
+
+            document.createElement(
+
+                "option"
+
+            );
+
+
+        option.value =
+
+            student._id;
+
+
+        option.textContent =
+
+            student.studentId +
+
+            " - " +
+
+            student.name;
+
+
+        select.appendChild(
+
+            option
+
+        );
+
+
+    });
+
+
+}
+
+
+
+/* =====================================================
+                SEARCH STUDENT
+===================================================== */
+
+
+document
+
+.getElementById(
+
+    "studentSearch"
+
+)
+
+.addEventListener(
+
+    "input",
+
+    function() {
+
+
+        const search =
+
+            this.value
+
+            .toLowerCase()
+
+            .trim();
+
+
+        const students =
+
+            getStudents();
+
+
+        const select =
+
+            document.getElementById(
+
+                "studentSelect"
+
+            );
+
+
+        select.innerHTML = `
+
+            <option value="">
+
+                Select Student
+
+            </option>
+
+        `;
+
+
+
+        students
+
+        .filter(function(student) {
+
+
+            return (
+
+                student.name
+
+                .toLowerCase()
+
+                .includes(search)
+
+                ||
+
+                student.studentId
+
+                .toLowerCase()
+
+                .includes(search)
+
+            );
+
+
+        })
+
+
+        .forEach(function(student) {
+
+
+            const option =
+
+                document.createElement(
+
+                    "option"
+
+                );
+
+
+            option.value =
+
+                student._id;
+
+
+            option.textContent =
+
+                student.studentId +
+
+                " - " +
+
+                student.name;
+
+
+            select.appendChild(
+
+                option
+
+            );
+
+
+        });
+
+
+    }
+
+);
+
+
+
+/* =====================================================
+                SHOW RESULT
+===================================================== */
+
+
+function showResult() {
+
+
+    const selectedId =
+
+        document.getElementById(
+
+            "studentSelect"
+
+        ).value;
+
+
+    if (!selectedId) {
+
+
+        alert(
+
+            "Please select a student."
+
+        );
+
+
+        return;
+
+
+    }
+
+
+
+    const students =
+
+        getStudents();
+
+
+    const marks =
+
+        getMarks();
+
+
+
+    const student =
+
+        students.find(function(item) {
+
+
+            return (
+
+                item._id ===
+
+                selectedId
+
+            );
+
+
+        });
+
+
+
+    if (!student) {
+
+
+        alert(
+
+            "Student not found."
+
+        );
+
+
+        return;
+
+
+    }
+
+
+
+    /* STUDENT DETAILS */
+
+
+    document.getElementById(
+
+        "studentResultName"
+
+    ).textContent =
+
+        student.name +
+
+        " - Result";
+
+
+
+    document.getElementById(
+
+        "resultStudentId"
+
+    ).value =
+
+        student.studentId || "-";
+
+
+
+    document.getElementById(
+
+        "resultBatch"
+
+    ).value =
+
+        student.batch || "-";
+
+
+
+    document.getElementById(
+
+        "resultCourse"
+
+    ).value =
+
+        student.course || "-";
+
+
+
+    document.getElementById(
+
+        "resultDuration"
+
+    ).value =
+
+        student.duration || "-";
+
+
+
+    /* GET STUDENT MARKS */
+
+
+    const studentMarks =
+
+        marks.filter(function(mark) {
+
+
+            return (
+
+                mark.studentId ===
+
+                selectedId
+
+            );
+
+
+        });
+
+
+
+    const table =
+
+        document.getElementById(
+
+            "marksTable"
+
+        );
+
+
+    table.innerHTML = "";
+
+
+
+    let total = 0;
+
+    let obtained = 0;
+
+
+
+    if (
+
+        studentMarks.length === 0
+
+    ) {
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="5">
+
+                    No marks uploaded for this student.
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+    }
+
+
+
+    studentMarks.forEach(function(mark) {
+
+
+        const totalMark =
+
+            Number(
+
+                mark.totalMarks ||
+
+                mark.total ||
+
+                0
+
+            );
+
+
+        const obtainedMark =
+
+            Number(
+
+                mark.obtainedMarks ||
+
+                mark.obtained ||
+
+                0
+
+            );
+
+
+
+        total +=
+
+            totalMark;
+
+
+        obtained +=
+
+            obtainedMark;
+
+
+
+        const row =
+
+            document.createElement(
+
+                "tr"
+
+            );
+
+
+        row.innerHTML = `
+
+            <td>
+
+                ${mark.assignmentName || "-"}
+
+            </td>
+
+
+            <td>
+
+                ${mark.subject || "-"}
+
+            </td>
+
+
+            <td>
+
+                ${totalMark}
+
+            </td>
+
+
+            <td>
+
+                ${obtainedMark}
+
+            </td>
+
+
+            <td>
+
+                ${mark.remark || "-"}
+
+            </td>
+
+        `;
+
+
+        table.appendChild(
+
+            row
+
+        );
+
+
+    });
+
+
+
+    /* PERCENTAGE */
+
+
+    let percent = 0;
+
+
+    if (total > 0) {
+
+
+        percent =
+
+            (
+
+                obtained /
+
+                total
+
+            )
+
+            *
+
+            100;
+
+
+    }
+
+
+
+    percent =
+
+        percent.toFixed(2);
+
+
+
+    /* REMARK */
+
+
+    let remark = "";
+
+
+
+    if (
+
+        studentMarks.length === 0
+
+    ) {
+
+
+        remark =
+
+            "No Result Available";
+
+
+    }
+
+    else if (
+
+        percent >= 75
+
+    ) {
+
+
+        remark =
+
+            "Excellent";
+
+
+    }
+
+    else if (
+
+        percent >= 60
+
+    ) {
+
+
+        remark =
+
+            "Very Good";
+
+
+    }
+
+    else if (
+
+        percent >= 50
+
+    ) {
+
+
+        remark =
+
+            "Good";
+
+
+    }
+
+    else if (
+
+        percent >= 35
+
+    ) {
+
+
+        remark =
+
+            "Needs Improvement";
+
+
+    }
+
+    else {
+
+
+        remark =
+
+            "Requires More Practice";
+
+
+    }
+
+
+
+    /* SUMMARY */
+
+
+    document.getElementById(
+
+        "totalMarks"
+
+    ).value =
+
+        total;
+
+
+
+    document.getElementById(
+
+        "obtainedMarks"
+
+    ).value =
+
+        obtained;
+
+
+
+    document.getElementById(
+
+        "percentage"
+
+    ).value =
+
+        percent +
+
+        "%";
+
+
+
+    document.getElementById(
+
+        "overallRemark"
+
+    ).value =
+
+        remark;
+
+
+
+    /* SHOW SECTIONS */
+
+
+    document.getElementById(
+
+        "resultBox"
+
+    ).style.display =
+
+        "block";
+
+
+    document.getElementById(
+
+        "marksBox"
+
+    ).style.display =
+
+        "block";
+
+
+    document.getElementById(
+
+        "summaryBox"
+
+    ).style.display =
+
+        "block";
+
+
+    document.getElementById(
+
+        "emptyMessage"
+
+    ).style.display =
+
+        "none";
+
+
+}
+
+
+
+/* =====================================================
+                DOWNLOAD RESULT
+===================================================== */
+
+
+function downloadResult() {
+
+
+    const studentId =
+
+        document.getElementById(
+
+            "resultStudentId"
+
+        ).value;
+
+
+
+    if (!studentId) {
+
+
+        alert(
+
+            "Please view a result first."
+
+        );
+
+
+        return;
+
+
+    }
+
+
+
+    const name =
+
+        document.getElementById(
+
+            "studentResultName"
+
+        ).textContent;
+
+
+
+    const batch =
+
+        document.getElementById(
+
+            "resultBatch"
+
+        ).value;
+
+
+
+    const course =
+
+        document.getElementById(
+
+            "resultCourse"
+
+        ).value;
+
+
+
+    const total =
+
+        document.getElementById(
+
+            "totalMarks"
+
+        ).value;
+
+
+
+    const obtained =
+
+        document.getElementById(
+
+            "obtainedMarks"
+
+        ).value;
+
+
+
+    const percentage =
+
+        document.getElementById(
+
+            "percentage"
+
+        ).value;
+
+
+
+    const remark =
+
+        document.getElementById(
+
+            "overallRemark"
+
+        ).value;
+
+
+
+    const content = `
+
+GANISHKA TECHNOLOGY
+
+STUDENT RESULT MARKSHEET
+
+================================
+
+Student Name : ${name}
+
+Student ID   : ${studentId}
+
+Batch        : ${batch}
+
+Course       : ${course}
+
+================================
+
+Total Marks    : ${total}
+
+Obtained Marks : ${obtained}
+
+Percentage     : ${percentage}
+
+Remark         : ${remark}
+
+================================
+
+Ganishka Technology
+
+    `;
+
+
+
+    const blob =
+
+        new Blob(
+
+            [content],
+
+            {
+
+                type:
+
+                    "text/plain"
+
+            }
+
+        );
+
+
+
+    const url =
+
+        URL.createObjectURL(
+
+            blob
+
+        );
+
+
+
+    const link =
+
+        document.createElement(
+
+            "a"
+
+        );
+
+
+    link.href = url;
+
+
+    link.download =
+
+        studentId +
+
+        "_Marksheet.txt";
+
+
+    link.click();
+
+
+    URL.revokeObjectURL(
+
+        url
+
+    );
+
+
+}
+
+
+
+/* =====================================================
+                INITIALIZE
+===================================================== */
+
+
+loadStudents();
+
+
+</script>
+
+
+</body>
+
+</html>

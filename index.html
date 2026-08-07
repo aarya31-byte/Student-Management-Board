@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student Management Board | Admin Login</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Login CSS -->
+    <link rel="stylesheet"
+          href="02_login.css">
+
+</head>
+
+
+<body>
+
+
+<!-- ================= MAIN LOGIN CONTAINER ================= -->
+
+<div class="login-container">
+
+
+    <!-- ================= LEFT SIDE ================= -->
+
+    <div class="login-left">
+
+
+        <div class="brand-content">
+
+
+            <div class="brand-icon">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+
+            <h1>
+                GANISHKA<br>
+                ENTERPRISES
+            </h1>
+
+
+            <div class="brand-line"></div>
+
+
+            <p class="inspiring-text">
+
+                Empowering every learner to grow,
+
+                <br>
+
+                learn and achieve more.
+
+            </p>
+
+
+            <p class="brand-description">
+
+                A smarter way to manage students,
+
+                track learning progress and
+
+                organize academic performance.
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ================= RIGHT SIDE ================= -->
+
+    <div class="login-right">
+
+
+        <div class="login-box">
+
+
+            <!-- Login Icon -->
+
+            <div class="login-icon">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+            </div>
+
+
+            <!-- Heading -->
+
+            <h2>
+                Admin Login
+            </h2>
+
+
+            <p class="login-subtitle">
+
+                Welcome back! Please login to continue.
+
+            </p>
+
+
+
+            <!-- ================= LOGIN FORM ================= -->
+
+            <form id="loginForm">
+
+
+                <!-- Username -->
+
+                <div class="input-group">
+
+
+                    <label for="username">
+
+                        Username
+
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+
+                        <i class="fa-solid fa-user"></i>
+
+
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- Password -->
+
+                <div class="input-group">
+
+
+                    <label for="password">
+
+                        Password
+
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+
+                        <i class="fa-solid fa-lock"></i>
+
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required>
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="togglePassword"
+                            aria-label="Show or hide password">
+
+                            <i class="fa-solid fa-eye"></i>
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- Login Button -->
+
+                <button
+                    type="submit"
+                    class="login-btn">
+
+
+                    <span>
+                        Login
+                    </span>
+
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+
+                </button>
+
+
+            </form>
+
+
+            <!-- Footer -->
+
+            <p class="login-footer">
+
+                Student Management Board
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- Login JavaScript -->
+
+<script src="03_login.js"></script>
+
+
+</body>
+
+</html>

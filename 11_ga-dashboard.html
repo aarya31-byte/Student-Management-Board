@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Ganishka Academy Dashboard</title>
+
+
+    <!-- GOOGLE FONT -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- MAIN CSS -->
+
+    <link rel="stylesheet"
+          href="16_panel.css">
+
+</head>
+
+
+<body>
+
+
+<div class="panel">
+
+
+    <!-- =================================================
+                         SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="sidebar-logo">
+
+            <div class="sidebar-logo-icon">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- BRAND NAME -->
+
+        <h2>
+            Ganishka Academy
+        </h2>
+
+
+        <p>
+            Admin Panel
+        </p>
+
+
+
+        <!-- NAVIGATION -->
+
+        <ul class="sidebar-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <li class="active">
+
+
+                <i class="fa-solid fa-house"></i>
+
+
+                <span>
+                    Dashboard
+                </span>
+
+
+            </li>
+
+
+
+            <!-- STUDENTS -->
+
+            <li
+                onclick="window.location.href='12_ga-students.html'">
+
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+
+                <span>
+                    Students
+                </span>
+
+
+            </li>
+            
+            
+
+
+
+            <!-- CODING PRACTICE -->
+
+            <li
+                onclick="window.location.href='13_ga-coding-practice.html'">
+
+
+                <i class="fa-solid fa-code"></i>
+
+
+                <span>
+                    Coding Practice
+                </span>
+
+
+            </li>
+
+<li onclick="window.location.href='17_ga-attendance.html'">
+
+    <i class="fa-solid fa-calendar-check"></i>
+
+    <span>Attendance</span>
+
+</li>
+
+            <!-- FINAL EXAM -->
+
+            <li
+                onclick="window.location.href='14_ga-final-exam.html'">
+
+
+                <i class="fa-solid fa-file-pen"></i>
+
+
+                <span>
+                    Final Exam
+                </span>
+
+
+            </li>
+
+
+
+            <!-- RESULTS -->
+
+            <li
+                onclick="window.location.href='15_ga-results.html'">
+
+
+                <i class="fa-solid fa-chart-column"></i>
+
+
+                <span>
+                    Results
+                </span>
+
+
+            </li>
+
+
+
+            <!-- MAIN DASHBOARD -->
+
+            <li
+                onclick="window.location.href='04_dashboard.html'">
+
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+
+                <span>
+                    Main Dashboard
+                </span>
+
+
+            </li>
+
+
+        </ul>
+
+
+
+        <!-- LOGOUT -->
+
+        <div class="sidebar-logout">
+
+
+            <button onclick="logout()">
+
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+
+                Logout
+
+
+            </button>
+
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================================
+                         MAIN CONTENT
+    ================================================== -->
+
+    <main class="content">
+
+
+        <!-- =================================================
+                         TOP HEADER
+        ================================================== -->
+
+        <div class="top">
+
+
+            <div class="top-title">
+
+
+                <span>
+                    GANISHKA ACADEMY
+                </span>
+
+
+                <h1>
+                    Dashboard
+                </h1>
+
+
+                <p>
+                    Welcome to the Ganishka Academy student management panel.
+                </p>
+
+
+            </div>
+
+
+
+            <!-- ADMIN -->
+
+            <div class="top-admin">
+
+
+                <div>
+
+
+                    <small>
+                        Welcome
+                    </small>
+
+
+                    <strong id="gaAdminName">
+                        Administrator
+                    </strong>
+
+
+                </div>
+
+
+
+                <div class="top-admin-icon">
+
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                         STATISTICS CARDS
+        ================================================== -->
+
+        <div class="stats-grid">
+
+
+            <!-- TOTAL STUDENTS -->
+
+            <div class="stat-card">
+
+
+                <div class="stat-icon">
+
+
+                    <i class="fa-solid fa-user-graduate"></i>
+
+
+                </div>
+
+
+                <div>
+
+
+                    <span>
+                        Total Students
+                    </span>
+
+
+                    <h2 id="totalStudents">
+                        0
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- CODING RECORDS -->
+
+            <div class="stat-card">
+
+
+                <div class="stat-icon">
+
+
+                    <i class="fa-solid fa-code"></i>
+
+
+                </div>
+
+
+                <div>
+
+
+                    <span>
+                        Coding Practice
+                    </span>
+
+
+                    <h2 id="totalCoding">
+                        0
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- EXAM RECORDS -->
+
+            <div class="stat-card">
+
+
+                <div class="stat-icon">
+
+
+                    <i class="fa-solid fa-file-pen"></i>
+
+
+                </div>
+
+
+                <div>
+
+
+                    <span>
+                        Exam Records
+                    </span>
+
+
+                    <h2 id="totalExams">
+                        0
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- PASSED -->
+
+            <div class="stat-card">
+
+
+                <div class="stat-icon">
+
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+
+                </div>
+
+
+                <div>
+
+
+                    <span>
+                        Passed Students
+                    </span>
+
+
+                    <h2 id="passedStudents">
+                        0
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                    SECONDARY STATISTICS
+        ================================================== -->
+
+        <div class="stats-grid">
+
+
+            <!-- NEEDS IMPROVEMENT -->
+
+            <div class="stat-card">
+
+
+                <div class="stat-icon">
+
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+
+                </div>
+
+
+                <div>
+
+
+                    <span>
+                        Needs Improvement
+                    </span>
+
+
+                    <h2 id="improvementStudents">
+                        0
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- NOT ATTEMPTED -->
+
+            <div class="stat-card">
+
+
+                <div class="stat-icon">
+
+
+                    <i class="fa-solid fa-clock"></i>
+
+
+                </div>
+
+
+                <div>
+
+
+                    <span>
+                        Not Attempted
+                    </span>
+
+
+                    <h2 id="notAttempted">
+                        0
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                    RECENT STUDENTS
+        ================================================== -->
+
+        <div class="table-box">
+
+
+            <div class="table-header">
+
+
+                <div>
+
+
+                    <span class="section-label">
+                        STUDENTS
+                    </span>
+
+
+                    <h2>
+                        Recent Students
+                    </h2>
+
+
+                </div>
+
+
+
+                <button
+
+                    class="primary-btn"
+
+                    onclick="window.location.href='12_ga-students.html'">
+
+
+                    <i class="fa-solid fa-users"></i>
+
+
+                    View All
+
+
+                </button>
+
+
+            </div>
+
+
+
+            <div class="table-responsive">
+
+
+                <table>
+
+
+                    <thead>
+
+
+                        <tr>
+
+
+                            <th>
+                                Student ID
+                            </th>
+
+
+                            <th>
+                                Name
+                            </th>
+
+
+                            <th>
+                                Batch
+                            </th>
+
+
+                            <th>
+                                Course
+                            </th>
+
+
+                            <th>
+                                Duration
+                            </th>
+
+
+                        </tr>
+
+
+                    </thead>
+
+
+                    <tbody id="recentStudents">
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+
+            <div
+
+                id="studentEmpty"
+
+                class="empty-message">
+
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+
+                <p>
+                    No students added yet.
+                </p>
+
+
+                <span>
+                    Add students from the Students section.
+                </span>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                    RECENT EXAM RESULTS
+        ================================================== -->
+
+        <div class="table-box">
+
+
+            <div class="table-header">
+
+
+                <div>
+
+
+                    <span class="section-label">
+                        EXAMINATION
+                    </span>
+
+
+                    <h2>
+                        Recent Exam Results
+                    </h2>
+
+
+                </div>
+
+
+
+                <button
+
+                    class="primary-btn"
+
+                    onclick="window.location.href='15_ga-results.html'">
+
+
+                    <i class="fa-solid fa-chart-column"></i>
+
+
+                    View Results
+
+
+                </button>
+
+
+            </div>
+
+
+
+            <div class="table-responsive">
+
+
+                <table>
+
+
+                    <thead>
+
+
+                        <tr>
+
+
+                            <th>
+                                Student ID
+                            </th>
+
+
+                            <th>
+                                Student Name
+                            </th>
+
+
+                            <th>
+                                Marks
+                            </th>
+
+
+                            <th>
+                                Percentage
+                            </th>
+
+
+                            <th>
+                                Grade
+                            </th>
+
+
+                            <th>
+                                Status
+                            </th>
+
+
+                        </tr>
+
+
+                    </thead>
+
+
+                    <tbody id="recentResults">
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+
+            <div
+
+                id="resultEmpty"
+
+                class="empty-message">
+
+
+                <i class="fa-solid fa-chart-column"></i>
+
+
+                <p>
+                    No exam results available.
+                </p>
+
+
+                <span>
+                    Add final exam records to view results.
+                </span>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- COMMON JS -->
+
+<script src="17_script.js"></script>
+
+
+
+<script>
+
+
+/* =================================================
+            LOGIN CHECK
+================================================= */
+
+
+if (
+
+    localStorage.getItem(
+        "isLoggedIn"
+    )
+
+    !==
+
+    "true"
+
+) {
+
+
+    window.location.href =
+        "01_index.html";
+
+}
+
+
+
+/* =================================================
+            GET DATA
+================================================= */
+
+
+function getStudents() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gaStudents"
+        )
+
+    ) || [];
+
+}
+
+
+
+function getCodingRecords() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gaCoding"
+        )
+
+    ) || [];
+
+}
+
+
+
+function getExamRecords() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gaExams"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =================================================
+            UPDATE STATISTICS
+================================================= */
+
+
+function updateStatistics() {
+
+
+    const students =
+        getStudents();
+
+
+    const coding =
+        getCodingRecords();
+
+
+    const exams =
+        getExamRecords();
+
+
+
+    /* TOTAL STUDENTS */
+
+
+    document.getElementById(
+
+        "totalStudents"
+
+    ).textContent =
+
+        students.length;
+
+
+
+    /* CODING RECORDS */
+
+
+    document.getElementById(
+
+        "totalCoding"
+
+    ).textContent =
+
+        coding.length;
+
+
+
+    /* EXAM RECORDS */
+
+
+    document.getElementById(
+
+        "totalExams"
+
+    ).textContent =
+
+        exams.length;
+
+
+
+    /* PASSED */
+
+
+    const passedIds =
+
+        new Set();
+
+
+
+    const improvementIds =
+
+        new Set();
+
+
+
+    exams.forEach(
+
+        function(exam) {
+
+
+            if (
+
+                exam.status ===
+                "Passed"
+
+            ) {
+
+
+                passedIds.add(
+
+                    exam.studentId
+
+                );
+
+
+            }
+
+
+            else {
+
+
+                improvementIds.add(
+
+                    exam.studentId
+
+                );
+
+
+            }
+
+        }
+
+    );
+
+
+
+    document.getElementById(
+
+        "passedStudents"
+
+    ).textContent =
+
+        passedIds.size;
+
+
+
+    /* NEEDS IMPROVEMENT */
+
+
+    document.getElementById(
+
+        "improvementStudents"
+
+    ).textContent =
+
+        improvementIds.size;
+
+
+
+    /* NOT ATTEMPTED */
+
+
+    const examStudentIds =
+
+        new Set(
+
+            exams.map(
+
+                function(exam) {
+
+                    return exam.studentId;
+
+                }
+
+            )
+
+        );
+
+
+
+    const notAttemptedCount =
+
+        students.filter(
+
+            function(student) {
+
+
+                return !examStudentIds.has(
+
+                    student._id
+
+                );
+
+
+            }
+
+        ).length;
+
+
+
+    document.getElementById(
+
+        "notAttempted"
+
+    ).textContent =
+
+        notAttemptedCount;
+
+}
+
+
+
+/* =================================================
+            RECENT STUDENTS
+================================================= */
+
+
+function renderRecentStudents() {
+
+
+    const table =
+
+        document.getElementById(
+
+            "recentStudents"
+
+        );
+
+
+    const empty =
+
+        document.getElementById(
+
+            "studentEmpty"
+
+        );
+
+
+    const students =
+        getStudents();
+
+
+
+    table.innerHTML = "";
+
+
+
+    if (
+
+        students.length === 0
+
+    ) {
+
+
+        empty.style.display =
+            "block";
+
+
+        return;
+
+    }
+
+
+
+    empty.style.display =
+        "none";
+
+
+
+    const recentStudents =
+
+        students.slice(
+
+            -5
+
+        ).reverse();
+
+
+
+    recentStudents.forEach(
+
+        function(student) {
+
+
+            const row =
+
+                document.createElement(
+                    "tr"
+                );
+
+
+
+            row.innerHTML = `
+
+
+                <td>
+
+                    <strong>
+
+                        ${escapeHTML(
+
+                            student.studentId
+
+                        )}
+
+                    </strong>
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.name
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.batch
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.course
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.duration
+
+                    )}
+
+                </td>
+
+
+            `;
+
+
+
+            table.appendChild(
+
+                row
+
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =================================================
+            RECENT RESULTS
+================================================= */
+
+
+function renderRecentResults() {
+
+
+    const table =
+
+        document.getElementById(
+
+            "recentResults"
+
+        );
+
+
+    const empty =
+
+        document.getElementById(
+
+            "resultEmpty"
+
+        );
+
+
+    const students =
+        getStudents();
+
+
+    const exams =
+        getExamRecords();
+
+
+
+    table.innerHTML = "";
+
+
+
+    if (
+
+        exams.length === 0
+
+    ) {
+
+
+        empty.style.display =
+            "block";
+
+
+        return;
+
+    }
+
+
+
+    empty.style.display =
+        "none";
+
+
+
+    const recentExams =
+
+        exams.slice(
+
+            -5
+
+        ).reverse();
+
+
+
+    recentExams.forEach(
+
+        function(exam) {
+
+
+            const student =
+
+                students.find(
+
+                    function(item) {
+
+
+                        return (
+
+                            item._id ===
+
+                            exam.studentId
+
+                        );
+
+
+                    }
+
+                );
+
+
+
+            if (!student) {
+
+                return;
+
+            }
+
+
+
+            const row =
+
+                document.createElement(
+                    "tr"
+                );
+
+
+
+            row.innerHTML = `
+
+
+                <td>
+
+                    <strong>
+
+                        ${escapeHTML(
+
+                            student.studentId
+
+                        )}
+
+                    </strong>
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.name
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${exam.obtained}
+
+                    /
+
+                    ${exam.total}
+
+                </td>
+
+
+
+                <td>
+
+                    ${Number(
+
+                        exam.percentage
+
+                    ).toFixed(2)}%
+
+                </td>
+
+
+
+                <td>
+
+
+                    <span class="result-status">
+
+                        ${escapeHTML(
+
+                            exam.grade
+
+                        )}
+
+                    </span>
+
+
+                </td>
+
+
+
+                <td>
+
+
+                    <span class="badge
+
+                    ${
+
+
+                        exam.status === "Passed"
+
+                        ?
+
+                        "badge-active"
+
+                        :
+
+                        "badge-inactive"
+
+
+                    }">
+
+
+                        ${escapeHTML(
+
+                            exam.status
+
+                        )}
+
+
+                    </span>
+
+
+                </td>
+
+
+            `;
+
+
+
+            table.appendChild(
+
+                row
+
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =================================================
+            ESCAPE HTML
+================================================= */
+
+
+function escapeHTML(
+
+    value
+
+) {
+
+
+    const div =
+
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+
+        value || "-";
+
+
+    return div.innerHTML;
+
+}
+
+
+
+/* =================================================
+            LOGOUT
+================================================= */
+
+
+function logout() {
+
+
+    localStorage.removeItem(
+
+        "isLoggedIn"
+
+    );
+
+
+    localStorage.removeItem(
+
+        "adminName"
+
+    );
+
+
+    window.location.href =
+
+        "01_index.html";
+
+}
+
+
+
+/* =================================================
+            ADMIN NAME
+================================================= */
+
+
+const adminName =
+
+    localStorage.getItem(
+
+        "adminName"
+
+    );
+
+
+if (adminName) {
+
+
+    document.getElementById(
+
+        "gaAdminName"
+
+    ).textContent =
+
+        adminName;
+
+}
+
+
+
+/* =================================================
+            INITIALIZE
+================================================= */
+
+
+updateStatistics();
+
+
+renderRecentStudents();
+
+
+renderRecentResults();
+
+
+</script>
+
+
+</body>
+
+</html>

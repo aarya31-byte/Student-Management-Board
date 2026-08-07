@@ -1,0 +1,2067 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        GA Students
+    </title>
+
+
+    <!-- GOOGLE FONT -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- MAIN PANEL CSS -->
+
+    <link rel="stylesheet"
+          href="16_panel.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+                    MAIN PANEL
+===================================================== -->
+
+<div class="panel">
+
+
+    <!-- =================================================
+                        SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="sidebar-logo">
+
+            <div class="sidebar-logo-icon">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- BRAND -->
+
+        <h2>
+            Ganishka Academy
+        </h2>
+
+
+        <p>
+            Admin Panel
+        </p>
+
+
+
+        <!-- NAVIGATION -->
+
+        <ul class="sidebar-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <li
+                onclick="window.location.href='11_ga-dashboard.html'">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </li>
+
+
+
+            <!-- STUDENTS -->
+
+            <li class="active">
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+                <span>
+                    Students
+                </span>
+
+            </li>
+
+
+
+            <!-- CODING PRACTICE -->
+
+            <li
+                onclick="window.location.href='13_ga-coding-practice.html'">
+
+                <i class="fa-solid fa-code"></i>
+
+                <span>
+                    Coding Practice
+                </span>
+
+            </li>
+
+            <!-- ATTENDANCE -->
+
+<li onclick="goToPage('11_gt-attendance.html')">
+
+    <i class="fa-solid fa-calendar-check"></i>
+
+    <span>
+        Attendance
+    </span>
+
+</li>
+
+
+
+            <!-- FINAL EXAM -->
+
+            <li
+                onclick="window.location.href='14_ga-final-exam.html'">
+
+                <i class="fa-solid fa-file-pen"></i>
+
+                <span>
+                    Final Exam
+                </span>
+
+            </li>
+
+
+
+            <!-- RESULTS -->
+
+            <li
+                onclick="window.location.href='15_ga-results.html'">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>
+                    Results
+                </span>
+
+            </li>
+
+
+
+            <!-- MAIN DASHBOARD -->
+
+            <li
+                onclick="window.location.href='04_dashboard.html'">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <span>
+                    Main Dashboard
+                </span>
+
+            </li>
+
+
+        </ul>
+
+
+
+        <!-- LOGOUT -->
+
+        <div class="sidebar-logout">
+
+            <button onclick="logout()">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================================
+                        MAIN CONTENT
+    ================================================== -->
+
+    <main class="content">
+
+
+        <!-- =================================================
+                        TOP HEADER
+        ================================================== -->
+
+        <div class="top">
+
+
+            <div class="top-title">
+
+
+                <span>
+                    GANISHKA ACADEMY
+                </span>
+
+
+                <h1>
+                    Student Management
+                </h1>
+
+
+                <p>
+                    Add, update, delete and manage academy students.
+                </p>
+
+
+            </div>
+
+
+
+            <div class="top-admin">
+
+
+                <div>
+
+                    <small>
+                        Welcome
+                    </small>
+
+
+                    <strong id="gaAdminName">
+                        Administrator
+                    </strong>
+
+                </div>
+
+
+
+                <div class="top-admin-icon">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                    ADD STUDENT FORM
+        ================================================== -->
+
+        <div class="form-box">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+
+                    <span class="section-label">
+                        STUDENT MANAGEMENT
+                    </span>
+
+
+                    <h2 id="studentFormTitle">
+                        Add New Student
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <form id="studentForm">
+
+
+                <div class="form-grid">
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+
+                        <label for="studentName">
+
+                            Student Name
+
+                        </label>
+
+
+                        <input
+
+                            type="text"
+
+                            id="studentName"
+
+                            placeholder="Enter student full name"
+
+                            required>
+
+
+                    </div>
+
+
+
+                    <!-- BATCH -->
+
+                    <div class="form-group">
+
+
+                        <label for="studentBatch">
+
+                            Batch
+
+                        </label>
+
+
+                        <input
+
+                            type="text"
+
+                            id="studentBatch"
+
+                            placeholder="Example: 2026-27"
+
+                            required>
+
+
+                    </div>
+
+
+
+                    <!-- COURSE -->
+
+                    <div class="form-group">
+
+
+                        <label for="studentCourse">
+
+                            Course
+
+                        </label>
+
+
+                        <select
+
+                            id="studentCourse"
+
+                            required>
+
+
+                            <option value="">
+
+                                Select Course
+
+                            </option>
+
+
+                            <option value="Web Development">
+
+                                Web Development
+
+                            </option>
+
+
+                            <option value="Python Programming">
+
+                                Python Programming
+
+                            </option>
+
+
+                            <option value="Java Programming">
+
+                                Java Programming
+
+                            </option>
+
+
+                            <option value="Data Science">
+
+                                Data Science
+
+                            </option>
+
+
+                            <option value="Full Stack Development">
+
+                                Full Stack Development
+
+                            </option>
+
+
+                        </select>
+
+
+                    </div>
+
+
+
+                    <!-- DURATION -->
+
+                    <div class="form-group">
+
+
+                        <label for="studentDuration">
+
+                            Course Duration
+
+                        </label>
+
+
+                        <select
+
+                            id="studentDuration"
+
+                            required>
+
+
+                            <option value="">
+
+                                Select Duration
+
+                            </option>
+
+
+                            <option value="1 Month">
+
+                                1 Month
+
+                            </option>
+
+
+                            <option value="3 Months">
+
+                                3 Months
+
+                            </option>
+
+
+                            <option value="6 Months">
+
+                                6 Months
+
+                            </option>
+
+
+                            <option value="1 Year">
+
+                                1 Year
+
+                            </option>
+
+
+                            <option value="2 Years">
+
+                                2 Years
+
+                            </option>
+
+
+                        </select>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- BUTTONS -->
+
+                <div class="form-buttons">
+
+
+                    <button
+
+                        type="submit"
+
+                        class="primary-btn"
+
+                        id="studentSubmitBtn">
+
+
+                        <i class="fa-solid fa-user-plus"></i>
+
+
+                        <span>
+
+                            Add Student
+
+                        </span>
+
+
+                    </button>
+
+
+
+                    <button
+
+                        type="button"
+
+                        class="secondary-btn"
+
+                        id="studentResetBtn">
+
+
+                        <i class="fa-solid fa-rotate-left"></i>
+
+
+                        Reset
+
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                    STUDENT LIST
+        ================================================== -->
+
+        <div class="table-box">
+
+
+            <div class="table-header">
+
+
+                <div>
+
+
+                    <span class="section-label">
+                        ACADEMY STUDENTS
+                    </span>
+
+
+                    <h2>
+                        Student List
+                    </h2>
+
+
+                </div>
+
+
+
+                <!-- SEARCH -->
+
+                <div class="search-wrapper">
+
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+
+                    <input
+
+                        type="text"
+
+                        id="searchStudent"
+
+                        placeholder="Search ID, Name, Batch or Course...">
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- TABLE -->
+
+            <div class="table-responsive">
+
+
+                <table>
+
+
+                    <thead>
+
+
+                        <tr>
+
+
+                            <th>
+                                Student ID
+                            </th>
+
+
+                            <th>
+                                Name
+                            </th>
+
+
+                            <th>
+                                Batch
+                            </th>
+
+
+                            <th>
+                                Course
+                            </th>
+
+
+                            <th>
+                                Duration
+                            </th>
+
+
+                            <th>
+                                Action
+                            </th>
+
+
+                        </tr>
+
+
+                    </thead>
+
+
+
+                    <tbody id="studentTable">
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+
+            <!-- EMPTY MESSAGE -->
+
+            <div
+
+                id="studentEmpty"
+
+                class="empty-message">
+
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+
+                <p>
+                    No students found.
+                </p>
+
+
+                <span>
+                    Add a new student using the form above.
+                </span>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- =====================================================
+                    COMMON JAVASCRIPT
+===================================================== -->
+
+<script src="17_script.js"></script>
+
+
+
+<script>
+
+
+/* =========================================
+            LOGIN CHECK
+========================================= */
+
+
+if (
+
+    localStorage.getItem(
+        "isLoggedIn"
+    )
+
+    !==
+
+    "true"
+
+) {
+
+    window.location.href =
+        "01_index.html";
+
+}
+
+
+
+/* =========================================
+            VARIABLES
+========================================= */
+
+
+let editingStudentId = null;
+
+
+
+/* =========================================
+            GET STUDENTS
+========================================= */
+
+
+function getStudents() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gaStudents"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =========================================
+            SAVE STUDENTS
+========================================= */
+
+
+function saveStudents(
+
+    students
+
+) {
+
+
+    localStorage.setItem(
+
+        "gaStudents",
+
+        JSON.stringify(
+            students
+        )
+
+    );
+
+}
+
+
+
+/* =========================================
+        GENERATE STUDENT ID
+========================================= */
+
+
+function generateStudentId(
+
+    students
+
+) {
+
+
+    let number =
+
+        students.length + 1;
+
+
+
+    let studentId =
+
+        "GA" +
+
+        String(number)
+            .padStart(3, "0");
+
+
+
+    let exists =
+
+        students.some(
+
+            function(student) {
+
+                return (
+
+                    student.studentId ===
+                    studentId
+
+                );
+
+            }
+
+        );
+
+
+
+    while (exists) {
+
+
+        number++;
+
+
+
+        studentId =
+
+            "GA" +
+
+            String(number)
+                .padStart(3, "0");
+
+
+
+        exists =
+
+            students.some(
+
+                function(student) {
+
+                    return (
+
+                        student.studentId ===
+                        studentId
+
+                    );
+
+                }
+
+            );
+
+    }
+
+
+
+    return studentId;
+
+}
+
+
+
+/* =========================================
+            INITIALIZE PAGE
+========================================= */
+
+
+function initializeStudentPage() {
+
+
+    const form =
+
+        document.getElementById(
+            "studentForm"
+        );
+
+
+    const resetButton =
+
+        document.getElementById(
+            "studentResetBtn"
+        );
+
+
+    const searchInput =
+
+        document.getElementById(
+            "searchStudent"
+        );
+
+
+
+    renderStudents();
+
+
+
+    /* FORM */
+
+
+    if (form) {
+
+
+        form.addEventListener(
+
+            "submit",
+
+            handleStudentSubmit
+
+        );
+
+    }
+
+
+
+    /* RESET */
+
+
+    if (resetButton) {
+
+
+        resetButton.addEventListener(
+
+            "click",
+
+            resetStudentForm
+
+        );
+
+    }
+
+
+
+    /* SEARCH */
+
+
+    if (searchInput) {
+
+
+        searchInput.addEventListener(
+
+            "input",
+
+            function() {
+
+
+                renderStudents(
+
+                    searchInput.value
+
+                );
+
+            }
+
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+            ADD / UPDATE STUDENT
+========================================= */
+
+
+function handleStudentSubmit(
+
+    event
+
+) {
+
+
+    event.preventDefault();
+
+
+
+    /* GET FORM VALUES */
+
+
+    const name =
+
+        document.getElementById(
+            "studentName"
+        )
+        .value
+        .trim();
+
+
+
+    const batch =
+
+        document.getElementById(
+            "studentBatch"
+        )
+        .value
+        .trim();
+
+
+
+    const course =
+
+        document.getElementById(
+            "studentCourse"
+        )
+        .value;
+
+
+
+    const duration =
+
+        document.getElementById(
+            "studentDuration"
+        )
+        .value;
+
+
+
+    /* VALIDATION */
+
+
+    if (
+
+        !name ||
+
+        !batch ||
+
+        !course ||
+
+        !duration
+
+    ) {
+
+
+        alert(
+
+            "Please fill all student details."
+
+        );
+
+
+        return;
+
+    }
+
+
+
+    /* GET DATA */
+
+
+    const students =
+        getStudents();
+
+
+
+    /* =====================================
+            UPDATE EXISTING STUDENT
+    ===================================== */
+
+
+    if (
+
+        editingStudentId !== null
+
+    ) {
+
+
+        const studentIndex =
+
+            students.findIndex(
+
+                function(student) {
+
+                    return (
+
+                        student._id ===
+                        editingStudentId
+
+                    );
+
+                }
+
+            );
+
+
+
+        if (
+
+            studentIndex !== -1
+
+        ) {
+
+
+            students[
+                studentIndex
+            ].name =
+
+                name;
+
+
+
+            students[
+                studentIndex
+            ].batch =
+
+                batch;
+
+
+
+            students[
+                studentIndex
+            ].course =
+
+                course;
+
+
+
+            students[
+                studentIndex
+            ].duration =
+
+                duration;
+
+
+
+            saveStudents(
+                students
+            );
+
+
+
+            alert(
+
+                "Student details updated successfully!"
+
+            );
+
+
+
+            resetStudentForm();
+
+
+            renderStudents();
+
+
+            return;
+
+        }
+
+    }
+
+
+
+    /* =====================================
+            ADD NEW STUDENT
+    ===================================== */
+
+
+    const newStudent = {
+
+
+        _id:
+
+            Date.now().toString(),
+
+
+        studentId:
+
+            generateStudentId(
+                students
+            ),
+
+
+        name:
+
+            name,
+
+
+        batch:
+
+            batch,
+
+
+        course:
+
+            course,
+
+
+        duration:
+
+            duration,
+
+
+        createdAt:
+
+            new Date()
+                .toISOString()
+
+
+    };
+
+
+
+    students.push(
+
+        newStudent
+
+    );
+
+
+
+    saveStudents(
+
+        students
+
+    );
+
+
+
+    alert(
+
+        "Student added successfully!"
+
+    );
+
+
+
+    resetStudentForm();
+
+
+    renderStudents();
+
+}
+
+
+
+/* =========================================
+            RENDER STUDENTS
+========================================= */
+
+
+function renderStudents(
+
+    searchTerm = ""
+
+) {
+
+
+    const table =
+
+        document.getElementById(
+            "studentTable"
+        );
+
+
+    const empty =
+
+        document.getElementById(
+            "studentEmpty"
+        );
+
+
+    if (!table) {
+
+        return;
+
+    }
+
+
+
+    const students =
+        getStudents();
+
+
+
+    const search =
+
+        searchTerm
+        .toLowerCase()
+        .trim();
+
+
+
+    /* FILTER */
+
+
+    const filteredStudents =
+
+        students.filter(
+
+            function(student) {
+
+
+                const searchText =
+
+                    (
+
+                        student.studentId +
+
+                        " " +
+
+                        student.name +
+
+                        " " +
+
+                        student.batch +
+
+                        " " +
+
+                        student.course +
+
+                        " " +
+
+                        student.duration
+
+                    )
+
+                    .toLowerCase();
+
+
+
+                return (
+
+                    searchText.includes(
+                        search
+                    )
+
+                );
+
+            }
+
+        );
+
+
+
+    /* CLEAR */
+
+
+    table.innerHTML = "";
+
+
+
+    /* EMPTY */
+
+
+    if (
+
+        filteredStudents.length === 0
+
+    ) {
+
+
+        if (empty) {
+
+            empty.style.display =
+                "block";
+
+        }
+
+
+        return;
+
+    }
+
+
+
+    /* HIDE EMPTY */
+
+
+    if (empty) {
+
+        empty.style.display =
+            "none";
+
+    }
+
+
+
+    /* CREATE ROWS */
+
+
+    filteredStudents.forEach(
+
+        function(student) {
+
+
+            const row =
+
+                document.createElement(
+                    "tr"
+                );
+
+
+
+            row.innerHTML = `
+
+
+                <td>
+
+                    <strong>
+
+                        ${escapeHTML(
+
+                            student.studentId
+
+                        )}
+
+                    </strong>
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.name
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.batch
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.course
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.duration
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+
+                    <button
+
+                        class="edit-btn"
+
+                        onclick="editStudent('${student._id}')">
+
+
+                        <i class="fa-solid fa-pen"></i>
+
+
+                    </button>
+
+
+
+                    <button
+
+                        class="delete-btn"
+
+                        onclick="deleteStudent('${student._id}')">
+
+
+                        <i class="fa-solid fa-trash"></i>
+
+
+                    </button>
+
+
+                </td>
+
+
+            `;
+
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =========================================
+                EDIT
+========================================= */
+
+
+function editStudent(
+
+    id
+
+) {
+
+
+    const students =
+        getStudents();
+
+
+
+    const student =
+
+        students.find(
+
+            function(item) {
+
+                return (
+
+                    item._id ===
+                    id
+
+                );
+
+            }
+
+        );
+
+
+
+    if (!student) {
+
+        return;
+
+    }
+
+
+
+    /* FILL FORM */
+
+
+    document.getElementById(
+        "studentName"
+    ).value =
+
+        student.name;
+
+
+
+    document.getElementById(
+        "studentBatch"
+    ).value =
+
+        student.batch;
+
+
+
+    document.getElementById(
+        "studentCourse"
+    ).value =
+
+        student.course;
+
+
+
+    document.getElementById(
+        "studentDuration"
+    ).value =
+
+        student.duration;
+
+
+
+    /* EDIT MODE */
+
+
+    editingStudentId =
+        id;
+
+
+
+    /* TITLE */
+
+
+    document.getElementById(
+        "studentFormTitle"
+    ).textContent =
+
+        "Update Student Details";
+
+
+
+    /* BUTTON */
+
+
+    document.getElementById(
+        "studentSubmitBtn"
+    ).innerHTML = `
+
+
+        <i class="fa-solid fa-pen-to-square"></i>
+
+
+        <span>
+
+            Update Student
+
+        </span>
+
+
+    `;
+
+
+
+    /* SCROLL */
+
+
+    document
+    .querySelector(".form-box")
+    ?.scrollIntoView({
+
+        behavior:
+            "smooth"
+
+    });
+
+}
+
+
+
+/* =========================================
+                DELETE
+========================================= */
+
+
+function deleteStudent(
+
+    id
+
+) {
+
+
+    const students =
+        getStudents();
+
+
+
+    const student =
+
+        students.find(
+
+            function(item) {
+
+                return (
+
+                    item._id ===
+                    id
+
+                );
+
+            }
+
+        );
+
+
+
+    if (!student) {
+
+        return;
+
+    }
+
+
+
+    const confirmation =
+
+        confirm(
+
+            "Are you sure you want to delete " +
+
+            student.name +
+
+            " (" +
+
+            student.studentId +
+
+            ")?\n\n" +
+
+            "All related Coding Practice and Final Exam records will also be deleted."
+
+        );
+
+
+
+    if (!confirmation) {
+
+        return;
+
+    }
+
+
+
+    /* DELETE STUDENT */
+
+
+    const updatedStudents =
+
+        students.filter(
+
+            function(item) {
+
+                return (
+
+                    item._id !==
+                    id
+
+                );
+
+            }
+
+        );
+
+
+
+    saveStudents(
+
+        updatedStudents
+
+    );
+
+
+
+    /* =====================================
+        DELETE RELATED CODING RECORDS
+    ===================================== */
+
+
+    const codingRecords =
+
+        JSON.parse(
+
+            localStorage.getItem(
+                "gaCoding"
+            )
+
+        ) || [];
+
+
+
+    const updatedCodingRecords =
+
+        codingRecords.filter(
+
+            function(record) {
+
+                return (
+
+                    record.studentId !==
+                    id
+
+                );
+
+            }
+
+        );
+
+
+
+    localStorage.setItem(
+
+        "gaCoding",
+
+        JSON.stringify(
+
+            updatedCodingRecords
+
+        )
+
+    );
+
+
+
+    /* =====================================
+        DELETE RELATED EXAM RECORDS
+    ===================================== */
+
+
+    const examRecords =
+
+        JSON.parse(
+
+            localStorage.getItem(
+                "gaExams"
+            )
+
+        ) || [];
+
+
+
+    const updatedExamRecords =
+
+        examRecords.filter(
+
+            function(record) {
+
+                return (
+
+                    record.studentId !==
+                    id
+
+                );
+
+            }
+
+        );
+
+
+
+    localStorage.setItem(
+
+        "gaExams",
+
+        JSON.stringify(
+
+            updatedExamRecords
+
+        )
+
+    );
+
+
+
+    /* RESET */
+
+
+    resetStudentForm();
+
+
+    renderStudents();
+
+
+
+    alert(
+
+        "Student and related records deleted successfully!"
+
+    );
+
+}
+
+
+
+/* =========================================
+                RESET FORM
+========================================= */
+
+
+function resetStudentForm() {
+
+
+    const form =
+
+        document.getElementById(
+            "studentForm"
+        );
+
+
+    if (form) {
+
+        form.reset();
+
+    }
+
+
+
+    editingStudentId =
+        null;
+
+
+
+    document.getElementById(
+        "studentFormTitle"
+    ).textContent =
+
+        "Add New Student";
+
+
+
+    document.getElementById(
+        "studentSubmitBtn"
+    ).innerHTML = `
+
+
+        <i class="fa-solid fa-user-plus"></i>
+
+
+        <span>
+
+            Add Student
+
+        </span>
+
+
+    `;
+
+}
+
+
+
+/* =========================================
+            ESCAPE HTML
+========================================= */
+
+
+function escapeHTML(
+
+    value
+
+) {
+
+
+    const div =
+
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+
+        value || "-";
+
+
+    return div.innerHTML;
+
+}
+
+
+
+/* =========================================
+                LOGOUT
+========================================= */
+
+
+function logout() {
+
+
+    localStorage.removeItem(
+
+        "isLoggedIn"
+
+    );
+
+
+    localStorage.removeItem(
+
+        "adminName"
+
+    );
+
+
+    window.location.href =
+
+        "01_index.html";
+
+}
+
+
+
+/* =========================================
+            ADMIN NAME
+========================================= */
+
+
+const adminName =
+
+    localStorage.getItem(
+
+        "adminName"
+
+    );
+
+
+if (adminName) {
+
+
+    const adminElement =
+
+        document.getElementById(
+            "gaAdminName"
+        );
+
+
+    if (adminElement) {
+
+        adminElement.textContent =
+            adminName;
+
+    }
+
+}
+
+
+
+/* =========================================
+            INITIALIZE
+========================================= */
+
+
+initializeStudentPage();
+
+
+</script>
+
+
+</body>
+
+</html>

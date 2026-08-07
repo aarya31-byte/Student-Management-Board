@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GA Results</title>
+
+
+    <!-- GOOGLE FONT -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- MAIN CSS -->
+
+    <link rel="stylesheet"
+          href="16_panel.css">
+
+</head>
+
+
+<body>
+
+
+<div class="panel">
+
+
+    <!-- =================================================
+                        SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="sidebar-logo">
+
+            <div class="sidebar-logo-icon">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- BRAND -->
+
+        <h2>
+            Ganishka Academy
+        </h2>
+
+
+        <p>
+            Admin Panel
+        </p>
+
+
+
+        <!-- NAVIGATION -->
+
+        <ul class="sidebar-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <li
+                onclick="window.location.href='11_ga-dashboard.html'">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </li>
+
+
+
+            <!-- STUDENTS -->
+
+            <li
+                onclick="window.location.href='12_ga-students.html'">
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+                <span>
+                    Students
+                </span>
+
+            </li>
+
+
+
+            <!-- CODING PRACTICE -->
+
+            <li
+                onclick="window.location.href='13_ga-coding-practice.html'">
+
+                <i class="fa-solid fa-code"></i>
+
+                <span>
+                    Coding Practice
+                </span>
+
+            </li>
+<!-- ATTENDANCE -->
+
+<li onclick="goToPage('11_gt-attendance.html')">
+
+    <i class="fa-solid fa-calendar-check"></i>
+
+    <span>
+        Attendance
+    </span>
+
+</li>
+
+
+            <!-- FINAL EXAM -->
+
+            <li
+                onclick="window.location.href='14_ga-final-exam.html'">
+
+                <i class="fa-solid fa-file-pen"></i>
+
+                <span>
+                    Final Exam
+                </span>
+
+            </li>
+
+
+
+            <!-- RESULTS -->
+
+            <li class="active">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>
+                    Results
+                </span>
+
+            </li>
+
+
+
+            <!-- MAIN DASHBOARD -->
+
+            <li
+                onclick="window.location.href='04_dashboard.html'">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <span>
+                    Main Dashboard
+                </span>
+
+            </li>
+
+
+        </ul>
+
+
+
+        <!-- LOGOUT -->
+
+        <div class="sidebar-logout">
+
+            <button onclick="logout()">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================================
+                        MAIN CONTENT
+    ================================================== -->
+
+    <main class="content">
+
+
+        <!-- =================================================
+                        TOP HEADER
+        ================================================== -->
+
+        <div class="top">
+
+
+            <div class="top-title">
+
+
+                <span>
+                    GANISHKA ACADEMY
+                </span>
+
+
+                <h1>
+                    Student Results
+                </h1>
+
+
+                <p>
+                    View coding practice and final exam performance.
+                </p>
+
+
+            </div>
+
+
+
+            <div class="top-admin">
+
+
+                <div>
+
+                    <small>
+                        Welcome
+                    </small>
+
+
+                    <strong id="gaAdminName">
+                        Administrator
+                    </strong>
+
+                </div>
+
+
+
+                <div class="top-admin-icon">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                    RESULT FILTER
+        ================================================== -->
+
+        <div class="form-box">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+
+                    <span class="section-label">
+                        RESULT FILTER
+                    </span>
+
+
+                    <h2>
+                        Select Student
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="form-grid">
+
+
+                <!-- STUDENT FILTER -->
+
+                <div class="form-group">
+
+
+                    <label for="resultStudent">
+
+                        Student
+
+                    </label>
+
+
+                    <select
+
+                        id="resultStudent">
+
+
+                        <option value="all">
+
+                            All Students
+
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+
+                <!-- SEARCH -->
+
+                <div class="form-group">
+
+
+                    <label for="resultSearch">
+
+                        Search Result
+
+                    </label>
+
+
+                    <input
+
+                        type="text"
+
+                        id="resultSearch"
+
+                        placeholder="Search by ID or student name...">
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                    RESULT TABLE
+        ================================================== -->
+
+        <div class="table-box">
+
+
+            <div class="table-header">
+
+
+                <div>
+
+
+                    <span class="section-label">
+
+                        STUDENT PERFORMANCE
+
+                    </span>
+
+
+                    <h2>
+
+                        Results Overview
+
+                    </h2>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="table-responsive">
+
+
+                <table>
+
+
+                    <thead>
+
+
+                        <tr>
+
+
+                            <th>
+                                Student ID
+                            </th>
+
+
+                            <th>
+                                Student Name
+                            </th>
+
+
+                            <th>
+                                Coding Practice
+                            </th>
+
+
+                            <th>
+                                Final Exam
+                            </th>
+
+
+                            <th>
+                                Exam Percentage
+                            </th>
+
+
+                            <th>
+                                Grade
+                            </th>
+
+
+                            <th>
+                                Status
+                            </th>
+
+
+                        </tr>
+
+
+                    </thead>
+
+
+                    <tbody id="resultTable">
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+
+            <!-- EMPTY -->
+
+            <div
+
+                id="resultEmpty"
+
+                class="empty-message">
+
+
+                <i class="fa-solid fa-chart-column"></i>
+
+
+                <p>
+
+                    No result data found.
+
+                </p>
+
+
+                <span>
+
+                    Add students and exam records to view results.
+
+                </span>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- COMMON JS -->
+
+<script src="17_script.js"></script>
+
+
+
+<script>
+
+
+/* =================================================
+            LOGIN CHECK
+================================================= */
+
+
+if (
+
+    localStorage.getItem(
+        "isLoggedIn"
+    )
+
+    !==
+
+    "true"
+
+) {
+
+
+    window.location.href =
+        "01_index.html";
+
+}
+
+
+
+/* =================================================
+            GET STUDENTS
+================================================= */
+
+
+function getStudents() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gaStudents"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =================================================
+            GET CODING RECORDS
+================================================= */
+
+
+function getCodingRecords() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gaCoding"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =================================================
+            GET EXAM RECORDS
+================================================= */
+
+
+function getExamRecords() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gaExams"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =================================================
+            LOAD STUDENT FILTER
+================================================= */
+
+
+function loadStudentFilter() {
+
+
+    const select =
+
+        document.getElementById(
+            "resultStudent"
+        );
+
+
+    const students =
+        getStudents();
+
+
+
+    select.innerHTML = `
+
+        <option value="all">
+
+            All Students
+
+        </option>
+
+    `;
+
+
+
+    students.forEach(
+
+        function(student) {
+
+
+            const option =
+
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+
+                student._id;
+
+
+
+            option.textContent =
+
+                student.studentId +
+
+                " - " +
+
+                student.name;
+
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =================================================
+        GET CODING PERFORMANCE
+================================================= */
+
+
+function getCodingPerformance(
+
+    studentId
+
+) {
+
+
+    const records =
+        getCodingRecords();
+
+
+
+    const studentRecords =
+
+        records.filter(
+
+            function(record) {
+
+                return (
+
+                    record.studentId ===
+                    studentId
+
+                );
+
+            }
+
+        );
+
+
+
+    if (
+
+        studentRecords.length === 0
+
+    ) {
+
+
+        return {
+
+            solved: 0,
+
+            total: 0,
+
+            percentage: 0
+
+        };
+
+    }
+
+
+
+    let solved = 0;
+
+    let total = 0;
+
+
+
+    studentRecords.forEach(
+
+        function(record) {
+
+
+            solved +=
+
+                Number(
+                    record.solved
+                );
+
+
+            total +=
+
+                Number(
+                    record.total
+                );
+
+        }
+
+    );
+
+
+
+    const percentage =
+
+        total > 0
+
+            ?
+
+            (
+
+                solved /
+
+                total
+
+            ) * 100
+
+            :
+
+            0;
+
+
+
+    return {
+
+
+        solved:
+
+            solved,
+
+
+        total:
+
+            total,
+
+
+        percentage:
+
+            percentage
+
+    };
+
+}
+
+
+
+/* =================================================
+        GET FINAL EXAM PERFORMANCE
+================================================= */
+
+
+function getExamPerformance(
+
+    studentId
+
+) {
+
+
+    const records =
+        getExamRecords();
+
+
+
+    const studentRecords =
+
+        records.filter(
+
+            function(record) {
+
+                return (
+
+                    record.studentId ===
+                    studentId
+
+                );
+
+            }
+
+        );
+
+
+
+    if (
+
+        studentRecords.length === 0
+
+    ) {
+
+
+        return {
+
+
+            obtained: 0,
+
+            total: 0,
+
+            percentage: 0,
+
+            grade: "-",
+
+            status: "Not Attempted"
+
+        };
+
+    }
+
+
+
+    let obtained = 0;
+
+    let total = 0;
+
+
+
+    studentRecords.forEach(
+
+        function(record) {
+
+
+            obtained +=
+
+                Number(
+                    record.obtained
+                );
+
+
+            total +=
+
+                Number(
+                    record.total
+                );
+
+        }
+
+    );
+
+
+
+    const percentage =
+
+        total > 0
+
+            ?
+
+            (
+
+                obtained /
+
+                total
+
+            ) * 100
+
+            :
+
+            0;
+
+
+
+    let grade = "F";
+
+
+
+    if (
+
+        percentage >= 90
+
+    ) {
+
+        grade = "A+";
+
+    }
+
+    else if (
+
+        percentage >= 80
+
+    ) {
+
+        grade = "A";
+
+    }
+
+    else if (
+
+        percentage >= 70
+
+    ) {
+
+        grade = "B+";
+
+    }
+
+    else if (
+
+        percentage >= 60
+
+    ) {
+
+        grade = "B";
+
+    }
+
+    else if (
+
+        percentage >= 50
+
+    ) {
+
+        grade = "C";
+
+    }
+
+    else if (
+
+        percentage >= 40
+
+    ) {
+
+        grade = "D";
+
+    }
+
+
+
+    const status =
+
+        percentage >= 40
+
+            ?
+
+            "Passed"
+
+            :
+
+            "Needs Improvement";
+
+
+
+    return {
+
+
+        obtained:
+
+            obtained,
+
+
+        total:
+
+            total,
+
+
+        percentage:
+
+            percentage,
+
+
+        grade:
+
+            grade,
+
+
+        status:
+
+            status
+
+    };
+
+}
+
+
+
+/* =================================================
+            RENDER RESULTS
+================================================= */
+
+
+function renderResults() {
+
+
+    const table =
+
+        document.getElementById(
+            "resultTable"
+        );
+
+
+    const empty =
+
+        document.getElementById(
+            "resultEmpty"
+        );
+
+
+    const selectedStudent =
+
+        document.getElementById(
+            "resultStudent"
+        )
+        .value;
+
+
+
+    const searchTerm =
+
+        document.getElementById(
+            "resultSearch"
+        )
+        .value
+        .toLowerCase()
+        .trim();
+
+
+
+    const students =
+        getStudents();
+
+
+
+    table.innerHTML = "";
+
+
+
+    /* FILTER STUDENTS */
+
+
+    const filteredStudents =
+
+        students.filter(
+
+            function(student) {
+
+
+                const matchesStudent =
+
+                    selectedStudent === "all"
+
+                    ||
+
+                    student._id ===
+                    selectedStudent;
+
+
+
+                const searchText =
+
+                    (
+
+                        student.studentId +
+
+                        " " +
+
+                        student.name
+
+                    )
+
+                    .toLowerCase();
+
+
+
+                const matchesSearch =
+
+                    searchText.includes(
+                        searchTerm
+                    );
+
+
+
+                return (
+
+                    matchesStudent &&
+
+                    matchesSearch
+
+                );
+
+            }
+
+        );
+
+
+
+    /* EMPTY */
+
+
+    if (
+
+        filteredStudents.length === 0
+
+    ) {
+
+
+        empty.style.display =
+            "block";
+
+
+        return;
+
+    }
+
+
+
+    empty.style.display =
+        "none";
+
+
+
+    /* CREATE RESULT ROWS */
+
+
+    filteredStudents.forEach(
+
+        function(student) {
+
+
+            const coding =
+
+                getCodingPerformance(
+
+                    student._id
+
+                );
+
+
+
+            const exam =
+
+                getExamPerformance(
+
+                    student._id
+
+                );
+
+
+
+            const row =
+
+                document.createElement(
+                    "tr"
+                );
+
+
+
+            row.innerHTML = `
+
+
+                <td>
+
+                    <strong>
+
+                        ${escapeHTML(
+
+                            student.studentId
+
+                        )}
+
+                    </strong>
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.name
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${coding.solved}
+
+                    /
+
+                    ${coding.total}
+
+                    <br>
+
+                    <small>
+
+                        ${coding.percentage.toFixed(1)}%
+
+                    </small>
+
+                </td>
+
+
+
+                <td>
+
+                    ${exam.obtained}
+
+                    /
+
+                    ${exam.total}
+
+                </td>
+
+
+
+                <td>
+
+                    ${exam.percentage.toFixed(2)}%
+
+                </td>
+
+
+
+                <td>
+
+
+                    <span class="result-status">
+
+                        ${exam.grade}
+
+                    </span>
+
+
+                </td>
+
+
+
+                <td>
+
+
+                    <span class="badge
+
+                    ${
+
+
+                        exam.status === "Passed"
+
+                        ?
+
+                        "badge-active"
+
+                        :
+
+                        exam.status === "Not Attempted"
+
+                        ?
+
+                        "badge-pending"
+
+                        :
+
+                        "badge-inactive"
+
+
+                    }">
+
+
+                        ${exam.status}
+
+
+                    </span>
+
+
+                </td>
+
+
+            `;
+
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =================================================
+            SEARCH EVENT
+================================================= */
+
+
+document
+
+.getElementById(
+    "resultSearch"
+)
+
+.addEventListener(
+
+    "input",
+
+    function() {
+
+
+        renderResults();
+
+    }
+
+);
+
+
+
+/* =================================================
+            STUDENT FILTER EVENT
+================================================= */
+
+
+document
+
+.getElementById(
+    "resultStudent"
+)
+
+.addEventListener(
+
+    "change",
+
+    function() {
+
+
+        renderResults();
+
+    }
+
+);
+
+
+
+/* =================================================
+            ESCAPE HTML
+================================================= */
+
+
+function escapeHTML(
+
+    value
+
+) {
+
+
+    const div =
+
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+
+        value || "-";
+
+
+    return div.innerHTML;
+
+}
+
+
+
+/* =================================================
+            LOGOUT
+================================================= */
+
+
+function logout() {
+
+
+    localStorage.removeItem(
+
+        "isLoggedIn"
+
+    );
+
+
+    localStorage.removeItem(
+
+        "adminName"
+
+    );
+
+
+    window.location.href =
+
+        "01_index.html";
+
+}
+
+
+
+/* =================================================
+            ADMIN NAME
+================================================= */
+
+
+const adminName =
+
+    localStorage.getItem(
+
+        "adminName"
+
+    );
+
+
+if (adminName) {
+
+
+    document.getElementById(
+
+        "gaAdminName"
+
+    ).textContent =
+
+        adminName;
+
+}
+
+
+
+/* =================================================
+            INITIALIZE
+================================================= */
+
+
+loadStudentFilter();
+
+
+renderResults();
+
+
+</script>
+
+
+</body>
+
+</html>

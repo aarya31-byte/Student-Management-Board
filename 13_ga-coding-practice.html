@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        GA Coding Practice
+    </title>
+
+
+    <!-- GOOGLE FONT -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- MAIN CSS -->
+
+    <link rel="stylesheet"
+          href="16_panel.css">
+
+</head>
+
+
+<body>
+
+
+<div class="panel">
+
+
+    <!-- =================================================
+                        SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="sidebar-logo-icon">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+        </div>
+
+
+        <h2>
+            Ganishka Academy
+        </h2>
+
+
+        <p>
+            Admin Panel
+        </p>
+
+
+
+        <ul class="sidebar-menu">
+
+
+            <li
+                onclick="window.location.href='11_ga-dashboard.html'">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </li>
+
+
+
+            <li
+                onclick="window.location.href='12_ga-students.html'">
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+                <span>
+                    Students
+                </span>
+
+            </li>
+
+
+
+            <li class="active">
+
+                <i class="fa-solid fa-code"></i>
+
+                <span>
+                    Coding Practice
+                </span>
+
+            </li>
+<!-- ATTENDANCE -->
+
+<li onclick="goToPage('11_gt-attendance.html')">
+
+    <i class="fa-solid fa-calendar-check"></i>
+
+    <span>
+        Attendance
+    </span>
+
+</li>
+
+
+            <li
+                onclick="window.location.href='14_ga-final-exam.html'">
+
+                <i class="fa-solid fa-file-pen"></i>
+
+                <span>
+                    Final Exam
+                </span>
+
+            </li>
+
+
+
+            <li
+                onclick="window.location.href='15_ga-results.html'">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>
+                    Results
+                </span>
+
+            </li>
+
+
+
+            <li
+                onclick="window.location.href='04_dashboard.html'">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <span>
+                    Main Dashboard
+                </span>
+
+            </li>
+
+
+        </ul>
+
+
+
+        <div class="sidebar-logout">
+
+            <button onclick="logout()">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================================
+                        MAIN CONTENT
+    ================================================== -->
+
+    <main class="content">
+
+
+        <!-- TOP -->
+
+        <div class="top">
+
+
+            <div class="top-title">
+
+                <span>
+                    GANISHKA ACADEMY
+                </span>
+
+
+                <h1>
+                    Coding Practice
+                </h1>
+
+
+                <p>
+                    Manage student coding practice performance.
+                </p>
+
+            </div>
+
+
+
+            <div class="top-admin">
+
+
+                <div>
+
+                    <small>
+                        Welcome
+                    </small>
+
+
+                    <strong id="gaAdminName">
+                        Administrator
+                    </strong>
+
+                </div>
+
+
+                <div class="top-admin-icon">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                    ADD CODING PRACTICE
+        ================================================== -->
+
+        <div class="form-box">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        CODING PRACTICE
+                    </span>
+
+
+                    <h2>
+                        Add Coding Practice Record
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <form id="codingForm">
+
+
+                <div class="form-grid">
+
+
+                    <!-- STUDENT -->
+
+                    <div class="form-group">
+
+
+                        <label for="codingStudent">
+
+                            Select Student
+
+                        </label>
+
+
+                        <select
+
+                            id="codingStudent"
+
+                            required>
+
+
+                            <option value="">
+
+                                Select Student
+
+                            </option>
+
+
+                        </select>
+
+
+                    </div>
+
+
+
+                    <!-- TOPIC -->
+
+                    <div class="form-group">
+
+
+                        <label for="codingTopic">
+
+                            Practice Topic
+
+                        </label>
+
+
+                        <select
+
+                            id="codingTopic"
+
+                            required>
+
+
+                            <option value="">
+
+                                Select Topic
+
+                            </option>
+
+
+                            <option value="HTML">
+
+                                HTML
+
+                            </option>
+
+
+                            <option value="CSS">
+
+                                CSS
+
+                            </option>
+
+
+                            <option value="JavaScript">
+
+                                JavaScript
+
+                            </option>
+
+
+                            <option value="Python">
+
+                                Python
+
+                            </option>
+
+
+                            <option value="Java">
+
+                                Java
+
+                            </option>
+
+
+                        </select>
+
+
+                    </div>
+
+
+
+                    <!-- TOTAL -->
+
+                    <div class="form-group">
+
+
+                        <label for="codingTotal">
+
+                            Total Problems
+
+                        </label>
+
+
+                        <input
+
+                            type="number"
+
+                            id="codingTotal"
+
+                            placeholder="Enter total problems"
+
+                            min="1"
+
+                            required>
+
+
+                    </div>
+
+
+
+                    <!-- SOLVED -->
+
+                    <div class="form-group">
+
+
+                        <label for="codingSolved">
+
+                            Problems Solved
+
+                        </label>
+
+
+                        <input
+
+                            type="number"
+
+                            id="codingSolved"
+
+                            placeholder="Enter solved problems"
+
+                            min="0"
+
+                            required>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="form-buttons">
+
+
+                    <button
+
+                        type="submit"
+
+                        class="primary-btn">
+
+
+                        <i class="fa-solid fa-plus"></i>
+
+
+                        Add Record
+
+
+                    </button>
+
+
+                    <button
+
+                        type="reset"
+
+                        class="secondary-btn">
+
+
+                        <i class="fa-solid fa-rotate-left"></i>
+
+
+                        Reset
+
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+                    CODING PRACTICE TABLE
+        ================================================== -->
+
+        <div class="table-box">
+
+
+            <div class="table-header">
+
+
+                <div>
+
+                    <span class="section-label">
+                        PRACTICE RECORDS
+                    </span>
+
+
+                    <h2>
+                        Coding Practice List
+                    </h2>
+
+                </div>
+
+
+
+                <div class="search-wrapper">
+
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+
+                    <input
+
+                        type="text"
+
+                        id="searchCoding"
+
+                        placeholder="Search student or topic...">
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="table-responsive">
+
+
+                <table>
+
+
+                    <thead>
+
+
+                        <tr>
+
+
+                            <th>
+                                Student ID
+                            </th>
+
+
+                            <th>
+                                Student Name
+                            </th>
+
+
+                            <th>
+                                Topic
+                            </th>
+
+
+                            <th>
+                                Total
+                            </th>
+
+
+                            <th>
+                                Solved
+                            </th>
+
+
+                            <th>
+                                Progress
+                            </th>
+
+
+                            <th>
+                                Action
+                            </th>
+
+
+                        </tr>
+
+
+                    </thead>
+
+
+                    <tbody id="codingTable">
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+
+            <div
+
+                id="codingEmpty"
+
+                class="empty-message">
+
+
+                <i class="fa-solid fa-code"></i>
+
+
+                <p>
+                    No coding practice records found.
+                </p>
+
+
+                <span>
+                    Add a coding practice record using the form above.
+                </span>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- COMMON JS -->
+
+<script src="17_script.js"></script>
+
+
+
+<script>
+
+
+/* =========================================
+        LOGIN CHECK
+========================================= */
+
+
+if (
+
+    localStorage.getItem(
+        "isLoggedIn"
+    )
+
+    !==
+
+    "true"
+
+) {
+
+    window.location.href =
+        "01_index.html";
+
+}
+
+
+
+/* =========================================
+        GET STUDENTS
+========================================= */
+
+
+function getStudents() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gaStudents"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =========================================
+        GET CODING RECORDS
+========================================= */
+
+
+function getCodingRecords() {
+
+
+    return JSON.parse(
+
+        localStorage.getItem(
+            "gaCoding"
+        )
+
+    ) || [];
+
+}
+
+
+
+/* =========================================
+        SAVE CODING RECORDS
+========================================= */
+
+
+function saveCodingRecords(
+
+    records
+
+) {
+
+
+    localStorage.setItem(
+
+        "gaCoding",
+
+        JSON.stringify(
+            records
+        )
+
+    );
+
+}
+
+
+
+/* =========================================
+        LOAD STUDENTS
+========================================= */
+
+
+function loadStudents() {
+
+
+    const select =
+
+        document.getElementById(
+            "codingStudent"
+        );
+
+
+    const students =
+        getStudents();
+
+
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select Student
+
+        </option>
+
+    `;
+
+
+
+    students.forEach(
+
+        function(student) {
+
+
+            const option =
+
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+
+                student._id;
+
+
+
+            option.textContent =
+
+                student.studentId +
+
+                " - " +
+
+                student.name;
+
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =========================================
+        ADD CODING RECORD
+========================================= */
+
+
+document
+
+.getElementById(
+    "codingForm"
+)
+
+.addEventListener(
+
+    "submit",
+
+    function(event) {
+
+
+        event.preventDefault();
+
+
+
+        const studentId =
+
+            document.getElementById(
+                "codingStudent"
+            )
+            .value;
+
+
+
+        const topic =
+
+            document.getElementById(
+                "codingTopic"
+            )
+            .value;
+
+
+
+        const total =
+
+            Number(
+
+                document.getElementById(
+                    "codingTotal"
+                )
+                .value
+
+            );
+
+
+
+        const solved =
+
+            Number(
+
+                document.getElementById(
+                    "codingSolved"
+                )
+                .value
+
+            );
+
+
+
+        if (
+
+            !studentId ||
+
+            !topic ||
+
+            !total
+
+        ) {
+
+
+            alert(
+
+                "Please fill all details."
+
+            );
+
+
+            return;
+
+        }
+
+
+
+        if (
+
+            solved > total
+
+        ) {
+
+
+            alert(
+
+                "Solved problems cannot be greater than total problems."
+
+            );
+
+
+            return;
+
+        }
+
+
+
+        const records =
+            getCodingRecords();
+
+
+
+        const newRecord = {
+
+
+            _id:
+
+                Date.now().toString(),
+
+
+            studentId:
+
+                studentId,
+
+
+            topic:
+
+                topic,
+
+
+            total:
+
+                total,
+
+
+            solved:
+
+                solved,
+
+
+            createdAt:
+
+                new Date()
+                    .toISOString()
+
+
+        };
+
+
+
+        records.push(
+
+            newRecord
+
+        );
+
+
+
+        saveCodingRecords(
+
+            records
+
+        );
+
+
+
+        alert(
+
+            "Coding practice record added successfully!"
+
+        );
+
+
+
+        document
+
+        .getElementById(
+            "codingForm"
+        )
+
+        .reset();
+
+
+
+        renderCodingRecords();
+
+    }
+
+);
+
+
+
+/* =========================================
+        RENDER RECORDS
+========================================= */
+
+
+function renderCodingRecords(
+
+    searchTerm = ""
+
+) {
+
+
+    const table =
+
+        document.getElementById(
+            "codingTable"
+        );
+
+
+    const empty =
+
+        document.getElementById(
+            "codingEmpty"
+        );
+
+
+    const students =
+        getStudents();
+
+
+    const records =
+        getCodingRecords();
+
+
+
+    const search =
+
+        searchTerm
+        .toLowerCase()
+        .trim();
+
+
+
+    table.innerHTML = "";
+
+
+
+    const filteredRecords =
+
+        records.filter(
+
+            function(record) {
+
+
+                const student =
+
+                    students.find(
+
+                        function(item) {
+
+                            return (
+
+                                item._id ===
+                                record.studentId
+
+                            );
+
+                        }
+
+                    );
+
+
+
+                const studentName =
+
+                    student
+
+                    ?
+
+                    student.name
+
+                    :
+
+                    "";
+
+
+
+                const studentCode =
+
+                    student
+
+                    ?
+
+                    student.studentId
+
+                    :
+
+                    "";
+
+
+
+                const searchText =
+
+                    studentName +
+
+                    " " +
+
+                    studentCode +
+
+                    " " +
+
+                    record.topic;
+
+
+
+                return (
+
+                    searchText
+
+                    .toLowerCase()
+
+                    .includes(search)
+
+                );
+
+            }
+
+        );
+
+
+
+    if (
+
+        filteredRecords.length === 0
+
+    ) {
+
+
+        empty.style.display =
+            "block";
+
+
+        return;
+
+    }
+
+
+
+    empty.style.display =
+        "none";
+
+
+
+    filteredRecords.forEach(
+
+        function(record) {
+
+
+            const student =
+
+                students.find(
+
+                    function(item) {
+
+                        return (
+
+                            item._id ===
+                            record.studentId
+
+                        );
+
+                    }
+
+                );
+
+
+
+            if (!student) {
+
+                return;
+
+            }
+
+
+
+            const percentage =
+
+                (
+
+                    record.solved /
+
+                    record.total
+
+                ) * 100;
+
+
+
+            const row =
+
+                document.createElement(
+                    "tr"
+                );
+
+
+
+            row.innerHTML = `
+
+
+                <td>
+
+                    <strong>
+
+                        ${escapeHTML(
+
+                            student.studentId
+
+                        )}
+
+                    </strong>
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        student.name
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${escapeHTML(
+
+                        record.topic
+
+                    )}
+
+                </td>
+
+
+
+                <td>
+
+                    ${record.total}
+
+                </td>
+
+
+
+                <td>
+
+                    ${record.solved}
+
+                </td>
+
+
+
+                <td>
+
+                    <span class="result-status">
+
+                        ${percentage.toFixed(0)}%
+
+                    </span>
+
+                </td>
+
+
+
+                <td>
+
+
+                    <button
+
+                        class="delete-btn"
+
+                        onclick="deleteCodingRecord('${record._id}')">
+
+
+                        <i class="fa-solid fa-trash"></i>
+
+
+                    </button>
+
+
+                </td>
+
+
+            `;
+
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =========================================
+        DELETE RECORD
+========================================= */
+
+
+function deleteCodingRecord(
+
+    id
+
+) {
+
+
+    const confirmation =
+
+        confirm(
+
+            "Delete this coding practice record?"
+
+        );
+
+
+
+    if (!confirmation) {
+
+        return;
+
+    }
+
+
+
+    const records =
+        getCodingRecords();
+
+
+
+    const updatedRecords =
+
+        records.filter(
+
+            function(record) {
+
+                return (
+
+                    record._id !==
+                    id
+
+                );
+
+            }
+
+        );
+
+
+
+    saveCodingRecords(
+
+        updatedRecords
+
+    );
+
+
+
+    renderCodingRecords();
+
+
+
+    alert(
+
+        "Record deleted successfully!"
+
+    );
+
+}
+
+
+
+/* =========================================
+        SEARCH
+========================================= */
+
+
+document
+
+.getElementById(
+    "searchCoding"
+)
+
+.addEventListener(
+
+    "input",
+
+    function() {
+
+
+        renderCodingRecords(
+
+            this.value
+
+        );
+
+    }
+
+);
+
+
+
+/* =========================================
+        ESCAPE HTML
+========================================= */
+
+
+function escapeHTML(
+
+    value
+
+) {
+
+
+    const div =
+
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+
+        value || "-";
+
+
+    return div.innerHTML;
+
+}
+
+
+
+/* =========================================
+        LOGOUT
+========================================= */
+
+
+function logout() {
+
+
+    localStorage.removeItem(
+
+        "isLoggedIn"
+
+    );
+
+
+    localStorage.removeItem(
+
+        "adminName"
+
+    );
+
+
+    window.location.href =
+
+        "01_index.html";
+
+}
+
+
+
+/* =========================================
+        ADMIN NAME
+========================================= */
+
+
+const adminName =
+
+    localStorage.getItem(
+
+        "adminName"
+
+    );
+
+
+if (adminName) {
+
+
+    document.getElementById(
+
+        "gaAdminName"
+
+    ).textContent =
+
+        adminName;
+
+}
+
+
+
+/* =========================================
+        INITIALIZE
+========================================= */
+
+
+loadStudents();
+
+
+renderCodingRecords();
+
+
+</script>
+
+
+</body>
+
+</html>

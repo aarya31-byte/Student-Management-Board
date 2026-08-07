@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>GA Attendance | Ganishka Academy</title>
+
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <link rel="stylesheet"
+          href="16_panel.css">
+
+</head>
+
+
+<body>
+
+
+<div class="panel">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="sidebar-logo-icon">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+        </div>
+
+
+        <h2>
+
+            Ganishka Academy
+
+        </h2>
+
+
+        <p>
+
+            Admin Panel
+
+        </p>
+
+
+        <ul class="sidebar-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <li onclick="goToPage('11_ga-dashboard.html')">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>
+
+                    Dashboard
+
+                </span>
+
+            </li>
+
+
+            <!-- STUDENTS -->
+
+            <li onclick="goToPage('12_ga-students.html')">
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+                <span>
+
+                    Students
+
+                </span>
+
+            </li>
+
+
+            <!-- CODING PRACTICE -->
+
+            <li onclick="goToPage('13_ga-coding-practice.html')">
+
+                <i class="fa-solid fa-code"></i>
+
+                <span>
+
+                    Coding Practice
+
+                </span>
+
+            </li>
+
+
+
+            <!-- ATTENDANCE ACTIVE -->
+
+            <li class="active">
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+                <span>
+
+                    Attendance
+
+                </span>
+
+            </li>
+ <!-- FINAL EXAM -->
+
+            <li onclick="goToPage('14_ga-final-exam.html')">
+
+
+                <i class="fa-solid fa-file-pen"></i>
+
+
+                <span>
+                    Final Exam
+                </span>
+
+
+            </li>
+
+            <!-- RESULTS -->
+
+            <li onclick="goToPage('15_ga-results.html')">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>
+
+                    Results
+
+                </span>
+
+            </li>
+
+
+            <!-- MAIN DASHBOARD -->
+
+            <li onclick="goToPage('04_dashboard.html')">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <span>
+
+                    Main Dashboard
+
+                </span>
+
+            </li>
+
+
+        </ul>
+
+
+        <div class="sidebar-logout">
+
+            <button onclick="logout()">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+
+    <main class="content">
+
+
+        <div class="top">
+
+
+            <div class="top-title">
+
+
+                <span>
+
+                    GANISHKA ACADEMY
+
+                </span>
+
+
+                <h1>
+
+                    Student Attendance
+
+                </h1>
+
+
+                <p>
+
+                    Manage and track academy student attendance.
+
+                </p>
+
+
+            </div>
+
+
+            <div class="top-admin">
+
+
+                <div>
+
+                    <small>
+
+                        Welcome
+
+                    </small>
+
+
+                    <strong id="adminName">
+
+                        Administrator
+
+                    </strong>
+
+                </div>
+
+
+                <div class="top-admin-icon">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================= FORM ================= -->
+
+
+        <div class="form-box">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+
+                    <span class="section-label">
+
+                        ATTENDANCE MANAGEMENT
+
+                    </span>
+
+
+                    <h2>
+
+                        Mark Student Attendance
+
+                    </h2>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Select Student
+
+                    </label>
+
+
+                    <select id="studentSelect">
+
+
+                        <option value="">
+
+                            Select Student
+
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Attendance Date
+
+                    </label>
+
+
+                    <input
+
+                        type="date"
+
+                        id="attendanceDate">
+
+
+                </div>
+
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Attendance Status
+
+                    </label>
+
+
+                    <select id="attendanceStatus">
+
+
+                        <option value="">
+
+                            Select Status
+
+                        </option>
+
+
+                        <option value="Present">
+
+                            Present
+
+                        </option>
+
+
+                        <option value="Absent">
+
+                            Absent
+
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="form-buttons">
+
+
+                <button
+
+                    class="primary-btn"
+
+                    onclick="markAttendance()">
+
+
+                    <i class="fa-solid fa-check"></i>
+
+
+                    Mark Attendance
+
+
+                </button>
+
+
+                <button
+
+                    class="secondary-btn"
+
+                    onclick="resetForm()">
+
+
+                    <i class="fa-solid fa-rotate-left"></i>
+
+
+                    Reset
+
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================= STATS ================= -->
+
+
+        <div class="stats-grid">
+
+
+            <div class="stat-card">
+
+
+                <div>
+
+                    <span>
+
+                        Total Records
+
+                    </span>
+
+
+                    <h2 id="totalRecords">
+
+                        0
+
+                    </h2>
+
+                </div>
+
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+
+            </div>
+
+
+            <div class="stat-card">
+
+
+                <div>
+
+                    <span>
+
+                        Present
+
+                    </span>
+
+
+                    <h2 id="presentCount">
+
+                        0
+
+                    </h2>
+
+                </div>
+
+
+                <i class="fa-solid fa-circle-check"></i>
+
+
+            </div>
+
+
+            <div class="stat-card">
+
+
+                <div>
+
+                    <span>
+
+                        Absent
+
+                    </span>
+
+
+                    <h2 id="absentCount">
+
+                        0
+
+                    </h2>
+
+                </div>
+
+
+                <i class="fa-solid fa-circle-xmark"></i>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================= TABLE ================= -->
+
+
+        <div class="table-box">
+
+
+            <div class="table-header">
+
+
+                <div>
+
+
+                    <span class="section-label">
+
+                        ATTENDANCE RECORDS
+
+                    </span>
+
+
+                    <h2>
+
+                        Academy Attendance List
+
+                    </h2>
+
+                </div>
+
+
+                <input
+
+                    type="text"
+
+                    id="searchAttendance"
+
+                    class="search"
+
+                    placeholder="Search student or ID...">
+
+
+            </div>
+
+
+
+            <div class="table-responsive">
+
+
+                <table>
+
+
+                    <thead>
+
+
+                        <tr>
+
+
+                            <th>
+
+                                Student ID
+
+                            </th>
+
+
+                            <th>
+
+                                Student Name
+
+                            </th>
+
+
+                            <th>
+
+                                Date
+
+                            </th>
+
+
+                            <th>
+
+                                Status
+
+                            </th>
+
+
+                            <th>
+
+                                Action
+
+                            </th>
+
+
+                        </tr>
+
+
+                    </thead>
+
+
+                    <tbody id="attendanceTable">
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<script>
+
+
+/* ================= NAVIGATION ================= */
+
+
+function goToPage(page) {
+
+    window.location.href = page;
+
+}
+
+
+
+/* ================= LOGOUT ================= */
+
+
+function logout() {
+
+    localStorage.removeItem("isLoggedIn");
+
+    localStorage.removeItem("adminName");
+
+    window.location.href = "01_index.html";
+
+}
+
+
+
+/* ================= ADMIN ================= */
+
+
+const adminName = localStorage.getItem("adminName");
+
+
+if (adminName) {
+
+    document.getElementById("adminName").textContent = adminName;
+
+}
+
+
+
+/* ================= GA STUDENTS ================= */
+
+
+function getStudents() {
+
+    return JSON.parse(
+
+        localStorage.getItem("gaStudents")
+
+    ) || [];
+
+}
+
+
+
+/* ================= GA ATTENDANCE ================= */
+
+
+function getAttendance() {
+
+    return JSON.parse(
+
+        localStorage.getItem("gaAttendance")
+
+    ) || [];
+
+}
+
+
+function saveAttendance(data) {
+
+    localStorage.setItem(
+
+        "gaAttendance",
+
+        JSON.stringify(data)
+
+    );
+
+}
+
+
+
+/* ================= LOAD STUDENTS ================= */
+
+
+function loadStudents() {
+
+
+    const students = getStudents();
+
+
+    const select =
+
+        document.getElementById(
+
+            "studentSelect"
+
+        );
+
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select Student
+
+        </option>
+
+    `;
+
+
+    students.forEach(student => {
+
+
+        const option =
+
+            document.createElement(
+
+                "option"
+
+            );
+
+
+        option.value =
+
+            student._id ||
+
+            student.id ||
+
+            student.studentId;
+
+
+        option.textContent =
+
+            (
+
+                student.studentId ||
+
+                student.id ||
+
+                "-"
+
+            )
+
+            +
+
+            " - "
+
+            +
+
+            (
+
+                student.name ||
+
+                "Student"
+
+            );
+
+
+        select.appendChild(option);
+
+
+    });
+
+}
+
+
+
+/* ================= MARK ATTENDANCE ================= */
+
+
+function markAttendance() {
+
+
+    const studentId =
+
+        document.getElementById(
+
+            "studentSelect"
+
+        ).value;
+
+
+    const date =
+
+        document.getElementById(
+
+            "attendanceDate"
+
+        ).value;
+
+
+    const status =
+
+        document.getElementById(
+
+            "attendanceStatus"
+
+        ).value;
+
+
+    if (!studentId || !date || !status) {
+
+
+        alert(
+
+            "Please select student, date and attendance status."
+
+        );
+
+
+        return;
+
+
+    }
+
+
+    const students = getStudents();
+
+
+    const student = students.find(
+
+        item =>
+
+            String(
+
+                item._id ||
+
+                item.id ||
+
+                item.studentId
+
+            )
+
+            ===
+
+            String(studentId)
+
+    );
+
+
+    if (!student) {
+
+
+        alert(
+
+            "Student not found."
+
+        );
+
+
+        return;
+
+
+    }
+
+
+    let attendance =
+
+        getAttendance();
+
+
+    const alreadyMarked =
+
+        attendance.some(
+
+            item =>
+
+                String(
+
+                    item.studentId
+
+                )
+
+                ===
+
+                String(studentId)
+
+                &&
+
+                item.date === date
+
+        );
+
+
+    if (alreadyMarked) {
+
+
+        alert(
+
+            "Attendance for this student on this date is already marked."
+
+        );
+
+
+        return;
+
+
+    }
+
+
+    attendance.push({
+
+        id: Date.now(),
+
+        studentId: studentId,
+
+        studentCode:
+
+            student.studentId ||
+
+            student.id ||
+
+            studentId,
+
+        studentName:
+
+            student.name ||
+
+            "Student",
+
+        date: date,
+
+        status: status
+
+    });
+
+
+    saveAttendance(attendance);
+
+
+    alert(
+
+        "Attendance marked successfully!"
+
+    );
+
+
+    resetForm();
+
+
+    renderAttendance();
+
+
+}
+
+
+
+/* ================= RESET ================= */
+
+
+function resetForm() {
+
+
+    document.getElementById(
+
+        "studentSelect"
+
+    ).value = "";
+
+
+    document.getElementById(
+
+        "attendanceDate"
+
+    ).value = "";
+
+
+    document.getElementById(
+
+        "attendanceStatus"
+
+    ).value = "";
+
+
+}
+
+
+
+/* ================= RENDER ================= */
+
+
+function renderAttendance() {
+
+
+    const attendance =
+
+        getAttendance();
+
+
+    const search =
+
+        document.getElementById(
+
+            "searchAttendance"
+
+        )
+
+        .value
+
+        .toLowerCase()
+
+        .trim();
+
+
+    const table =
+
+        document.getElementById(
+
+            "attendanceTable"
+
+        );
+
+
+    table.innerHTML = "";
+
+
+    let present = 0;
+
+    let absent = 0;
+
+
+    attendance.forEach(item => {
+
+
+        if (
+
+            item.status ===
+
+            "Present"
+
+        ) {
+
+            present++;
+
+        }
+
+
+        if (
+
+            item.status ===
+
+            "Absent"
+
+        ) {
+
+            absent++;
+
+        }
+
+
+    });
+
+
+    document.getElementById(
+
+        "totalRecords"
+
+    ).textContent =
+
+        attendance.length;
+
+
+    document.getElementById(
+
+        "presentCount"
+
+    ).textContent =
+
+        present;
+
+
+    document.getElementById(
+
+        "absentCount"
+
+    ).textContent =
+
+        absent;
+
+
+    const filtered =
+
+        attendance.filter(item =>
+
+
+            String(
+
+                item.studentCode
+
+            )
+
+            .toLowerCase()
+
+            .includes(search)
+
+
+            ||
+
+
+            String(
+
+                item.studentName
+
+            )
+
+            .toLowerCase()
+
+            .includes(search)
+
+
+            ||
+
+
+            String(
+
+                item.date
+
+            )
+
+            .includes(search)
+
+
+        );
+
+
+    if (
+
+        filtered.length === 0
+
+    ) {
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="5">
+
+                    No attendance records found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        return;
+
+
+    }
+
+
+    filtered.forEach(item => {
+
+
+        const row =
+
+            document.createElement(
+
+                "tr"
+
+            );
+
+
+        row.innerHTML = `
+
+            <td>
+
+                ${item.studentCode}
+
+            </td>
+
+
+            <td>
+
+                ${item.studentName}
+
+            </td>
+
+
+            <td>
+
+                ${item.date}
+
+            </td>
+
+
+            <td>
+
+                ${item.status}
+
+            </td>
+
+
+            <td>
+
+
+                <button
+
+                    class="delete-btn"
+
+                    onclick="deleteAttendance(${item.id})">
+
+
+                    <i class="fa-solid fa-trash"></i>
+
+
+                </button>
+
+
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+
+    });
+
+
+}
+
+
+
+/* ================= DELETE ================= */
+
+
+function deleteAttendance(id) {
+
+
+    if (
+
+        !confirm(
+
+            "Are you sure you want to delete this attendance record?"
+
+        )
+
+    ) {
+
+        return;
+
+    }
+
+
+    let attendance =
+
+        getAttendance();
+
+
+    attendance =
+
+        attendance.filter(
+
+            item =>
+
+                item.id !== id
+
+        );
+
+
+    saveAttendance(attendance);
+
+
+    renderAttendance();
+
+
+}
+
+
+
+/* ================= SEARCH ================= */
+
+
+document
+
+.getElementById(
+
+    "searchAttendance"
+
+)
+
+.addEventListener(
+
+    "input",
+
+    renderAttendance
+
+);
+
+
+
+/* ================= INITIALIZE ================= */
+
+
+loadStudents();
+
+renderAttendance();
+
+
+</script>
+
+
+</body>
+
+</html>

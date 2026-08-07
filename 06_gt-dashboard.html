@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>GT Dashboard | Student Management Board</title>
+              <!-- Google Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet"
+          href="16_panel.css">
+
+</head>
+<body>
+<div class="panel"> 
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="sidebar-logo-icon">
+
+                <i class="fa-solid fa-laptop-code"></i>
+
+            </div>
+
+        </div>
+
+
+        <h2>
+            Ganishka<br>
+            Technology
+        </h2>
+
+
+        <p>
+            Admin Panel
+        </p>
+
+
+        <ul class="sidebar-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <li class="active">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </li>
+
+
+            <!-- STUDENTS -->
+
+            <li onclick="goToPage('07_gt-students.html')">
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+                <span>
+                    Students
+                </span>
+
+            </li>
+            <li onclick="window.location.href='11_gt-attendance.html'">
+
+    <i class="fa-solid fa-calendar-check"></i>
+
+    <span>Attendance</span>
+
+</li>
+
+
+            <!-- ASSIGNMENTS -->
+
+            <li onclick="goToPage('08_gt-assignments.html')">
+
+                <i class="fa-solid fa-list-check"></i>
+
+                <span>
+                    Assignments
+                </span>
+
+            </li>
+
+
+            <!-- UPLOAD MARKS -->
+
+            <li onclick="goToPage('09_gt-marks.html')">
+
+                <i class="fa-solid fa-pen-to-square"></i>
+
+                <span>
+                    Upload Marks
+                </span>
+
+            </li>
+
+
+            <!-- RESULTS -->
+
+            <li onclick="goToPage('10_gt-results.html')">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>
+                    Results
+                </span>
+
+            </li>
+
+
+            <!-- MAIN DASHBOARD -->
+
+            <li onclick="goToPage('04_dashboard.html')">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <span>
+                    Main Dashboard
+                </span>
+
+            </li>
+
+
+        </ul>
+
+
+        <!-- LOGOUT -->
+
+        <div class="sidebar-logout">
+
+            <button onclick="logout()">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="content">
+
+
+        <!-- TOP HEADER -->
+
+        <div class="top">
+
+
+            <div class="top-title">
+
+                <span>
+                    GANISHKA TECHNOLOGY
+                </span>
+
+                <h1>
+                    Technology Dashboard
+                </h1>
+
+                <p>
+                    Manage students, assignments, marks and results.
+                </p>
+
+            </div>
+
+
+            <!-- ADMIN -->
+
+            <div class="top-admin">
+
+                <div>
+
+                    <small>
+                        Welcome
+                    </small>
+
+                    <strong id="gtAdminName">
+                        Administrator
+                    </strong>
+
+                </div>
+
+
+                <div class="top-admin-icon">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================= STAT CARDS ================= -->
+
+        <div class="stats-grid">
+
+
+            <!-- STUDENTS -->
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+                <span>
+                    Total Students
+                </span>
+
+                <strong id="totalStudents">
+                    0
+                </strong>
+
+            </div>
+
+
+            <!-- ASSIGNMENTS -->
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <span>
+                    Assignments
+                </span>
+
+                <strong id="totalAssignments">
+                    0
+                </strong>
+
+            </div>
+
+
+            <!-- RESULTS -->
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>
+                    Results
+                </span>
+
+                <strong id="totalResults">
+                    0
+                </strong>
+
+            </div>
+<div class="stat-card">
+
+    <i class="fa-solid fa-calendar-check"></i>
+
+    <span>
+        Attendance
+    </span>
+
+    <strong id="totalAttendance">
+        0
+    </strong>
+
+</div>
+
+        </div>
+
+
+
+        <!-- ================= STUDENT LIST ================= -->
+
+        <div class="table-box">
+
+
+            <div class="table-header">
+
+
+                <div>
+
+                    <span class="section-label">
+                        STUDENT MANAGEMENT
+                    </span>
+
+                    <h2>
+                        Technology Students
+                    </h2>
+
+                </div>
+
+
+                <!-- SEARCH -->
+
+                <div class="search-wrapper">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+
+                        type="text"
+
+                        id="dashboardSearch"
+
+                        placeholder="Search students...">
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="table-responsive">
+
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Student ID
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Batch
+                            </th>
+
+                            <th>
+                                Course
+                            </th>
+
+                            <th>
+                                Duration
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="dashboardStudentTable">
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<script>
+
+
+/* ================= PAGE NAVIGATION ================= */
+
+function goToPage(page) {
+
+    window.location.href = page;
+
+}
+
+
+
+/* ================= GET STUDENTS ================= */
+
+function getGTStudents() {
+
+    return JSON.parse(
+
+        localStorage.getItem("gtStudents")
+
+    ) || [];
+
+}
+
+
+
+/* ================= GET ASSIGNMENTS ================= */
+
+function getGTAssignments() {
+
+    return JSON.parse(
+
+        localStorage.getItem("gtAssignments")
+
+    ) || [];
+
+}
+
+
+
+/* ================= GET MARKS ================= */
+
+function getGTMarks() {
+
+    return JSON.parse(
+
+        localStorage.getItem("gtMarks")
+
+    ) || [];
+
+}
+
+/* ================= GET ATTENDANCE ================= */
+
+function getGTAttendance() {
+
+    return JSON.parse(
+
+        localStorage.getItem("gtAttendance")
+
+    ) || [];
+
+}
+
+/* ================= DISPLAY STUDENTS ================= */
+
+function displayStudents(search = "") {
+
+
+    const students = getGTStudents();
+
+
+    const table =
+
+        document.getElementById(
+
+            "dashboardStudentTable"
+
+        );
+
+
+    table.innerHTML = "";
+
+
+    const filteredStudents =
+
+        students.filter(function(student) {
+
+
+            const text =
+
+                (
+
+                    student.studentId +
+
+                    " " +
+
+                    student.name +
+
+                    " " +
+
+                    student.batch +
+
+                    " " +
+
+                    student.course +
+
+                    " " +
+
+                    student.duration
+
+                )
+
+                .toLowerCase();
+
+
+            return text.includes(
+
+                search.toLowerCase()
+
+            );
+
+        });
+
+
+
+    if (
+
+        filteredStudents.length === 0
+
+    ) {
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="5">
+
+                    No students found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    filteredStudents.forEach(function(student) {
+
+
+        const row =
+
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>
+
+                ${student.studentId || "-"}
+
+            </td>
+
+
+            <td>
+
+                ${student.name || "-"}
+
+            </td>
+
+
+            <td>
+
+                ${student.batch || "-"}
+
+            </td>
+
+
+            <td>
+
+                ${student.course || "-"}
+
+            </td>
+
+
+            <td>
+
+                ${student.duration || "-"}
+
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+
+    });
+
+}
+
+
+
+/* ================= UPDATE DASHBOARD ================= */
+
+function updateDashboard() {
+
+    const students = getGTStudents();
+
+    const assignments = getGTAssignments();
+
+    const marks = getGTMarks();
+
+    const attendance = getGTAttendance();
+
+    document.getElementById("totalStudents").textContent =
+        students.length;
+
+    document.getElementById("totalAssignments").textContent =
+        assignments.length;
+
+    document.getElementById("totalResults").textContent =
+        marks.length;
+
+    const attendanceElement =
+        document.getElementById("totalAttendance");
+
+    if (attendanceElement) {
+        attendanceElement.textContent = attendance.length;
+    }
+
+    displayStudents();
+
+}
+
+/* ================= ADMIN NAME ================= */
+
+const adminName =
+
+    localStorage.getItem(
+
+        "adminName"
+
+    );
+
+
+
+if (adminName) {
+
+
+    document.getElementById(
+
+        "gtAdminName"
+
+    ).textContent =
+
+        adminName;
+
+}
+
+
+
+/* ================= LOGOUT ================= */
+
+function logout() {
+
+
+    localStorage.removeItem(
+
+        "isLoggedIn"
+
+    );
+    localStorage.removeItem(
+
+        "adminName"
+
+    );
+    window.location.href =
+
+        "01_index.html";
+
+}
+/* ================= INITIALIZE ================= */
+updateDashboard();
+</script>
+</body>
+</html>

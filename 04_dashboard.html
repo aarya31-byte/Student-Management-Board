@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Student Management Board | Dashboard
+    </title>
+
+
+    <!-- Google Font -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- Dashboard CSS -->
+
+    <link rel="stylesheet"
+          href="05_dashboard.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+             MAIN DASHBOARD
+========================================= -->
+
+
+<div class="dashboard-page">
+
+
+    <!-- =====================================
+                 TOP HEADER
+    ====================================== -->
+
+
+    <header class="dashboard-header">
+
+
+        <!-- Logo / Title -->
+
+        <div class="dashboard-brand">
+
+
+            <div class="brand-small-icon">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+
+            <div>
+
+                <h1>
+                    Student Management Board
+                </h1>
+
+                <p>
+                    Ganishka Enterprises
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- Admin Area -->
+
+        <div class="admin-area">
+
+
+            <div class="admin-details">
+
+                <span class="admin-label">
+                    Welcome
+                </span>
+
+                <strong id="adminName">
+                    Administrator
+                </strong>
+
+            </div>
+
+
+            <div class="admin-icon">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+            </div>
+
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- =====================================
+                 MAIN CONTENT
+    ====================================== -->
+
+
+    <main class="dashboard-content">
+
+
+        <!-- Page Heading -->
+
+
+        <div class="page-heading">
+
+
+            <span class="heading-tag">
+                ADMIN PANEL
+            </span>
+
+
+            <h2>
+                Choose Your Dashboard
+            </h2>
+
+
+            <p>
+                Select a platform to manage students,
+                academic activities and performance.
+            </p>
+
+
+        </div>
+
+
+
+        <!-- =================================
+              GT & GA CARDS
+        ================================== -->
+
+
+        <div class="platform-grid">
+
+
+
+            <!-- =================================
+                  GT CARD
+            ================================== -->
+
+
+            <div class="platform-card">
+
+
+                <!-- Card Icon -->
+
+
+                <div class="platform-icon">
+
+                    <i class="fa-solid fa-laptop-code"></i>
+
+                </div>
+
+
+
+                <!-- Card Content -->
+
+
+                <div class="platform-content">
+
+
+                    <span class="platform-label">
+                        TECHNOLOGY
+                    </span>
+
+
+                    <h3>
+                        Ganishka Technology
+                    </h3>
+
+
+                    <div class="card-line"></div>
+
+
+                    <p>
+
+                        Manage technology students,
+                        assignments, projects,
+                        marks and results from
+                        one organized dashboard.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- Button -->
+
+
+                <button
+                    class="open-dashboard-btn"
+                    onclick="openGTDashboard()">
+
+
+                    <span>
+                        Open GT Dashboard
+                    </span>
+
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- =================================
+                  GA CARD
+            ================================== -->
+
+
+            <div class="platform-card">
+
+
+                <!-- Card Icon -->
+
+
+                <div class="platform-icon">
+
+                    <i class="fa-solid fa-graduation-cap"></i>
+
+                </div>
+
+
+
+                <!-- Card Content -->
+
+
+                <div class="platform-content">
+
+
+                    <span class="platform-label">
+                        ACADEMY
+                    </span>
+
+
+                    <h3>
+                        Ganishka Academy
+                    </h3>
+
+
+                    <div class="card-line"></div>
+
+
+                    <p>
+
+                        Manage academy students,
+                        coding practice, marks
+                        and results through
+                        a simple dashboard.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- Button -->
+
+
+                <button
+                    class="open-dashboard-btn"
+                    onclick="openGADashboard()">
+
+
+                    <span>
+                        Open GA Dashboard
+                    </span>
+
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================
+                 LOGOUT
+        ================================== -->
+
+
+        <div class="logout-area">
+
+
+            <button
+                class="logout-btn"
+                onclick="logout()">
+
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+
+                <span>
+                    Logout
+                </span>
+
+
+            </button>
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- =================================
+                FOOTER
+    ================================== -->
+
+
+    <footer class="dashboard-footer">
+
+
+        <p>
+            Student Management Board
+        </p>
+
+
+        <span>
+            Ganishka Enterprises
+        </span>
+
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- =========================================
+             DASHBOARD JAVASCRIPT
+========================================= -->
+
+
+<script>
+
+
+/* =========================================
+        CHECK LOGIN SESSION
+========================================= */
+
+
+if(
+    localStorage.getItem("isLoggedIn")
+    !==
+    "true"
+){
+
+    window.location.href =
+        "01_index.html";
+
+}
+
+
+
+/* =========================================
+        SHOW ADMIN NAME
+========================================= */
+
+
+const storedAdminName =
+
+    localStorage.getItem(
+        "adminName"
+    );
+
+
+if(storedAdminName){
+
+    document.getElementById(
+        "adminName"
+    ).textContent =
+
+        storedAdminName;
+
+}
+
+
+
+/* =========================================
+        OPEN GT DASHBOARD
+========================================= */
+
+
+function openGTDashboard(){
+
+    window.location.href =
+        "06_gt-dashboard.html";
+
+}
+
+
+
+/* =========================================
+        OPEN GA DASHBOARD
+========================================= */
+
+
+function openGADashboard(){
+
+    window.location.href =
+        "11_ga-dashboard.html";
+
+}
+
+
+
+/* =========================================
+              LOGOUT
+========================================= */
+
+
+function logout(){
+
+    localStorage.removeItem(
+        "isLoggedIn"
+    );
+
+
+    localStorage.removeItem(
+        "adminName"
+    );
+
+
+    window.location.href =
+        "01_index.html";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
