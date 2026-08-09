@@ -364,41 +364,6 @@
                             </option>
 
 
-                            <option value="Web Development">
-
-                                Web Development
-
-                            </option>
-
-
-                            <option value="Python Programming">
-
-                                Python Programming
-
-                            </option>
-
-
-                            <option value="Java Programming">
-
-                                Java Programming
-
-                            </option>
-
-
-                            <option value="Full Stack Development">
-
-                                Full Stack Development
-
-                            </option>
-
-
-                            <option value="Data Science">
-
-                                Data Science
-
-                            </option>
-
-
                         </select>
 
 
@@ -633,7 +598,20 @@
 
 
 
+<script src="17_script.js"></script>
+
+
 <script>
+
+
+/* ================= LOGIN CHECK ================= */
+
+if (!localStorage.getItem("authToken")) {
+
+    window.location.href = "01_index.html";
+
+}
+
 
 
 /* ================= NAVIGATION ================= */
@@ -646,33 +624,147 @@ function goToPage(page) {
 
 
 
+/* ================= STUDENT CACHE ================= */
+
+let gtStudentsCache = [];
+
+
+
 /* ================= GET STUDENTS ================= */
 
-function getGTStudents() {
+async function getGTStudents() {
 
-    return JSON.parse(
+    const response =
 
-        localStorage.getItem(
+        await authFetch(
 
-            "gtStudents"
+            "/api/orgs/gt/students?limit=1000"
 
-        )
+        );
 
-    ) || [];
+
+    if (!response.ok) {
+
+        alert(
+
+            await getErrorDetail(
+
+                response,
+
+                "Unable to load students."
+
+            )
+
+        );
+
+
+        return [];
+
+    }
+
+
+    gtStudentsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gtStudentsCache;
 
 }
 
 
 
-/* ================= SAVE STUDENTS ================= */
+/* ================= GET COURSES ================= */
 
-function saveGTStudents(students) {
+let gtCoursesCache = [];
 
-    localStorage.setItem(
 
-        "gtStudents",
+async function getGTCourses() {
 
-        JSON.stringify(students)
+    const response =
+
+        await authFetch(
+
+            "/api/orgs/gt/courses"
+
+        );
+
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+
+    gtCoursesCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gtCoursesCache;
+
+}
+
+
+
+/* ================= POPULATE COURSE OPTIONS ================= */
+
+function populateCourseOptions() {
+
+    const select =
+
+        document.getElementById(
+
+            "studentCourse"
+
+        );
+
+    if (!select) {
+
+        return;
+
+    }
+
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select Course
+
+        </option>
+
+    `;
+
+
+    gtCoursesCache.forEach(
+
+        function(course) {
+
+            const option =
+
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+
+                course.id;
+
+            option.textContent =
+
+                course.name;
+
+            select.appendChild(
+                option
+            );
+
+        }
 
     );
 
@@ -693,7 +785,7 @@ function displayStudents(search = "") {
 
     const students =
 
-        getGTStudents();
+        gtStudentsCache;
 
 
     const table =
@@ -718,7 +810,7 @@ function displayStudents(search = "") {
 
                 (
 
-                    student.studentId +
+                    student.display_id +
 
                     " " +
 
@@ -730,7 +822,7 @@ function displayStudents(search = "") {
 
                     " " +
 
-                    student.course +
+                    student.course_id +
 
                     " " +
 
@@ -792,7 +884,7 @@ function displayStudents(search = "") {
 
             <td>
 
-                ${student.studentId}
+                ${student.display_id}
 
             </td>
 
@@ -813,7 +905,7 @@ function displayStudents(search = "") {
 
             <td>
 
-                ${student.course}
+                ${(student.course && student.course.name) || student.course_id}
 
             </td>
 
@@ -832,7 +924,7 @@ function displayStudents(search = "") {
 
                     class="edit-btn"
 
-                    onclick="editStudent('${student._id}')">
+                    onclick="editStudent('${student.id}')">
 
 
                     <i class="fa-solid fa-pen"></i>
@@ -846,7 +938,7 @@ function displayStudents(search = "") {
 
                     class="delete-btn"
 
-                    onclick="deleteStudent('${student._id}')">
+                    onclick="deleteStudent('${student.id}')">
 
 
                     <i class="fa-solid fa-trash"></i>
@@ -880,7 +972,7 @@ document
 
     "submit",
 
-    function(event) {
+    async function(event) {
 
 
         event.preventDefault();
@@ -927,9 +1019,21 @@ document
 
 
 
-        const students =
+        const payload = {
 
-            getGTStudents();
+            name:
+                name,
+
+            batch:
+                batch,
+
+            course_id:
+                Number(course),
+
+            duration:
+                duration
+
+        };
 
 
 
@@ -943,63 +1047,45 @@ document
         ) {
 
 
-            const index =
+            const response =
 
-                students.findIndex(
+                await authFetch(
 
-                    function(student) {
+                    "/api/orgs/gt/students/" +
 
+                    editingStudentId,
 
-                        return (
+                    {
 
-                            student._id ===
+                        method:
+                            "PUT",
 
-                            editingStudentId
-
-                        );
+                        body:
+                            payload
 
                     }
 
                 );
 
 
+            if (!response.ok) {
 
-            if (
+                alert(
 
-                index !== -1
+                    await getErrorDetail(
 
-            ) {
+                        response,
 
+                        "Unable to update student."
 
-                students[index].name =
+                    )
 
-                    name;
-
-
-                students[index].batch =
-
-                    batch;
+                );
 
 
-                students[index].course =
-
-                    course;
-
-
-                students[index].duration =
-
-                    duration;
-
+                return;
 
             }
-
-
-
-            saveGTStudents(
-
-                students
-
-            );
 
 
             alert(
@@ -1018,70 +1104,43 @@ document
         else {
 
 
-            const newStudent = {
+            const response =
+
+                await authFetch(
+
+                    "/api/orgs/gt/students",
+
+                    {
+
+                        method:
+                            "POST",
+
+                        body:
+                            payload
+
+                    }
+
+                );
 
 
-                _id:
+            if (!response.ok) {
 
-                    Date.now().toString(),
+                alert(
 
+                    await getErrorDetail(
 
-                studentId:
+                        response,
 
-                    "GT" +
-
-                    String(
-
-                        students.length + 1
+                        "Unable to add student."
 
                     )
 
-                    .padStart(
-
-                        3,
-
-                        "0"
-
-                    ),
+                );
 
 
-                name:
+                return;
 
-                    name,
-
-
-                batch:
-
-                    batch,
-
-
-                course:
-
-                    course,
-
-
-                duration:
-
-                    duration
-
-
-            };
-
-
-
-            students.push(
-
-                newStudent
-
-            );
-
-
-
-            saveGTStudents(
-
-                students
-
-            );
+            }
 
 
             alert(
@@ -1095,6 +1154,8 @@ document
 
 
         resetForm();
+
+        await getGTStudents();
 
         displayStudents();
 
@@ -1111,7 +1172,7 @@ function editStudent(id) {
 
     const students =
 
-        getGTStudents();
+        gtStudentsCache;
 
 
 
@@ -1124,7 +1185,7 @@ function editStudent(id) {
 
                 return (
 
-                    item._id ===
+                    item.id ===
 
                     id
 
@@ -1176,7 +1237,8 @@ function editStudent(id) {
 
     ).value =
 
-        student.course;
+        (student.course && student.course.id) ||
+        student.course_id;
 
 
 
@@ -1219,7 +1281,7 @@ function editStudent(id) {
 
 /* ================= DELETE ================= */
 
-function deleteStudent(id) {
+async function deleteStudent(id) {
 
 
     if (
@@ -1238,26 +1300,26 @@ function deleteStudent(id) {
 
 
 
-    let students =
-
-        getGTStudents();
-
-
-
-    students =
-
-        students.filter(
-
-            function(student) {
+    /*
+    NOTE: cascading delete of this student's attendance and
+    assessment records now happens server-side
+    (backend_details.md section 3) — no client-side cleanup
+    is needed here.
+    */
 
 
-                return (
+    const response =
 
-                    student._id !==
+        await authFetch(
 
-                    id
+            "/api/orgs/gt/students/" +
 
-                );
+            id,
+
+            {
+
+                method:
+                    "DELETE"
 
             }
 
@@ -1265,13 +1327,28 @@ function deleteStudent(id) {
 
 
 
-    saveGTStudents(
+    if (!response.ok) {
 
-        students
+        alert(
 
-    );
+            await getErrorDetail(
+
+                response,
+
+                "Unable to delete student."
+
+            )
+
+        );
 
 
+        return;
+
+    }
+
+
+
+    await getGTStudents();
 
     displayStudents();
 
@@ -1393,7 +1470,7 @@ function logout() {
 
     localStorage.removeItem(
 
-        "isLoggedIn"
+        "authToken"
 
     );
 
@@ -1415,7 +1492,17 @@ function logout() {
 
 /* ================= INITIALIZE ================= */
 
-displayStudents();
+(async function initializeGTStudentsPage() {
+
+    await getGTStudents();
+
+    await getGTCourses();
+
+    populateCourseOptions();
+
+    displayStudents();
+
+})();
 
 
 </script>

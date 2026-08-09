@@ -395,41 +395,6 @@
                             </option>
 
 
-                            <option value="Web Development">
-
-                                Web Development
-
-                            </option>
-
-
-                            <option value="Python Programming">
-
-                                Python Programming
-
-                            </option>
-
-
-                            <option value="Java Programming">
-
-                                Java Programming
-
-                            </option>
-
-
-                            <option value="Data Science">
-
-                                Data Science
-
-                            </option>
-
-
-                            <option value="Full Stack Development">
-
-                                Full Stack Development
-
-                            </option>
-
-
                         </select>
 
 
@@ -732,13 +697,9 @@
 
 if (
 
-    localStorage.getItem(
-        "isLoggedIn"
+    !localStorage.getItem(
+        "authToken"
     )
-
-    !==
-
-    "true"
 
 ) {
 
@@ -763,40 +724,152 @@ let editingStudentId = null;
 ========================================= */
 
 
-function getStudents() {
+let gaStudentsCache = [];
 
 
-    return JSON.parse(
+async function getStudents() {
 
-        localStorage.getItem(
-            "gaStudents"
-        )
 
-    ) || [];
+    const response =
+
+        await authFetch(
+            "/api/orgs/ga/students?limit=1000"
+        );
+
+
+    if (!response.ok) {
+
+        alert(
+
+            await getErrorDetail(
+
+                response,
+
+                "Unable to load students."
+
+            )
+
+        );
+
+
+        return [];
+
+    }
+
+
+    gaStudentsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gaStudentsCache;
 
 }
 
 
 
 /* =========================================
-            SAVE STUDENTS
+            GET COURSES
 ========================================= */
 
 
-function saveStudents(
-
-    students
-
-) {
+let gaCoursesCache = [];
 
 
-    localStorage.setItem(
+async function getGACourses() {
 
-        "gaStudents",
 
-        JSON.stringify(
-            students
-        )
+    const response =
+
+        await authFetch(
+
+            "/api/orgs/ga/courses"
+
+        );
+
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+
+    gaCoursesCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gaCoursesCache;
+
+}
+
+
+
+/* =========================================
+            POPULATE COURSE OPTIONS
+========================================= */
+
+
+function populateCourseOptions() {
+
+
+    const select =
+
+        document.getElementById(
+            "studentCourse"
+        );
+
+
+    if (!select) {
+
+        return;
+
+    }
+
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select Course
+
+        </option>
+
+    `;
+
+
+    gaCoursesCache.forEach(
+
+        function(course) {
+
+
+            const option =
+
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+
+                course.id;
+
+
+            option.textContent =
+
+                course.name;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
 
     );
 
@@ -805,7 +878,10 @@ function saveStudents(
 
 
 /* =========================================
-        GENERATE STUDENT ID
+        GENERATE STUDENT ID (unused now — the
+        backend assigns display_id itself via
+        a DB sequence; see backend_details.md
+        section 3/4)
 ========================================= */
 
 
@@ -898,7 +974,7 @@ function generateStudentId(
 ========================================= */
 
 
-function initializeStudentPage() {
+async function initializeStudentPage() {
 
 
     const form =
@@ -922,6 +998,12 @@ function initializeStudentPage() {
         );
 
 
+
+    await getStudents();
+
+    await getGACourses();
+
+    populateCourseOptions();
 
     renderStudents();
 
@@ -997,7 +1079,7 @@ function initializeStudentPage() {
 ========================================= */
 
 
-function handleStudentSubmit(
+async function handleStudentSubmit(
 
     event
 
@@ -1078,11 +1160,21 @@ function handleStudentSubmit(
 
 
 
-    /* GET DATA */
+    const payload = {
 
+        name:
+            name,
 
-    const students =
-        getStudents();
+        batch:
+            batch,
+
+        course_id:
+            Number(course),
+
+        duration:
+            duration
+
+    };
 
 
 
@@ -1098,18 +1190,20 @@ function handleStudentSubmit(
     ) {
 
 
-        const studentIndex =
+        const response =
 
-            students.findIndex(
+            await authFetch(
 
-                function(student) {
+                "/api/orgs/ga/students/" +
+                editingStudentId,
 
-                    return (
+                {
 
-                        student._id ===
-                        editingStudentId
+                    method:
+                        "PUT",
 
-                    );
+                    body:
+                        payload
 
                 }
 
@@ -1117,68 +1211,44 @@ function handleStudentSubmit(
 
 
 
-        if (
-
-            studentIndex !== -1
-
-        ) {
-
-
-            students[
-                studentIndex
-            ].name =
-
-                name;
-
-
-
-            students[
-                studentIndex
-            ].batch =
-
-                batch;
-
-
-
-            students[
-                studentIndex
-            ].course =
-
-                course;
-
-
-
-            students[
-                studentIndex
-            ].duration =
-
-                duration;
-
-
-
-            saveStudents(
-                students
-            );
-
-
+        if (!response.ok) {
 
             alert(
 
-                "Student details updated successfully!"
+                await getErrorDetail(
+
+                    response,
+
+                    "Unable to update student."
+
+                )
 
             );
-
-
-
-            resetStudentForm();
-
-
-            renderStudents();
 
 
             return;
 
         }
+
+
+
+        alert(
+
+            "Student details updated successfully!"
+
+        );
+
+
+
+        resetStudentForm();
+
+
+        await getStudents();
+
+        renderStudents();
+
+
+        return;
 
     }
 
@@ -1189,64 +1259,44 @@ function handleStudentSubmit(
     ===================================== */
 
 
-    const newStudent = {
+    const response =
 
+        await authFetch(
 
-        _id:
+            "/api/orgs/ga/students",
 
-            Date.now().toString(),
+            {
 
+                method:
+                    "POST",
 
-        studentId:
+                body:
+                    payload
 
-            generateStudentId(
-                students
-            ),
+            }
 
-
-        name:
-
-            name,
-
-
-        batch:
-
-            batch,
-
-
-        course:
-
-            course,
-
-
-        duration:
-
-            duration,
-
-
-        createdAt:
-
-            new Date()
-                .toISOString()
-
-
-    };
+        );
 
 
 
-    students.push(
+    if (!response.ok) {
 
-        newStudent
+        alert(
 
-    );
+            await getErrorDetail(
+
+                response,
+
+                "Unable to add student."
+
+            )
+
+        );
 
 
+        return;
 
-    saveStudents(
-
-        students
-
-    );
+    }
 
 
 
@@ -1260,6 +1310,8 @@ function handleStudentSubmit(
 
     resetStudentForm();
 
+
+    await getStudents();
 
     renderStudents();
 
@@ -1302,7 +1354,7 @@ function renderStudents(
 
 
     const students =
-        getStudents();
+        gaStudentsCache;
 
 
 
@@ -1328,7 +1380,7 @@ function renderStudents(
 
                     (
 
-                        student.studentId +
+                        student.display_id +
 
                         " " +
 
@@ -1340,7 +1392,7 @@ function renderStudents(
 
                         " " +
 
-                        student.course +
+                        student.course_id +
 
                         " " +
 
@@ -1434,7 +1486,7 @@ function renderStudents(
 
                         ${escapeHTML(
 
-                            student.studentId
+                            student.display_id
 
                         )}
 
@@ -1472,7 +1524,8 @@ function renderStudents(
 
                     ${escapeHTML(
 
-                        student.course
+                        (student.course && student.course.name) ||
+                        student.course_id
 
                     )}
 
@@ -1499,7 +1552,7 @@ function renderStudents(
 
                         class="edit-btn"
 
-                        onclick="editStudent('${student._id}')">
+                        onclick="editStudent('${student.id}')">
 
 
                         <i class="fa-solid fa-pen"></i>
@@ -1513,7 +1566,7 @@ function renderStudents(
 
                         class="delete-btn"
 
-                        onclick="deleteStudent('${student._id}')">
+                        onclick="deleteStudent('${student.id}')">
 
 
                         <i class="fa-solid fa-trash"></i>
@@ -1554,7 +1607,7 @@ function editStudent(
 
 
     const students =
-        getStudents();
+        gaStudentsCache;
 
 
 
@@ -1566,7 +1619,7 @@ function editStudent(
 
                 return (
 
-                    item._id ===
+                    item.id ===
                     id
 
                 );
@@ -1608,7 +1661,8 @@ function editStudent(
         "studentCourse"
     ).value =
 
-        student.course;
+        (student.course && student.course.id) ||
+        student.course_id;
 
 
 
@@ -1682,7 +1736,7 @@ function editStudent(
 ========================================= */
 
 
-function deleteStudent(
+async function deleteStudent(
 
     id
 
@@ -1690,7 +1744,7 @@ function deleteStudent(
 
 
     const students =
-        getStudents();
+        gaStudentsCache;
 
 
 
@@ -1702,7 +1756,7 @@ function deleteStudent(
 
                 return (
 
-                    item._id ===
+                    item.id ===
                     id
 
                 );
@@ -1731,7 +1785,7 @@ function deleteStudent(
 
             " (" +
 
-            student.studentId +
+            student.display_id +
 
             ")?\n\n" +
 
@@ -1749,21 +1803,25 @@ function deleteStudent(
 
 
 
-    /* DELETE STUDENT */
+    /*
+    NOTE: cascading delete of this student's coding
+    practice, attendance and final exam records now
+    happens server-side (backend_details.md section 3) —
+    no client-side cleanup is needed here.
+    */
 
 
-    const updatedStudents =
+    const response =
 
-        students.filter(
+        await authFetch(
 
-            function(item) {
+            "/api/orgs/ga/students/" +
+            id,
 
-                return (
+            {
 
-                    item._id !==
-                    id
-
-                );
+                method:
+                    "DELETE"
 
             }
 
@@ -1771,111 +1829,24 @@ function deleteStudent(
 
 
 
-    saveStudents(
+    if (!response.ok) {
 
-        updatedStudents
+        alert(
 
-    );
+            await getErrorDetail(
 
+                response,
 
+                "Unable to delete student."
 
-    /* =====================================
-        DELETE RELATED CODING RECORDS
-    ===================================== */
-
-
-    const codingRecords =
-
-        JSON.parse(
-
-            localStorage.getItem(
-                "gaCoding"
             )
 
-        ) || [];
-
-
-
-    const updatedCodingRecords =
-
-        codingRecords.filter(
-
-            function(record) {
-
-                return (
-
-                    record.studentId !==
-                    id
-
-                );
-
-            }
-
         );
 
 
+        return;
 
-    localStorage.setItem(
-
-        "gaCoding",
-
-        JSON.stringify(
-
-            updatedCodingRecords
-
-        )
-
-    );
-
-
-
-    /* =====================================
-        DELETE RELATED EXAM RECORDS
-    ===================================== */
-
-
-    const examRecords =
-
-        JSON.parse(
-
-            localStorage.getItem(
-                "gaExams"
-            )
-
-        ) || [];
-
-
-
-    const updatedExamRecords =
-
-        examRecords.filter(
-
-            function(record) {
-
-                return (
-
-                    record.studentId !==
-                    id
-
-                );
-
-            }
-
-        );
-
-
-
-    localStorage.setItem(
-
-        "gaExams",
-
-        JSON.stringify(
-
-            updatedExamRecords
-
-        )
-
-    );
+    }
 
 
 
@@ -1884,6 +1855,8 @@ function deleteStudent(
 
     resetStudentForm();
 
+
+    await getStudents();
 
     renderStudents();
 
@@ -1996,7 +1969,7 @@ function logout() {
 
     localStorage.removeItem(
 
-        "isLoggedIn"
+        "authToken"
 
     );
 

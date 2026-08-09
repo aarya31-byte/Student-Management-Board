@@ -13,6 +13,8 @@ const STORAGE_KEYS = {
 
     isLoggedIn: "isLoggedIn",
 
+    authToken: "authToken",
+
     adminName: "adminName",
 
     gtStudents: "gtStudents",
@@ -32,7 +34,347 @@ const STORAGE_KEYS = {
 
 
 /* =========================================================
-   2. GENERATE UNIQUE ID
+   2. API BASE URL
+========================================================= */
+
+/*
+
+Hardcoded for now — update this (and the copy in
+
+03_login.js) once the backend has a real deployed
+
+address. See backend_details.md section 7.
+
+*/
+
+const API_BASE_URL = "http://localhost:8000";
+
+
+
+/* =========================================================
+   2A. AUTHENTICATED FETCH HELPER
+========================================================= */
+
+async function authFetch(
+
+    path,
+
+    options = {}
+
+) {
+
+    const token =
+
+        localStorage.getItem(
+
+            STORAGE_KEYS.authToken
+
+        );
+
+
+    const headers = Object.assign(
+
+        {},
+
+        options.headers || {}
+
+    );
+
+
+    headers["Authorization"] =
+
+        "Bearer " +
+
+        (token || "");
+
+
+    let body =
+
+        options.body;
+
+
+    if (
+
+        body &&
+
+        typeof body === "object" &&
+
+        !(body instanceof FormData)
+
+    ) {
+
+        body =
+
+            JSON.stringify(
+                body
+            );
+
+
+        if (
+            !headers["Content-Type"]
+        ) {
+
+            headers["Content-Type"] =
+                "application/json";
+
+        }
+
+    }
+
+
+    const response =
+
+        await fetch(
+
+            API_BASE_URL + path,
+
+            Object.assign(
+
+                {},
+
+                options,
+
+                {
+
+                    headers:
+                        headers,
+
+                    body:
+                        body
+
+                }
+
+            )
+
+        );
+
+
+    if (
+
+        response.status === 401
+
+    ) {
+
+
+        localStorage.removeItem(
+
+            STORAGE_KEYS.authToken
+
+        );
+
+
+        localStorage.removeItem(
+
+            STORAGE_KEYS.adminName
+
+        );
+
+
+        window.location.href =
+
+            "01_index.html";
+
+    }
+
+
+    return response;
+
+}
+
+
+
+/* =========================================================
+   2B. UNWRAP LIST RESPONSE
+
+   The backend list endpoints may return either a bare
+   JSON array, or an object wrapping the array (e.g.
+   {items: [...]} / {students: [...]} / {data: [...]}).
+   This normalizes either shape to a plain array so every
+   page can treat list responses the same way.
+========================================================= */
+
+function unwrapList(
+
+    data
+
+) {
+
+    if (
+
+        Array.isArray(
+            data
+        )
+
+    ) {
+
+        return data;
+
+    }
+
+
+    if (
+
+        !data ||
+
+        typeof data !== "object"
+
+    ) {
+
+        return [];
+
+    }
+
+
+    return (
+
+        data.items ||
+
+        data.students ||
+
+        data.records ||
+
+        data.data ||
+
+        data.results ||
+
+        []
+
+    );
+
+}
+
+
+
+/* =========================================================
+   2C. GET ERROR DETAIL FROM RESPONSE
+
+   The backend returns non-2xx errors as JSON
+   {"detail": ...}. For login and plain auth/permission
+   failures, "detail" is a plain string (e.g. "Invalid
+   username or password."). For most validation failures,
+   "detail" is an OBJECT of {field: [messages]} (Laravel's
+   standard validation-error shape). This reads either
+   shape into a single displayable message, falling back
+   to a generic one when the body is missing, not JSON, or
+   empty.
+========================================================= */
+
+async function getErrorDetail(
+
+    response,
+
+    fallback
+
+) {
+
+    const defaultMessage =
+
+        fallback ||
+
+        "Something went wrong. Please try again.";
+
+
+    try {
+
+        const data =
+
+            await response.json();
+
+
+        const detail =
+
+            data && data.detail;
+
+
+        if (
+
+            typeof detail === "string" &&
+
+            detail
+
+        ) {
+
+            return detail;
+
+        }
+
+
+        if (
+
+            detail &&
+
+            typeof detail === "object"
+
+        ) {
+
+            const messages = [];
+
+
+            Object.keys(detail).forEach(
+
+                function(field) {
+
+                    const value =
+                        detail[field];
+
+
+                    if (
+                        Array.isArray(value)
+                    ) {
+
+                        value.forEach(
+
+                            function(message) {
+
+                                messages.push(
+                                    message
+                                );
+
+                            }
+
+                        );
+
+                    } else if (value) {
+
+                        messages.push(
+                            String(value)
+                        );
+
+                    }
+
+                }
+
+            );
+
+
+            if (
+                messages.length
+            ) {
+
+                return messages.join(
+                    " "
+                );
+
+            }
+
+        }
+
+
+        return defaultMessage;
+
+
+    } catch (error) {
+
+        return defaultMessage;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   3. GENERATE UNIQUE ID
 ========================================================= */
 
 function generateUniqueId(prefix = "ID") {
@@ -1105,7 +1447,7 @@ function commonLogout() {
 
     localStorage.removeItem(
 
-        STORAGE_KEYS.isLoggedIn
+        STORAGE_KEYS.authToken
 
     );
 
@@ -1132,18 +1474,18 @@ function commonLogout() {
 function checkLogin() {
 
 
-    const loggedIn =
+    const token =
 
         localStorage.getItem(
 
-            STORAGE_KEYS.isLoggedIn
+            STORAGE_KEYS.authToken
 
         );
 
 
     if (
 
-        loggedIn !== "true"
+        !token
 
     ) {
 

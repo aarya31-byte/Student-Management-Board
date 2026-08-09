@@ -809,13 +809,9 @@
 
 if (
 
-    localStorage.getItem(
-        "isLoggedIn"
+    !localStorage.getItem(
+        "authToken"
     )
-
-    !==
-
-    "true"
 
 ) {
 
@@ -832,46 +828,104 @@ if (
 ================================================= */
 
 
-function getStudents() {
+let gaStudentsCache = [];
 
 
-    return JSON.parse(
+async function getStudents() {
 
-        localStorage.getItem(
-            "gaStudents"
-        )
 
-    ) || [];
+    const response =
+
+        await authFetch(
+            "/api/orgs/ga/students?limit=1000"
+        );
+
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+
+    gaStudentsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gaStudentsCache;
 
 }
 
 
 
-function getCodingRecords() {
+let gaExamsCache = [];
 
 
-    return JSON.parse(
+async function getExamRecords() {
 
-        localStorage.getItem(
-            "gaCoding"
-        )
 
-    ) || [];
+    const response =
+
+        await authFetch(
+            "/api/orgs/ga/final-exam"
+        );
+
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+
+    gaExamsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gaExamsCache;
 
 }
 
 
 
-function getExamRecords() {
+async function getDashboardStats() {
 
 
-    return JSON.parse(
+    const response =
 
-        localStorage.getItem(
-            "gaExams"
-        )
+        await authFetch(
+            "/api/orgs/ga/dashboard/stats"
+        );
 
-    ) || [];
+
+    if (!response.ok) {
+
+        return {
+
+            total_students: 0,
+
+            total_coding_records: 0,
+
+            total_exam_records: 0,
+
+            passed_students: 0,
+
+            needs_improvement_students: 0,
+
+            not_attempted_students: 0
+
+        };
+
+    }
+
+
+    return await response.json();
 
 }
 
@@ -882,19 +936,21 @@ function getExamRecords() {
 ================================================= */
 
 
-function updateStatistics() {
+async function updateStatistics() {
 
 
-    const students =
-        getStudents();
+    /*
+    NOTE: student/coding/exam counts and the passed /
+    needs-improvement / not-attempted breakdown are all
+    computed server-side by ga_dashboard_stats()
+    (backend_details.md section 4/6) — this reads them
+    directly instead of deriving them from raw records.
+    */
 
 
-    const coding =
-        getCodingRecords();
+    const stats =
 
-
-    const exams =
-        getExamRecords();
+        await getDashboardStats();
 
 
 
@@ -907,7 +963,7 @@ function updateStatistics() {
 
     ).textContent =
 
-        students.length;
+        stats.total_students;
 
 
 
@@ -920,7 +976,7 @@ function updateStatistics() {
 
     ).textContent =
 
-        coding.length;
+        stats.total_coding_records;
 
 
 
@@ -933,64 +989,11 @@ function updateStatistics() {
 
     ).textContent =
 
-        exams.length;
+        stats.total_exam_records;
 
 
 
     /* PASSED */
-
-
-    const passedIds =
-
-        new Set();
-
-
-
-    const improvementIds =
-
-        new Set();
-
-
-
-    exams.forEach(
-
-        function(exam) {
-
-
-            if (
-
-                exam.status ===
-                "Passed"
-
-            ) {
-
-
-                passedIds.add(
-
-                    exam.studentId
-
-                );
-
-
-            }
-
-
-            else {
-
-
-                improvementIds.add(
-
-                    exam.studentId
-
-                );
-
-
-            }
-
-        }
-
-    );
-
 
 
     document.getElementById(
@@ -999,7 +1002,7 @@ function updateStatistics() {
 
     ).textContent =
 
-        passedIds.size;
+        stats.passed_students;
 
 
 
@@ -1012,49 +1015,11 @@ function updateStatistics() {
 
     ).textContent =
 
-        improvementIds.size;
+        stats.needs_improvement_students;
 
 
 
     /* NOT ATTEMPTED */
-
-
-    const examStudentIds =
-
-        new Set(
-
-            exams.map(
-
-                function(exam) {
-
-                    return exam.studentId;
-
-                }
-
-            )
-
-        );
-
-
-
-    const notAttemptedCount =
-
-        students.filter(
-
-            function(student) {
-
-
-                return !examStudentIds.has(
-
-                    student._id
-
-                );
-
-
-            }
-
-        ).length;
-
 
 
     document.getElementById(
@@ -1063,7 +1028,7 @@ function updateStatistics() {
 
     ).textContent =
 
-        notAttemptedCount;
+        stats.not_attempted_students;
 
 }
 
@@ -1096,7 +1061,7 @@ function renderRecentStudents() {
 
 
     const students =
-        getStudents();
+        gaStudentsCache;
 
 
 
@@ -1158,7 +1123,7 @@ function renderRecentStudents() {
 
                         ${escapeHTML(
 
-                            student.studentId
+                            student.display_id
 
                         )}
 
@@ -1196,7 +1161,8 @@ function renderRecentStudents() {
 
                     ${escapeHTML(
 
-                        student.course
+                        (student.course && student.course.name) ||
+                        student.course_id
 
                     )}
 
@@ -1260,11 +1226,11 @@ function renderRecentResults() {
 
 
     const students =
-        getStudents();
+        gaStudentsCache;
 
 
     const exams =
-        getExamRecords();
+        gaExamsCache;
 
 
 
@@ -1318,9 +1284,9 @@ function renderRecentResults() {
 
                         return (
 
-                            item._id ===
+                            item.id ===
 
-                            exam.studentId
+                            exam.student_id
 
                         );
 
@@ -1356,7 +1322,7 @@ function renderRecentResults() {
 
                         ${escapeHTML(
 
-                            student.studentId
+                            student.display_id
 
                         )}
 
@@ -1380,11 +1346,11 @@ function renderRecentResults() {
 
                 <td>
 
-                    ${exam.obtained}
+                    ${exam.obtained_marks}
 
                     /
 
-                    ${exam.total}
+                    ${exam.total_marks}
 
                 </td>
 
@@ -1513,7 +1479,7 @@ function logout() {
 
     localStorage.removeItem(
 
-        "isLoggedIn"
+        "authToken"
 
     );
 
@@ -1567,13 +1533,19 @@ if (adminName) {
 ================================================= */
 
 
-updateStatistics();
+(async function initializeGADashboardPage() {
 
+    await getStudents();
 
-renderRecentStudents();
+    await getExamRecords();
 
+    updateStatistics();
 
-renderRecentResults();
+    renderRecentStudents();
+
+    renderRecentResults();
+
+})();
 
 
 </script>

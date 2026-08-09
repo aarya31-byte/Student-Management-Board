@@ -643,7 +643,21 @@
 
 
 
+<script src="17_script.js"></script>
+
+
 <script>
+
+
+/* ================= LOGIN CHECK ================= */
+
+
+if (!localStorage.getItem("authToken")) {
+
+    window.location.href = "01_index.html";
+
+}
+
 
 
 /* ================= NAVIGATION ================= */
@@ -662,7 +676,7 @@ function goToPage(page) {
 
 function logout() {
 
-    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("authToken");
 
     localStorage.removeItem("adminName");
 
@@ -689,13 +703,30 @@ if (adminName) {
 /* ================= GA STUDENTS ================= */
 
 
-function getStudents() {
+let gaStudentsCache = [];
 
-    return JSON.parse(
 
-        localStorage.getItem("gaStudents")
+async function getStudents() {
 
-    ) || [];
+    const response =
+
+        await authFetch(
+            "/api/orgs/ga/students?limit=1000"
+        );
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+    gaStudentsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+    return gaStudentsCache;
 
 }
 
@@ -704,26 +735,30 @@ function getStudents() {
 /* ================= GA ATTENDANCE ================= */
 
 
-function getAttendance() {
-
-    return JSON.parse(
-
-        localStorage.getItem("gaAttendance")
-
-    ) || [];
-
-}
+let gaAttendanceCache = [];
 
 
-function saveAttendance(data) {
+async function getAttendance() {
 
-    localStorage.setItem(
+    const response =
 
-        "gaAttendance",
+        await authFetch(
+            "/api/orgs/ga/attendance"
+        );
 
-        JSON.stringify(data)
+    if (!response.ok) {
 
-    );
+        return [];
+
+    }
+
+    gaAttendanceCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+    return gaAttendanceCache;
 
 }
 
@@ -735,7 +770,7 @@ function saveAttendance(data) {
 function loadStudents() {
 
 
-    const students = getStudents();
+    const students = gaStudentsCache;
 
 
     const select =
@@ -772,18 +807,14 @@ function loadStudents() {
 
         option.value =
 
-            student._id ||
-
-            student.id ||
-
-            student.studentId;
+            student.id;
 
 
         option.textContent =
 
             (
 
-                student.studentId ||
+                student.display_id ||
 
                 student.id ||
 
@@ -818,7 +849,7 @@ function loadStudents() {
 /* ================= MARK ATTENDANCE ================= */
 
 
-function markAttendance() {
+async function markAttendance() {
 
 
     const studentId =
@@ -864,24 +895,14 @@ function markAttendance() {
     }
 
 
-    const students = getStudents();
+    const students = gaStudentsCache;
 
 
     const student = students.find(
 
         item =>
 
-            String(
-
-                item._id ||
-
-                item.id ||
-
-                item.studentId
-
-            )
-
-            ===
+            String(item.id) ===
 
             String(studentId)
 
@@ -904,40 +925,51 @@ function markAttendance() {
     }
 
 
-    let attendance =
+    /*
+    NOTE: attendance is unique per (student, date) — the
+    server enforces this and returns an error on a
+    duplicate; that error is surfaced below rather than
+    pre-validated here.
+    */
 
-        getAttendance();
 
+    const response =
 
-    const alreadyMarked =
+        await authFetch(
 
-        attendance.some(
+            "/api/orgs/ga/attendance",
 
-            item =>
+            {
 
-                String(
+                method: "POST",
 
-                    item.studentId
+                body: {
 
-                )
+                    student_id: studentId,
 
-                ===
+                    session_date: date,
 
-                String(studentId)
+                    status: status.toLowerCase()
 
-                &&
+                }
 
-                item.date === date
+            }
 
         );
 
 
-    if (alreadyMarked) {
+    if (!response.ok) {
 
 
         alert(
 
-            "Attendance for this student on this date is already marked."
+            await getErrorDetail(
+
+                response,
+
+                "Unable to mark attendance."
+
+            )
 
         );
 
@@ -946,36 +978,6 @@ function markAttendance() {
 
 
     }
-
-
-    attendance.push({
-
-        id: Date.now(),
-
-        studentId: studentId,
-
-        studentCode:
-
-            student.studentId ||
-
-            student.id ||
-
-            studentId,
-
-        studentName:
-
-            student.name ||
-
-            "Student",
-
-        date: date,
-
-        status: status
-
-    });
-
-
-    saveAttendance(attendance);
 
 
     alert(
@@ -987,6 +989,8 @@ function markAttendance() {
 
     resetForm();
 
+
+    await getAttendance();
 
     renderAttendance();
 
@@ -1034,7 +1038,7 @@ function renderAttendance() {
 
     const attendance =
 
-        getAttendance();
+        gaAttendanceCache;
 
 
     const search =
@@ -1076,7 +1080,7 @@ function renderAttendance() {
 
             item.status ===
 
-            "Present"
+            "present"
 
         ) {
 
@@ -1089,7 +1093,7 @@ function renderAttendance() {
 
             item.status ===
 
-            "Absent"
+            "absent"
 
         ) {
 
@@ -1130,47 +1134,59 @@ function renderAttendance() {
 
     const filtered =
 
-        attendance.filter(item =>
+        attendance.filter(item => {
 
 
-            String(
+            const student =
 
-                item.studentCode
+                gaStudentsCache.find(
 
-            )
+                    s => s.id === item.student_id
 
-            .toLowerCase()
-
-            .includes(search)
+                );
 
 
-            ||
+            return (
+
+                String(
+
+                    (student && student.display_id) || ""
+
+                )
+
+                .toLowerCase()
+
+                .includes(search)
 
 
-            String(
-
-                item.studentName
-
-            )
-
-            .toLowerCase()
-
-            .includes(search)
+                ||
 
 
-            ||
+                String(
+
+                    (student && student.name) || ""
+
+                )
+
+                .toLowerCase()
+
+                .includes(search)
 
 
-            String(
-
-                item.date
-
-            )
-
-            .includes(search)
+                ||
 
 
-        );
+                String(
+
+                    item.session_date || ""
+
+                )
+
+                .includes(search)
+
+            );
+
+        });
 
 
     if (
@@ -1204,6 +1220,24 @@ function renderAttendance() {
     filtered.forEach(item => {
 
 
+        const student =
+
+            gaStudentsCache.find(
+
+                s => s.id === item.student_id
+
+            );
+
+
+        const statusLabel =
+
+            item.status
+
+                ? item.status.charAt(0).toUpperCase() + item.status.slice(1)
+
+                : "-";
+
+
         const row =
 
             document.createElement(
@@ -1217,28 +1251,28 @@ function renderAttendance() {
 
             <td>
 
-                ${item.studentCode}
+                ${(student && student.display_id) || "-"}
 
             </td>
 
 
             <td>
 
-                ${item.studentName}
+                ${(student && student.name) || "Student"}
 
             </td>
 
 
             <td>
 
-                ${item.date}
+                ${item.session_date || "-"}
 
             </td>
 
 
             <td>
 
-                ${item.status}
+                ${statusLabel}
 
             </td>
 
@@ -1250,7 +1284,7 @@ function renderAttendance() {
 
                     class="delete-btn"
 
-                    onclick="deleteAttendance(${item.id})">
+                    onclick="deleteAttendance('${item.id}')">
 
 
                     <i class="fa-solid fa-trash"></i>
@@ -1277,7 +1311,7 @@ function renderAttendance() {
 /* ================= DELETE ================= */
 
 
-function deleteAttendance(id) {
+async function deleteAttendance(id) {
 
 
     if (
@@ -1295,24 +1329,39 @@ function deleteAttendance(id) {
     }
 
 
-    let attendance =
+    const response =
 
-        getAttendance();
+        await authFetch(
 
+            "/api/orgs/ga/attendance/" + id,
 
-    attendance =
-
-        attendance.filter(
-
-            item =>
-
-                item.id !== id
+            {
+                method: "DELETE"
+            }
 
         );
 
 
-    saveAttendance(attendance);
+    if (!response.ok) {
 
+        alert(
+
+            await getErrorDetail(
+
+                response,
+
+                "Unable to delete attendance record."
+
+            )
+
+        );
+
+        return;
+
+    }
+
+
+    await getAttendance();
 
     renderAttendance();
 
@@ -1345,9 +1394,17 @@ document
 /* ================= INITIALIZE ================= */
 
 
-loadStudents();
+(async function initializeGAAttendancePage() {
 
-renderAttendance();
+    await getStudents();
+
+    await getAttendance();
+
+    loadStudents();
+
+    renderAttendance();
+
+})();
 
 
 </script>

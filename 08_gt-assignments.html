@@ -429,41 +429,6 @@
                         </option>
 
 
-                        <option value="Web Development">
-
-                            Web Development
-
-                        </option>
-
-
-                        <option value="Java">
-
-                            Java
-
-                        </option>
-
-
-                        <option value="Python">
-
-                            Python
-
-                        </option>
-
-
-                        <option value="Database Management">
-
-                            Database Management
-
-                        </option>
-
-
-                        <option value="Data Structures">
-
-                            Data Structures
-
-                        </option>
-
-
                     </select>
 
 
@@ -764,7 +729,23 @@
 ====================================================== -->
 
 
+<script src="17_script.js"></script>
+
+
 <script>
+
+
+/* =====================================================
+                    LOGIN CHECK
+===================================================== */
+
+
+if (!localStorage.getItem("authToken")) {
+
+    window.location.href = "01_index.html";
+
+}
+
 
 
 /* =====================================================
@@ -792,7 +773,7 @@ function logout() {
 
     localStorage.removeItem(
 
-        "isLoggedIn"
+        "authToken"
 
     );
 
@@ -848,18 +829,145 @@ if (savedAdminName) {
 ===================================================== */
 
 
-function getStudents() {
+let gtStudentsCache = [];
 
 
-    return JSON.parse(
+async function getStudents() {
 
-        localStorage.getItem(
 
-            "gtStudents"
+    const response =
 
-        )
+        await authFetch(
 
-    ) || [];
+            "/api/orgs/gt/students?limit=1000"
+
+        );
+
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+
+    gtStudentsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gtStudentsCache;
+
+
+}
+
+
+
+/* =====================================================
+                    GET SUBJECTS
+===================================================== */
+
+
+let gtSubjectsCache = [];
+
+
+async function getGTSubjects() {
+
+
+    const response =
+
+        await authFetch(
+
+            "/api/orgs/gt/subjects?kind=gt_subject"
+
+        );
+
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+
+    gtSubjectsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gtSubjectsCache;
+
+
+}
+
+
+
+/* =====================================================
+                    POPULATE SUBJECT OPTIONS
+===================================================== */
+
+
+function populateSubjectOptions() {
+
+
+    const select =
+
+        document.getElementById(
+            "subject"
+        );
+
+
+    if (!select) {
+
+        return;
+
+    }
+
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select Subject
+
+        </option>
+
+    `;
+
+
+    gtSubjectsCache.forEach(
+
+        function(subject) {
+
+
+            const option =
+
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+
+                subject.id;
+
+
+            option.textContent =
+
+                subject.name;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+
+    );
 
 
 }
@@ -868,46 +976,60 @@ function getStudents() {
 
 /* =====================================================
                     GET ASSIGNMENTS
+
+    NOTE: the backend merges Assignments + Marks + the
+    never-shipped Projects concept into one gt_assessments
+    resource (backend_details.md section 8). This page
+    fetches all GT assessments and filters to
+    type === "assignment" client-side, since the documented
+    API has no server-side type filter.
 ===================================================== */
 
 
-function getAssignments() {
+let gtAssignmentsCache = [];
 
 
-    return JSON.parse(
-
-        localStorage.getItem(
-
-            "gtAssignments"
-
-        )
-
-    ) || [];
+async function getAssignments() {
 
 
-}
+    const response =
+
+        await authFetch(
+
+            "/api/orgs/gt/assessments"
+
+        );
 
 
+    if (!response.ok) {
 
-/* =====================================================
-                    SAVE ASSIGNMENTS
-===================================================== */
+        return [];
 
-
-function saveAssignments(assignments) {
+    }
 
 
-    localStorage.setItem(
+    const all =
 
-        "gtAssignments",
+        unwrapList(
+            await response.json()
+        );
 
-        JSON.stringify(
 
-            assignments
+    gtAssignmentsCache =
 
-        )
+        all.filter(function(item) {
 
-    );
+            return (
+
+                item.type ===
+                "assignment"
+
+            );
+
+        });
+
+
+    return gtAssignmentsCache;
 
 
 }
@@ -919,12 +1041,12 @@ function saveAssignments(assignments) {
 ===================================================== */
 
 
-function loadStudents() {
+async function loadStudents() {
 
 
     const students =
 
-        getStudents();
+        await getStudents();
 
 
     const select =
@@ -962,14 +1084,14 @@ function loadStudents() {
 
         option.value =
 
-            student._id || student.id || student.studentId;
+            student.id;
 
 
         option.textContent =
 
             (
 
-                student.studentId ||
+                student.display_id ||
 
                 student.id ||
 
@@ -1011,7 +1133,7 @@ function loadStudents() {
 ===================================================== */
 
 
-function addAssignment() {
+async function addAssignment() {
 
 
     const studentId =
@@ -1192,7 +1314,7 @@ function addAssignment() {
 
     const students =
 
-        getStudents();
+        gtStudentsCache;
 
 
 
@@ -1205,11 +1327,7 @@ function addAssignment() {
 
                 String(
 
-                    item._id ||
-
-                    item.id ||
-
-                    item.studentId
+                    item.id
 
                 )
 
@@ -1241,59 +1359,35 @@ function addAssignment() {
 
 
 
-    /* CREATE ASSIGNMENT */
+    const payload = {
 
 
-    const assignment = {
-
-
-        id:
-
-            Date.now(),
-
-
-        _id:
-
-            Date.now().toString(),
-
-
-        studentId:
+        student_id:
 
             studentId,
 
 
-        studentCode:
+        type:
 
-            student.studentId ||
-
-            student.id ||
-
-            studentId,
+            "assignment",
 
 
-        studentName:
-
-            student.name ||
-
-            "Student",
-
-
-        assignmentName:
+        name:
 
             assignmentName,
 
 
-        subject:
+        subject_id:
 
-            subject,
+            Number(subject),
 
 
-        totalMarks:
+        total_marks:
 
             Number(totalMarks),
 
 
-        obtainedMarks:
+        obtained_marks:
 
             Number(obtainedMarks),
 
@@ -1307,34 +1401,47 @@ function addAssignment() {
 
 
 
-    /* GET OLD RECORDS */
+    /* CREATE RECORD */
 
 
-    const assignments =
+    const response =
 
-        getAssignments();
+        await authFetch(
+
+            "/api/orgs/gt/assessments",
+
+            {
+
+                method:
+                    "POST",
+
+                body:
+                    payload
+
+            }
+
+        );
 
 
 
-    /* ADD NEW RECORD */
+    if (!response.ok) {
+
+        alert(
+
+            await getErrorDetail(
+
+                response,
+
+                "Unable to add assignment."
+
+            )
+
+        );
 
 
-    assignments.push(
+        return;
 
-        assignment
-
-    );
-
-
-
-    /* SAVE */
-
-
-    saveAssignments(
-
-        assignments
-
-    );
+    }
 
 
 
@@ -1355,6 +1462,8 @@ function addAssignment() {
 
     /* REFRESH TABLE */
 
+
+    await getAssignments();
 
     renderAssignments();
 
@@ -1432,7 +1541,7 @@ function renderAssignments() {
 
     const assignments =
 
-        getAssignments();
+        gtAssignmentsCache;
 
 
 
@@ -1475,14 +1584,23 @@ function renderAssignments() {
         assignments.filter(function(item) {
 
 
+            const student =
+
+                gtStudentsCache.find(function(s) {
+
+                    return (
+                        s.id === item.student_id
+                    );
+
+                });
+
+
             return (
 
 
                 String(
 
-                    item.studentCode ||
-
-                    item.studentId ||
+                    (student && student.display_id) ||
 
                     ""
 
@@ -1498,7 +1616,7 @@ function renderAssignments() {
 
                 String(
 
-                    item.studentName ||
+                    (student && student.name) ||
 
                     ""
 
@@ -1514,7 +1632,7 @@ function renderAssignments() {
 
                 String(
 
-                    item.subject ||
+                    item.subject_id ||
 
                     ""
 
@@ -1530,7 +1648,7 @@ function renderAssignments() {
 
                 String(
 
-                    item.assignmentName ||
+                    item.name ||
 
                     ""
 
@@ -1580,6 +1698,17 @@ function renderAssignments() {
     filtered.forEach(function(item) {
 
 
+        const student =
+
+            gtStudentsCache.find(function(s) {
+
+                return (
+                    s.id === item.student_id
+                );
+
+            });
+
+
         const row =
 
             document.createElement(
@@ -1594,42 +1723,42 @@ function renderAssignments() {
 
             <td>
 
-                ${item.studentCode || item.studentId || "-"}
+                ${(student && student.display_id) || "-"}
 
             </td>
 
 
             <td>
 
-                ${item.studentName || "-"}
+                ${(student && student.name) || "-"}
 
             </td>
 
 
             <td>
 
-                ${item.assignmentName || "-"}
+                ${item.name || "-"}
 
             </td>
 
 
             <td>
 
-                ${item.subject || "-"}
+                ${item.subject_id || "-"}
 
             </td>
 
 
             <td>
 
-                ${item.totalMarks || 0}
+                ${item.total_marks || 0}
 
             </td>
 
 
             <td>
 
-                ${item.obtainedMarks || 0}
+                ${item.obtained_marks || 0}
 
             </td>
 
@@ -1648,7 +1777,7 @@ function renderAssignments() {
 
                     class="delete-btn"
 
-                    onclick="deleteAssignment('${item.id || item._id}')">
+                    onclick="deleteAssignment('${item.id}')">
 
 
                     <i class="fa-solid fa-trash"></i>
@@ -1682,7 +1811,7 @@ function renderAssignments() {
 ===================================================== */
 
 
-function deleteAssignment(id) {
+async function deleteAssignment(id) {
 
 
     const confirmDelete =
@@ -1705,41 +1834,47 @@ function deleteAssignment(id) {
 
 
 
-    let assignments =
+    const response =
 
-        getAssignments();
+        await authFetch(
+
+            "/api/orgs/gt/assessments/" +
+
+            id,
+
+            {
+
+                method:
+                    "DELETE"
+
+            }
+
+        );
 
 
 
-    assignments =
+    if (!response.ok) {
 
-        assignments.filter(function(item) {
+        alert(
 
+            await getErrorDetail(
 
-            return String(
+                response,
 
-                item.id ||
-
-                item._id
+                "Unable to delete assignment."
 
             )
 
-            !==
-
-            String(id);
+        );
 
 
-        });
+        return;
+
+    }
 
 
 
-    saveAssignments(
-
-        assignments
-
-    );
-
-
+    await getAssignments();
 
     renderAssignments();
 
@@ -1782,10 +1917,19 @@ document
 ===================================================== */
 
 
-loadStudents();
+(async function initializeGTAssignmentsPage() {
 
+    await loadStudents();
 
-renderAssignments();
+    await getGTSubjects();
+
+    populateSubjectOptions();
+
+    await getAssignments();
+
+    renderAssignments();
+
+})();
 
 
 </script>

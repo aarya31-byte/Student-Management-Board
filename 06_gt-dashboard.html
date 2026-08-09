@@ -391,7 +391,20 @@
 
 
 
+<script src="17_script.js"></script>
+
+
 <script>
+
+
+/* ================= LOGIN CHECK ================= */
+
+if (!localStorage.getItem("authToken")) {
+
+    window.location.href = "01_index.html";
+
+}
+
 
 
 /* ================= PAGE NAVIGATION ================= */
@@ -406,62 +419,69 @@ function goToPage(page) {
 
 /* ================= GET STUDENTS ================= */
 
-function getGTStudents() {
+async function getGTStudents() {
 
-    return JSON.parse(
+    const response =
 
-        localStorage.getItem("gtStudents")
+        await authFetch(
 
-    ) || [];
+            "/api/orgs/gt/students?limit=1000"
+
+        );
+
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+
+    return unwrapList(
+        await response.json()
+    );
+
+}
+
+
+
+/* ================= GET DASHBOARD STATS ================= */
+
+async function getGTDashboardStats() {
+
+    const response =
+
+        await authFetch(
+
+            "/api/orgs/gt/dashboard/stats"
+
+        );
+
+
+    if (!response.ok) {
+
+        return {
+
+            total_students: 0,
+
+            total_assessments: 0,
+
+            total_attendance: 0
+
+        };
+
+    }
+
+
+    return await response.json();
 
 }
 
 
-
-/* ================= GET ASSIGNMENTS ================= */
-
-function getGTAssignments() {
-
-    return JSON.parse(
-
-        localStorage.getItem("gtAssignments")
-
-    ) || [];
-
-}
-
-
-
-/* ================= GET MARKS ================= */
-
-function getGTMarks() {
-
-    return JSON.parse(
-
-        localStorage.getItem("gtMarks")
-
-    ) || [];
-
-}
-
-/* ================= GET ATTENDANCE ================= */
-
-function getGTAttendance() {
-
-    return JSON.parse(
-
-        localStorage.getItem("gtAttendance")
-
-    ) || [];
-
-}
 
 /* ================= DISPLAY STUDENTS ================= */
 
-function displayStudents(search = "") {
-
-
-    const students = getGTStudents();
+function displayStudents(students, search = "") {
 
 
     const table =
@@ -485,7 +505,7 @@ function displayStudents(search = "") {
 
                 (
 
-                    student.studentId +
+                    student.display_id +
 
                     " " +
 
@@ -497,7 +517,7 @@ function displayStudents(search = "") {
 
                     " " +
 
-                    student.course +
+                    student.course_id +
 
                     " " +
 
@@ -558,7 +578,7 @@ function displayStudents(search = "") {
 
             <td>
 
-                ${student.studentId || "-"}
+                ${student.display_id || "-"}
 
             </td>
 
@@ -579,7 +599,7 @@ function displayStudents(search = "") {
 
             <td>
 
-                ${student.course || "-"}
+                ${(student.course && student.course.name) || student.course_id || "-"}
 
             </td>
 
@@ -604,33 +624,37 @@ function displayStudents(search = "") {
 
 /* ================= UPDATE DASHBOARD ================= */
 
-function updateDashboard() {
+async function updateDashboard() {
 
-    const students = getGTStudents();
+    const students = await getGTStudents();
 
-    const assignments = getGTAssignments();
-
-    const marks = getGTMarks();
-
-    const attendance = getGTAttendance();
+    const stats = await getGTDashboardStats();
 
     document.getElementById("totalStudents").textContent =
-        students.length;
+        stats.total_students || students.length;
+
+    /*
+    NOTE: the old "Assignments" and "Results" tiles counted
+    two separate localStorage collections (gtAssignments and
+    gtMarks). The backend merges both into one gt_assessments
+    resource (backend_details.md section 8), so both tiles
+    now read the same total_assessments count.
+    */
 
     document.getElementById("totalAssignments").textContent =
-        assignments.length;
+        stats.total_assessments || 0;
 
     document.getElementById("totalResults").textContent =
-        marks.length;
+        stats.total_assessments || 0;
 
     const attendanceElement =
         document.getElementById("totalAttendance");
 
     if (attendanceElement) {
-        attendanceElement.textContent = attendance.length;
+        attendanceElement.textContent = stats.total_attendance || 0;
     }
 
-    displayStudents();
+    displayStudents(students);
 
 }
 
@@ -668,7 +692,7 @@ function logout() {
 
     localStorage.removeItem(
 
-        "isLoggedIn"
+        "authToken"
 
     );
     localStorage.removeItem(

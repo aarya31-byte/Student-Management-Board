@@ -339,41 +339,6 @@
                             </option>
 
 
-                            <option value="HTML">
-
-                                HTML
-
-                            </option>
-
-
-                            <option value="CSS">
-
-                                CSS
-
-                            </option>
-
-
-                            <option value="JavaScript">
-
-                                JavaScript
-
-                            </option>
-
-
-                            <option value="Python">
-
-                                Python
-
-                            </option>
-
-
-                            <option value="Java">
-
-                                Java
-
-                            </option>
-
-
                         </select>
 
 
@@ -648,13 +613,9 @@
 
 if (
 
-    localStorage.getItem(
-        "isLoggedIn"
+    !localStorage.getItem(
+        "authToken"
     )
-
-    !==
-
-    "true"
 
 ) {
 
@@ -670,16 +631,139 @@ if (
 ========================================= */
 
 
-function getStudents() {
+let gaStudentsCache = [];
 
 
-    return JSON.parse(
+async function getStudents() {
 
-        localStorage.getItem(
-            "gaStudents"
-        )
 
-    ) || [];
+    const response =
+
+        await authFetch(
+            "/api/orgs/ga/students?limit=1000"
+        );
+
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+
+    gaStudentsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gaStudentsCache;
+
+}
+
+
+
+/* =========================================
+        GET TOPICS
+========================================= */
+
+
+let gaTopicsCache = [];
+
+
+async function getGATopics() {
+
+
+    const response =
+
+        await authFetch(
+            "/api/orgs/ga/subjects?kind=ga_coding_topic"
+        );
+
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+
+    gaTopicsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gaTopicsCache;
+
+}
+
+
+
+/* =========================================
+        POPULATE TOPIC OPTIONS
+========================================= */
+
+
+function populateTopicOptions() {
+
+
+    const select =
+
+        document.getElementById(
+            "codingTopic"
+        );
+
+
+    if (!select) {
+
+        return;
+
+    }
+
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select Topic
+
+        </option>
+
+    `;
+
+
+    gaTopicsCache.forEach(
+
+        function(topic) {
+
+
+            const option =
+
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+
+                topic.id;
+
+
+            option.textContent =
+
+                topic.name;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+
+    );
 
 }
 
@@ -687,45 +771,44 @@ function getStudents() {
 
 /* =========================================
         GET CODING RECORDS
+
+    NOTE: no percentage is computed server-side for coding
+    practice (only GT assessments and GA final exam get
+    computed grade bands — see backend_details.md section
+    3/6). The Progress % column below is a simple
+    solved/total display ratio, not an official graded
+    result, so it stays computed here.
 ========================================= */
 
 
-function getCodingRecords() {
+let gaCodingCache = [];
 
 
-    return JSON.parse(
-
-        localStorage.getItem(
-            "gaCoding"
-        )
-
-    ) || [];
-
-}
+async function getCodingRecords() {
 
 
+    const response =
 
-/* =========================================
-        SAVE CODING RECORDS
-========================================= */
-
-
-function saveCodingRecords(
-
-    records
-
-) {
+        await authFetch(
+            "/api/orgs/ga/coding-practice"
+        );
 
 
-    localStorage.setItem(
+    if (!response.ok) {
 
-        "gaCoding",
+        return [];
 
-        JSON.stringify(
-            records
-        )
+    }
 
-    );
+
+    gaCodingCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gaCodingCache;
 
 }
 
@@ -747,7 +830,7 @@ function loadStudents() {
 
 
     const students =
-        getStudents();
+        gaStudentsCache;
 
 
 
@@ -777,13 +860,13 @@ function loadStudents() {
 
             option.value =
 
-                student._id;
+                student.id;
 
 
 
             option.textContent =
 
-                student.studentId +
+                student.display_id +
 
                 " - " +
 
@@ -818,7 +901,7 @@ document
 
     "submit",
 
-    function(event) {
+    async function(event) {
 
 
         event.preventDefault();
@@ -913,62 +996,62 @@ document
 
 
 
-        const records =
-            getCodingRecords();
+        const payload = {
 
-
-
-        const newRecord = {
-
-
-            _id:
-
-                Date.now().toString(),
-
-
-            studentId:
-
+            student_id:
                 studentId,
 
+            topic_id:
+                Number(topic),
 
-            topic:
-
-                topic,
-
-
-            total:
-
+            total_problems:
                 total,
 
-
-            solved:
-
-                solved,
-
-
-            createdAt:
-
-                new Date()
-                    .toISOString()
-
+            solved_problems:
+                solved
 
         };
 
 
 
-        records.push(
+        const response =
 
-            newRecord
+            await authFetch(
 
-        );
+                "/api/orgs/ga/coding-practice",
+
+                {
+
+                    method:
+                        "POST",
+
+                    body:
+                        payload
+
+                }
+
+            );
 
 
 
-        saveCodingRecords(
+        if (!response.ok) {
 
-            records
+            alert(
 
-        );
+                await getErrorDetail(
+
+                    response,
+
+                    "Unable to add coding practice record."
+
+                )
+
+            );
+
+
+            return;
+
+        }
 
 
 
@@ -989,6 +1072,8 @@ document
         .reset();
 
 
+
+        await getCodingRecords();
 
         renderCodingRecords();
 
@@ -1025,11 +1110,11 @@ function renderCodingRecords(
 
 
     const students =
-        getStudents();
+        gaStudentsCache;
 
 
     const records =
-        getCodingRecords();
+        gaCodingCache;
 
 
 
@@ -1060,8 +1145,8 @@ function renderCodingRecords(
 
                             return (
 
-                                item._id ===
-                                record.studentId
+                                item.id ===
+                                record.student_id
 
                             );
 
@@ -1091,9 +1176,19 @@ function renderCodingRecords(
 
                     ?
 
-                    student.studentId
+                    student.display_id
 
                     :
+
+                    "";
+
+
+
+                const topicName =
+
+                    (record.topic && record.topic.name) ||
+
+                    record.topic_id ||
 
                     "";
 
@@ -1109,7 +1204,7 @@ function renderCodingRecords(
 
                     " " +
 
-                    record.topic;
+                    topicName;
 
 
 
@@ -1164,8 +1259,8 @@ function renderCodingRecords(
 
                         return (
 
-                            item._id ===
-                            record.studentId
+                            item.id ===
+                            record.student_id
 
                         );
 
@@ -1187,9 +1282,9 @@ function renderCodingRecords(
 
                 (
 
-                    record.solved /
+                    record.solved_problems /
 
-                    record.total
+                    record.total_problems
 
                 ) * 100;
 
@@ -1212,7 +1307,7 @@ function renderCodingRecords(
 
                         ${escapeHTML(
 
-                            student.studentId
+                            student.display_id
 
                         )}
 
@@ -1238,7 +1333,8 @@ function renderCodingRecords(
 
                     ${escapeHTML(
 
-                        record.topic
+                        (record.topic && record.topic.name) ||
+                        record.topic_id
 
                     )}
 
@@ -1248,7 +1344,7 @@ function renderCodingRecords(
 
                 <td>
 
-                    ${record.total}
+                    ${record.total_problems}
 
                 </td>
 
@@ -1256,7 +1352,7 @@ function renderCodingRecords(
 
                 <td>
 
-                    ${record.solved}
+                    ${record.solved_problems}
 
                 </td>
 
@@ -1281,7 +1377,7 @@ function renderCodingRecords(
 
                         class="delete-btn"
 
-                        onclick="deleteCodingRecord('${record._id}')">
+                        onclick="deleteCodingRecord('${record.id}')">
 
 
                         <i class="fa-solid fa-trash"></i>
@@ -1314,7 +1410,7 @@ function renderCodingRecords(
 ========================================= */
 
 
-function deleteCodingRecord(
+async function deleteCodingRecord(
 
     id
 
@@ -1339,23 +1435,17 @@ function deleteCodingRecord(
 
 
 
-    const records =
-        getCodingRecords();
+    const response =
 
+        await authFetch(
 
+            "/api/orgs/ga/coding-practice/" +
+            id,
 
-    const updatedRecords =
+            {
 
-        records.filter(
-
-            function(record) {
-
-                return (
-
-                    record._id !==
-                    id
-
-                );
+                method:
+                    "DELETE"
 
             }
 
@@ -1363,13 +1453,28 @@ function deleteCodingRecord(
 
 
 
-    saveCodingRecords(
+    if (!response.ok) {
 
-        updatedRecords
+        alert(
 
-    );
+            await getErrorDetail(
+
+                response,
+
+                "Unable to delete this record."
+
+            )
+
+        );
 
 
+        return;
+
+    }
+
+
+
+    await getCodingRecords();
 
     renderCodingRecords();
 
@@ -1455,7 +1560,7 @@ function logout() {
 
     localStorage.removeItem(
 
-        "isLoggedIn"
+        "authToken"
 
     );
 
@@ -1509,10 +1614,21 @@ if (adminName) {
 ========================================= */
 
 
-loadStudents();
+(async function initializeGACodingPracticePage() {
 
+    await getStudents();
 
-renderCodingRecords();
+    await getGATopics();
+
+    populateTopicOptions();
+
+    await getCodingRecords();
+
+    loadStudents();
+
+    renderCodingRecords();
+
+})();
 
 
 </script>

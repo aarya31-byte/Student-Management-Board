@@ -385,9 +385,7 @@
 
 
 if(
-    localStorage.getItem("isLoggedIn")
-    !==
-    "true"
+    !localStorage.getItem("authToken")
 ){
 
     window.location.href =
@@ -457,7 +455,7 @@ function openGADashboard(){
 function logout(){
 
     localStorage.removeItem(
-        "isLoggedIn"
+        "authToken"
     );
 
 

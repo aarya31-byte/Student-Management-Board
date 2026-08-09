@@ -332,41 +332,6 @@
                             </option>
 
 
-                            <option value="HTML & CSS">
-
-                                HTML & CSS
-
-                            </option>
-
-
-                            <option value="JavaScript">
-
-                                JavaScript
-
-                            </option>
-
-
-                            <option value="Python">
-
-                                Python
-
-                            </option>
-
-
-                            <option value="Java">
-
-                                Java
-
-                            </option>
-
-
-                            <option value="Web Development">
-
-                                Web Development
-
-                            </option>
-
-
                         </select>
 
 
@@ -663,13 +628,9 @@
 
 if (
 
-    localStorage.getItem(
-        "isLoggedIn"
+    !localStorage.getItem(
+        "authToken"
     )
-
-    !==
-
-    "true"
 
 ) {
 
@@ -686,16 +647,139 @@ if (
 ========================================= */
 
 
-function getStudents() {
+let gaStudentsCache = [];
 
 
-    return JSON.parse(
+async function getStudents() {
 
-        localStorage.getItem(
-            "gaStudents"
-        )
 
-    ) || [];
+    const response =
+
+        await authFetch(
+            "/api/orgs/ga/students?limit=1000"
+        );
+
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+
+    gaStudentsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gaStudentsCache;
+
+}
+
+
+
+/* =========================================
+        GET EXAM SUBJECTS
+========================================= */
+
+
+let gaExamSubjectsCache = [];
+
+
+async function getGAExamSubjects() {
+
+
+    const response =
+
+        await authFetch(
+            "/api/orgs/ga/subjects?kind=ga_exam_subject"
+        );
+
+
+    if (!response.ok) {
+
+        return [];
+
+    }
+
+
+    gaExamSubjectsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gaExamSubjectsCache;
+
+}
+
+
+
+/* =========================================
+        POPULATE SUBJECT OPTIONS
+========================================= */
+
+
+function populateSubjectOptions() {
+
+
+    const select =
+
+        document.getElementById(
+            "examSubject"
+        );
+
+
+    if (!select) {
+
+        return;
+
+    }
+
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select Subject
+
+        </option>
+
+    `;
+
+
+    gaExamSubjectsCache.forEach(
+
+        function(subject) {
+
+
+            const option =
+
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+
+                subject.id;
+
+
+            option.textContent =
+
+                subject.name;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+
+    );
 
 }
 
@@ -703,45 +787,42 @@ function getStudents() {
 
 /* =========================================
         GET EXAM RECORDS
+
+    NOTE: the backend computes percentage, grade and
+    status server-side on every final-exam record (see
+    backend_details.md section 3/6) — these are read
+    directly from the response, never recalculated here.
 ========================================= */
 
 
-function getExamRecords() {
+let gaExamsCache = [];
 
 
-    return JSON.parse(
-
-        localStorage.getItem(
-            "gaExams"
-        )
-
-    ) || [];
-
-}
+async function getExamRecords() {
 
 
+    const response =
 
-/* =========================================
-        SAVE EXAM RECORDS
-========================================= */
-
-
-function saveExamRecords(
-
-    records
-
-) {
+        await authFetch(
+            "/api/orgs/ga/final-exam"
+        );
 
 
-    localStorage.setItem(
+    if (!response.ok) {
 
-        "gaExams",
+        return [];
 
-        JSON.stringify(
-            records
-        )
+    }
 
-    );
+
+    gaExamsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gaExamsCache;
 
 }
 
@@ -763,7 +844,7 @@ function loadStudents() {
 
 
     const students =
-        getStudents();
+        gaStudentsCache;
 
 
 
@@ -793,13 +874,13 @@ function loadStudents() {
 
             option.value =
 
-                student._id;
+                student.id;
 
 
 
             option.textContent =
 
-                student.studentId +
+                student.display_id +
 
                 " - " +
 
@@ -834,7 +915,7 @@ document
 
     "submit",
 
-    function(event) {
+    async function(event) {
 
 
         event.preventDefault();
@@ -952,184 +1033,70 @@ document
 
 
 
-        /* PERCENTAGE */
+        /*
+        NOTE: percentage, grade and status are computed
+        server-side on every final-exam record
+        (backend_details.md section 3/6) — this no longer
+        computes or stores them.
+        */
 
 
-        const percentage =
+        const payload = {
 
-            (
-
-                obtained /
-
-                total
-
-            ) * 100;
-
-
-
-        /* GRADE */
-
-
-        let grade = "F";
-
-
-
-        if (
-
-            percentage >= 90
-
-        ) {
-
-            grade = "A+";
-
-        }
-
-        else if (
-
-            percentage >= 80
-
-        ) {
-
-            grade = "A";
-
-        }
-
-        else if (
-
-            percentage >= 70
-
-        ) {
-
-            grade = "B+";
-
-        }
-
-        else if (
-
-            percentage >= 60
-
-        ) {
-
-            grade = "B";
-
-        }
-
-        else if (
-
-            percentage >= 50
-
-        ) {
-
-            grade = "C";
-
-        }
-
-        else if (
-
-            percentage >= 40
-
-        ) {
-
-            grade = "D";
-
-        }
-
-
-
-        /* STATUS */
-
-
-        const status =
-
-            percentage >= 40
-
-                ?
-
-                "Passed"
-
-                :
-
-                "Needs Improvement";
-
-
-
-        /* GET RECORDS */
-
-
-        const records =
-            getExamRecords();
-
-
-
-        /* NEW RECORD */
-
-
-        const newRecord = {
-
-
-            _id:
-
-                Date.now().toString(),
-
-
-            studentId:
-
+            student_id:
                 studentId,
 
+            subject_id:
+                Number(subject),
 
-            subject:
-
-                subject,
-
-
-            total:
-
+            total_marks:
                 total,
 
-
-            obtained:
-
-                obtained,
-
-
-            percentage:
-
-                percentage,
-
-
-            grade:
-
-                grade,
-
-
-            status:
-
-                status,
-
-
-            createdAt:
-
-                new Date()
-                    .toISOString()
-
+            obtained_marks:
+                obtained
 
         };
 
 
 
-        records.push(
+        const response =
 
-            newRecord
+            await authFetch(
 
-        );
+                "/api/orgs/ga/final-exam",
+
+                {
+
+                    method:
+                        "POST",
+
+                    body:
+                        payload
+
+                }
+
+            );
 
 
 
-        saveExamRecords(
+        if (!response.ok) {
 
-            records
+            alert(
 
-        );
+                await getErrorDetail(
+
+                    response,
+
+                    "Unable to add final exam record."
+
+                )
+
+            );
+
+
+            return;
+
+        }
 
 
 
@@ -1150,6 +1117,8 @@ document
         .reset();
 
 
+
+        await getExamRecords();
 
         renderExamRecords();
 
@@ -1186,11 +1155,11 @@ function renderExamRecords(
 
 
     const students =
-        getStudents();
+        gaStudentsCache;
 
 
     const records =
-        getExamRecords();
+        gaExamsCache;
 
 
 
@@ -1221,8 +1190,8 @@ function renderExamRecords(
 
                             return (
 
-                                item._id ===
-                                record.studentId
+                                item.id ===
+                                record.student_id
 
                             );
 
@@ -1252,7 +1221,7 @@ function renderExamRecords(
 
                     ?
 
-                    student.studentId
+                    student.display_id
 
                     :
 
@@ -1270,7 +1239,7 @@ function renderExamRecords(
 
                     " " +
 
-                    record.subject;
+                    record.subject_id;
 
 
 
@@ -1331,8 +1300,8 @@ function renderExamRecords(
 
                         return (
 
-                            item._id ===
-                            record.studentId
+                            item.id ===
+                            record.student_id
 
                         );
 
@@ -1367,7 +1336,7 @@ function renderExamRecords(
 
                         ${escapeHTML(
 
-                            student.studentId
+                            student.display_id
 
                         )}
 
@@ -1393,7 +1362,7 @@ function renderExamRecords(
 
                     ${escapeHTML(
 
-                        record.subject
+                        record.subject_id
 
                     )}
 
@@ -1403,7 +1372,7 @@ function renderExamRecords(
 
                 <td>
 
-                    ${record.total}
+                    ${record.total_marks}
 
                 </td>
 
@@ -1411,7 +1380,7 @@ function renderExamRecords(
 
                 <td>
 
-                    ${record.obtained}
+                    ${record.obtained_marks}
 
                 </td>
 
@@ -1419,7 +1388,7 @@ function renderExamRecords(
 
                 <td>
 
-                    ${record.percentage.toFixed(2)}%
+                    ${Number(record.percentage).toFixed(2)}%
 
                 </td>
 
@@ -1468,7 +1437,7 @@ function renderExamRecords(
 
                         class="delete-btn"
 
-                        onclick="deleteExamRecord('${record._id}')">
+                        onclick="deleteExamRecord('${record.id}')">
 
 
                         <i class="fa-solid fa-trash"></i>
@@ -1501,7 +1470,7 @@ function renderExamRecords(
 ========================================= */
 
 
-function deleteExamRecord(
+async function deleteExamRecord(
 
     id
 
@@ -1526,23 +1495,17 @@ function deleteExamRecord(
 
 
 
-    const records =
-        getExamRecords();
+    const response =
 
+        await authFetch(
 
+            "/api/orgs/ga/final-exam/" +
+            id,
 
-    const updatedRecords =
+            {
 
-        records.filter(
-
-            function(record) {
-
-                return (
-
-                    record._id !==
-                    id
-
-                );
+                method:
+                    "DELETE"
 
             }
 
@@ -1550,13 +1513,28 @@ function deleteExamRecord(
 
 
 
-    saveExamRecords(
+    if (!response.ok) {
 
-        updatedRecords
+        alert(
 
-    );
+            await getErrorDetail(
+
+                response,
+
+                "Unable to delete this exam record."
+
+            )
+
+        );
 
 
+        return;
+
+    }
+
+
+
+    await getExamRecords();
 
     renderExamRecords();
 
@@ -1642,7 +1620,7 @@ function logout() {
 
     localStorage.removeItem(
 
-        "isLoggedIn"
+        "authToken"
 
     );
 
@@ -1696,10 +1674,21 @@ if (adminName) {
 ========================================= */
 
 
-loadStudents();
+(async function initializeGAFinalExamPage() {
 
+    await getStudents();
 
-renderExamRecords();
+    await getGAExamSubjects();
+
+    populateSubjectOptions();
+
+    await getExamRecords();
+
+    loadStudents();
+
+    renderExamRecords();
+
+})();
 
 
 </script>

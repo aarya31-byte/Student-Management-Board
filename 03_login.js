@@ -4,6 +4,20 @@
 ==================================================*/
 
 
+/*==================================================
+        API BASE URL
+
+        Hardcoded for now — update this (and the
+        copy in 17_script.js) once the backend has
+        a real deployed address. See
+        backend_details.md section 7.
+==================================================*/
+
+const API_BASE_URL =
+
+    "http://localhost:8000";
+
+
 document.addEventListener(
 
     "DOMContentLoaded",
@@ -102,7 +116,7 @@ document.addEventListener(
 
                 "submit",
 
-                function(event){
+                async function(event){
 
                     event.preventDefault();
 
@@ -139,38 +153,93 @@ document.addEventListener(
 
                     /*
 
-                    DEFAULT ADMIN LOGIN
+                    LOGIN AGAINST REAL BACKEND
 
-                    Username: admin
+                    POST {API_BASE_URL}/api/auth/login
 
-                    Password: admin123
+                    Body: {username, password}
+
+                    Success: 200 {token, adminName}
+
+                    Failure: non-2xx {detail}
 
                     */
 
 
-                    const adminUsername =
+                    try{
 
-                        "admin";
+                        const response =
+
+                            await fetch(
+
+                                API_BASE_URL +
+
+                                "/api/auth/login",
+
+                                {
+
+                                    method:
+                                        "POST",
+
+                                    headers: {
+
+                                        "Content-Type":
+                                            "application/json"
+
+                                    },
+
+                                    body:
+                                        JSON.stringify({
+
+                                            username:
+                                                username,
+
+                                            password:
+                                                password
+
+                                        })
+
+                                }
+
+                            );
 
 
-                    const adminPassword =
+                        const data =
 
-                        "admin123";
+                            await response
+
+                            .json()
+
+                            .catch(function(){
+
+                                return {};
+
+                            });
 
 
-                    if(
+                        if(!response.ok){
 
-                        username ===
+                            alert(
 
-                        adminUsername
+                                data.detail ||
 
-                        &&
+                                "Invalid username or password!"
 
-                        password ===
+                            );
 
-                        adminPassword
 
-                    ){
+                            passwordInput.value =
+
+                                "";
+
+
+                            passwordInput.focus();
+
+
+                            return;
+
+                        }
+
 
                         /*
 
@@ -181,9 +250,9 @@ document.addEventListener(
 
                         localStorage.setItem(
 
-                            "isLoggedIn",
+                            "authToken",
 
-                            "true"
+                            data.token
 
                         );
 
@@ -192,7 +261,7 @@ document.addEventListener(
 
                             "adminName",
 
-                            "Administrator"
+                            data.adminName
 
                         );
 
@@ -210,21 +279,22 @@ document.addEventListener(
 
                     }
 
-                    else{
+                    catch(error){
 
-                        alert(
+                        console.error(
 
-                            "Invalid Username or Password!"
+                            "Login request failed:",
+
+                            error
 
                         );
 
 
-                        passwordInput.value =
+                        alert(
 
-                            "";
+                            "Unable to reach the server. Please try again."
 
-
-                        passwordInput.focus();
+                        );
 
                     }
 

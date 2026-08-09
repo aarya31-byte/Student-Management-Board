@@ -521,13 +521,9 @@
 
 if (
 
-    localStorage.getItem(
-        "isLoggedIn"
+    !localStorage.getItem(
+        "authToken"
     )
-
-    !==
-
-    "true"
 
 ) {
 
@@ -540,60 +536,44 @@ if (
 
 
 /* =================================================
-            GET STUDENTS
+            GET RESULTS
+
+    Coding practice + final exam performance, per
+    student, is now computed entirely server-side
+    (backend_details.md section 3/4/6) — this fetches the
+    ready-made aggregate rows instead of assembling them
+    from raw records in JS.
 ================================================= */
 
 
-function getStudents() {
+let gaResultsCache = [];
 
 
-    return JSON.parse(
-
-        localStorage.getItem(
-            "gaStudents"
-        )
-
-    ) || [];
-
-}
+async function getResults() {
 
 
+    const response =
 
-/* =================================================
-            GET CODING RECORDS
-================================================= */
-
-
-function getCodingRecords() {
+        await authFetch(
+            "/api/orgs/ga/results"
+        );
 
 
-    return JSON.parse(
+    if (!response.ok) {
 
-        localStorage.getItem(
-            "gaCoding"
-        )
+        return [];
 
-    ) || [];
-
-}
+    }
 
 
+    gaResultsCache =
 
-/* =================================================
-            GET EXAM RECORDS
-================================================= */
-
-
-function getExamRecords() {
+        unwrapList(
+            await response.json()
+        );
 
 
-    return JSON.parse(
-
-        localStorage.getItem(
-            "gaExams"
-        )
-
-    ) || [];
+    return gaResultsCache;
 
 }
 
@@ -614,8 +594,8 @@ function loadStudentFilter() {
         );
 
 
-    const students =
-        getStudents();
+    const results =
+        gaResultsCache;
 
 
 
@@ -631,9 +611,9 @@ function loadStudentFilter() {
 
 
 
-    students.forEach(
+    results.forEach(
 
-        function(student) {
+        function(result) {
 
 
             const option =
@@ -645,17 +625,17 @@ function loadStudentFilter() {
 
             option.value =
 
-                student._id;
+                result.student_id;
 
 
 
             option.textContent =
 
-                student.studentId +
+                result.display_id +
 
                 " - " +
 
-                student.name;
+                result.name;
 
 
 
@@ -671,359 +651,14 @@ function loadStudentFilter() {
 
 
 
-/* =================================================
-        GET CODING PERFORMANCE
-================================================= */
-
-
-function getCodingPerformance(
-
-    studentId
-
-) {
-
-
-    const records =
-        getCodingRecords();
-
-
-
-    const studentRecords =
-
-        records.filter(
-
-            function(record) {
-
-                return (
-
-                    record.studentId ===
-                    studentId
-
-                );
-
-            }
-
-        );
-
-
-
-    if (
-
-        studentRecords.length === 0
-
-    ) {
-
-
-        return {
-
-            solved: 0,
-
-            total: 0,
-
-            percentage: 0
-
-        };
-
-    }
-
-
-
-    let solved = 0;
-
-    let total = 0;
-
-
-
-    studentRecords.forEach(
-
-        function(record) {
-
-
-            solved +=
-
-                Number(
-                    record.solved
-                );
-
-
-            total +=
-
-                Number(
-                    record.total
-                );
-
-        }
-
-    );
-
-
-
-    const percentage =
-
-        total > 0
-
-            ?
-
-            (
-
-                solved /
-
-                total
-
-            ) * 100
-
-            :
-
-            0;
-
-
-
-    return {
-
-
-        solved:
-
-            solved,
-
-
-        total:
-
-            total,
-
-
-        percentage:
-
-            percentage
-
-    };
-
-}
-
-
-
-/* =================================================
-        GET FINAL EXAM PERFORMANCE
-================================================= */
-
-
-function getExamPerformance(
-
-    studentId
-
-) {
-
-
-    const records =
-        getExamRecords();
-
-
-
-    const studentRecords =
-
-        records.filter(
-
-            function(record) {
-
-                return (
-
-                    record.studentId ===
-                    studentId
-
-                );
-
-            }
-
-        );
-
-
-
-    if (
-
-        studentRecords.length === 0
-
-    ) {
-
-
-        return {
-
-
-            obtained: 0,
-
-            total: 0,
-
-            percentage: 0,
-
-            grade: "-",
-
-            status: "Not Attempted"
-
-        };
-
-    }
-
-
-
-    let obtained = 0;
-
-    let total = 0;
-
-
-
-    studentRecords.forEach(
-
-        function(record) {
-
-
-            obtained +=
-
-                Number(
-                    record.obtained
-                );
-
-
-            total +=
-
-                Number(
-                    record.total
-                );
-
-        }
-
-    );
-
-
-
-    const percentage =
-
-        total > 0
-
-            ?
-
-            (
-
-                obtained /
-
-                total
-
-            ) * 100
-
-            :
-
-            0;
-
-
-
-    let grade = "F";
-
-
-
-    if (
-
-        percentage >= 90
-
-    ) {
-
-        grade = "A+";
-
-    }
-
-    else if (
-
-        percentage >= 80
-
-    ) {
-
-        grade = "A";
-
-    }
-
-    else if (
-
-        percentage >= 70
-
-    ) {
-
-        grade = "B+";
-
-    }
-
-    else if (
-
-        percentage >= 60
-
-    ) {
-
-        grade = "B";
-
-    }
-
-    else if (
-
-        percentage >= 50
-
-    ) {
-
-        grade = "C";
-
-    }
-
-    else if (
-
-        percentage >= 40
-
-    ) {
-
-        grade = "D";
-
-    }
-
-
-
-    const status =
-
-        percentage >= 40
-
-            ?
-
-            "Passed"
-
-            :
-
-            "Needs Improvement";
-
-
-
-    return {
-
-
-        obtained:
-
-            obtained,
-
-
-        total:
-
-            total,
-
-
-        percentage:
-
-            percentage,
-
-
-        grade:
-
-            grade,
-
-
-        status:
-
-            status
-
-    };
-
-}
-
+/*
+NOTE: per-student coding practice and final exam
+performance used to be assembled here from raw
+localStorage records. The backend now computes all of
+this server-side (backend_details.md section 3/4/6) and
+returns it directly from GET /api/orgs/ga/results — see
+getResults() above and renderResults() below.
+*/
 
 
 /* =================================================
@@ -1068,8 +703,8 @@ function renderResults() {
 
 
 
-    const students =
-        getStudents();
+    const results =
+        gaResultsCache;
 
 
 
@@ -1080,11 +715,11 @@ function renderResults() {
     /* FILTER STUDENTS */
 
 
-    const filteredStudents =
+    const filteredResults =
 
-        students.filter(
+        results.filter(
 
-            function(student) {
+            function(result) {
 
 
                 const matchesStudent =
@@ -1093,7 +728,7 @@ function renderResults() {
 
                     ||
 
-                    student._id ===
+                    result.student_id ===
                     selectedStudent;
 
 
@@ -1102,11 +737,11 @@ function renderResults() {
 
                     (
 
-                        student.studentId +
+                        result.display_id +
 
                         " " +
 
-                        student.name
+                        result.name
 
                     )
 
@@ -1141,7 +776,7 @@ function renderResults() {
 
     if (
 
-        filteredStudents.length === 0
+        filteredResults.length === 0
 
     ) {
 
@@ -1164,29 +799,9 @@ function renderResults() {
     /* CREATE RESULT ROWS */
 
 
-    filteredStudents.forEach(
+    filteredResults.forEach(
 
-        function(student) {
-
-
-            const coding =
-
-                getCodingPerformance(
-
-                    student._id
-
-                );
-
-
-
-            const exam =
-
-                getExamPerformance(
-
-                    student._id
-
-                );
-
+        function(result) {
 
 
             const row =
@@ -1206,7 +821,7 @@ function renderResults() {
 
                         ${escapeHTML(
 
-                            student.studentId
+                            result.display_id
 
                         )}
 
@@ -1220,7 +835,7 @@ function renderResults() {
 
                     ${escapeHTML(
 
-                        student.name
+                        result.name
 
                     )}
 
@@ -1230,17 +845,17 @@ function renderResults() {
 
                 <td>
 
-                    ${coding.solved}
+                    ${result.coding_solved}
 
                     /
 
-                    ${coding.total}
+                    ${result.coding_total}
 
                     <br>
 
                     <small>
 
-                        ${coding.percentage.toFixed(1)}%
+                        ${Number(result.coding_percentage || 0).toFixed(1)}%
 
                     </small>
 
@@ -1250,11 +865,11 @@ function renderResults() {
 
                 <td>
 
-                    ${exam.obtained}
+                    ${result.exam_obtained}
 
                     /
 
-                    ${exam.total}
+                    ${result.exam_total}
 
                 </td>
 
@@ -1262,7 +877,7 @@ function renderResults() {
 
                 <td>
 
-                    ${exam.percentage.toFixed(2)}%
+                    ${Number(result.exam_percentage || 0).toFixed(2)}%
 
                 </td>
 
@@ -1273,7 +888,7 @@ function renderResults() {
 
                     <span class="result-status">
 
-                        ${exam.grade}
+                        ${result.exam_grade || "-"}
 
                     </span>
 
@@ -1290,7 +905,7 @@ function renderResults() {
                     ${
 
 
-                        exam.status === "Passed"
+                        result.status === "Passed"
 
                         ?
 
@@ -1298,7 +913,7 @@ function renderResults() {
 
                         :
 
-                        exam.status === "Not Attempted"
+                        result.status === "Not Attempted"
 
                         ?
 
@@ -1312,7 +927,7 @@ function renderResults() {
                     }">
 
 
-                        ${exam.status}
+                        ${result.status}
 
 
                     </span>
@@ -1429,7 +1044,7 @@ function logout() {
 
     localStorage.removeItem(
 
-        "isLoggedIn"
+        "authToken"
 
     );
 
@@ -1483,10 +1098,15 @@ if (adminName) {
 ================================================= */
 
 
-loadStudentFilter();
+(async function initializeGAResultsPage() {
 
+    await getResults();
 
-renderResults();
+    loadStudentFilter();
+
+    renderResults();
+
+})();
 
 
 </script>

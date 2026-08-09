@@ -871,7 +871,23 @@
 
 
 
+<script src="17_script.js"></script>
+
+
 <script>
+
+
+/* =====================================================
+                LOGIN CHECK
+===================================================== */
+
+
+if (!localStorage.getItem("authToken")) {
+
+    window.location.href = "01_index.html";
+
+}
+
 
 
 /* =====================================================
@@ -899,7 +915,7 @@ function logout() {
 
     localStorage.removeItem(
 
-        "isLoggedIn"
+        "authToken"
 
     );
 
@@ -955,41 +971,36 @@ if (savedAdminName) {
 ===================================================== */
 
 
-function getStudents() {
+let gtStudentsCache = [];
 
 
-    return JSON.parse(
-
-        localStorage.getItem(
-
-            "gtStudents"
-
-        )
-
-    ) || [];
+async function getStudents() {
 
 
-}
+    const response =
+
+        await authFetch(
+
+            "/api/orgs/gt/students?limit=1000"
+
+        );
 
 
+    if (!response.ok) {
 
-/* =====================================================
-                GET MARKS
-===================================================== */
+        return [];
 
-
-function getMarks() {
+    }
 
 
-    return JSON.parse(
+    gtStudentsCache =
 
-        localStorage.getItem(
+        unwrapList(
+            await response.json()
+        );
 
-            "gtMarks"
 
-        )
-
-    ) || [];
+    return gtStudentsCache;
 
 
 }
@@ -1001,12 +1012,12 @@ function getMarks() {
 ===================================================== */
 
 
-function loadStudents() {
+async function loadStudents() {
 
 
     const students =
 
-        getStudents();
+        await getStudents();
 
 
     const select =
@@ -1044,12 +1055,12 @@ function loadStudents() {
 
         option.value =
 
-            student._id;
+            student.id;
 
 
         option.textContent =
 
-            student.studentId +
+            student.display_id +
 
             " - " +
 
@@ -1101,7 +1112,7 @@ document
 
         const students =
 
-            getStudents();
+            gtStudentsCache;
 
 
         const select =
@@ -1140,7 +1151,7 @@ document
 
                 ||
 
-                student.studentId
+                student.display_id
 
                 .toLowerCase()
 
@@ -1166,12 +1177,12 @@ document
 
             option.value =
 
-                student._id;
+                student.id;
 
 
             option.textContent =
 
-                student.studentId +
+                student.display_id +
 
                 " - " +
 
@@ -1199,7 +1210,7 @@ document
 ===================================================== */
 
 
-function showResult() {
+async function showResult() {
 
 
     const selectedId =
@@ -1230,12 +1241,7 @@ function showResult() {
 
     const students =
 
-        getStudents();
-
-
-    const marks =
-
-        getMarks();
+        gtStudentsCache;
 
 
 
@@ -1246,7 +1252,7 @@ function showResult() {
 
             return (
 
-                item._id ===
+                item.id ===
 
                 selectedId
 
@@ -1295,7 +1301,7 @@ function showResult() {
 
     ).value =
 
-        student.studentId || "-";
+        student.display_id || "-";
 
 
 
@@ -1315,7 +1321,11 @@ function showResult() {
 
     ).value =
 
-        student.course || "-";
+        (student.course && student.course.name) ||
+
+        student.course_id ||
+
+        "-";
 
 
 
@@ -1329,24 +1339,29 @@ function showResult() {
 
 
 
-    /* GET STUDENT MARKS */
+    /* GET STUDENT ASSESSMENTS (ITEMIZED MARKS) */
+
+
+    const assessmentsResponse =
+
+        await authFetch(
+
+            "/api/orgs/gt/assessments?studentId=" +
+
+            selectedId
+
+        );
 
 
     const studentMarks =
 
-        marks.filter(function(mark) {
+        assessmentsResponse.ok
 
+            ? unwrapList(
+                await assessmentsResponse.json()
+            )
 
-            return (
-
-                mark.studentId ===
-
-                selectedId
-
-            );
-
-
-        });
+            : [];
 
 
 
@@ -1402,9 +1417,7 @@ function showResult() {
 
             Number(
 
-                mark.totalMarks ||
-
-                mark.total ||
+                mark.total_marks ||
 
                 0
 
@@ -1415,9 +1428,7 @@ function showResult() {
 
             Number(
 
-                mark.obtainedMarks ||
-
-                mark.obtained ||
+                mark.obtained_marks ||
 
                 0
 
@@ -1449,14 +1460,14 @@ function showResult() {
 
             <td>
 
-                ${mark.assignmentName || "-"}
+                ${mark.name || "-"}
 
             </td>
 
 
             <td>
 
-                ${mark.subject || "-"}
+                ${mark.subject_id || "-"}
 
             </td>
 
@@ -1495,126 +1506,44 @@ function showResult() {
 
 
 
-    /* PERCENTAGE */
+    /*
+    SUMMARY — total marks, obtained marks, percentage and
+    overall remark are always read from the server's
+    computed result (backend_details.md section 3/6),
+    never recalculated in JS.
+    */
 
 
-    let percent = 0;
+    const resultResponse =
 
+        await authFetch(
 
-    if (total > 0) {
+            "/api/orgs/gt/students/" +
 
+            selectedId +
 
-        percent =
+            "/result"
 
-            (
+        );
 
-                obtained /
 
-                total
+    const result =
 
-            )
+        resultResponse.ok
 
-            *
+            ? await resultResponse.json()
 
-            100;
+            : {
 
+                total_marks: total,
 
-    }
+                obtained_marks: obtained,
 
+                percentage: 0,
 
+                overall_remark: "No Result Available"
 
-    percent =
-
-        percent.toFixed(2);
-
-
-
-    /* REMARK */
-
-
-    let remark = "";
-
-
-
-    if (
-
-        studentMarks.length === 0
-
-    ) {
-
-
-        remark =
-
-            "No Result Available";
-
-
-    }
-
-    else if (
-
-        percent >= 75
-
-    ) {
-
-
-        remark =
-
-            "Excellent";
-
-
-    }
-
-    else if (
-
-        percent >= 60
-
-    ) {
-
-
-        remark =
-
-            "Very Good";
-
-
-    }
-
-    else if (
-
-        percent >= 50
-
-    ) {
-
-
-        remark =
-
-            "Good";
-
-
-    }
-
-    else if (
-
-        percent >= 35
-
-    ) {
-
-
-        remark =
-
-            "Needs Improvement";
-
-
-    }
-
-    else {
-
-
-        remark =
-
-            "Requires More Practice";
-
-
-    }
+            };
 
 
 
@@ -1627,7 +1556,7 @@ function showResult() {
 
     ).value =
 
-        total;
+        result.total_marks;
 
 
 
@@ -1637,7 +1566,7 @@ function showResult() {
 
     ).value =
 
-        obtained;
+        result.obtained_marks;
 
 
 
@@ -1647,7 +1576,7 @@ function showResult() {
 
     ).value =
 
-        percent +
+        Number(result.percentage || 0).toFixed(2) +
 
         "%";
 
@@ -1659,7 +1588,7 @@ function showResult() {
 
     ).value =
 
-        remark;
+        result.overall_remark;
 
 
 

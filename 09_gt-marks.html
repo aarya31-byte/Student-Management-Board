@@ -580,13 +580,9 @@
 
 if (
 
-    localStorage.getItem(
-        "isLoggedIn"
+    !localStorage.getItem(
+        "authToken"
     )
-
-    !==
-
-    "true"
 
 ) {
 
@@ -639,7 +635,7 @@ function logout() {
 
 
     localStorage.removeItem(
-        "isLoggedIn"
+        "authToken"
     );
 
 
@@ -669,80 +665,81 @@ let editingMarksId = null;
 ========================================= */
 
 
-function getStudentsForMarks() {
+let gtStudentsCache = [];
 
 
-    return JSON.parse(
-
-        localStorage.getItem(
-            "gtStudents"
-        )
-
-    ) || [];
-
-}
+async function getStudentsForMarks() {
 
 
+    const response =
 
-/* =========================================
-              GET WORK
-========================================= */
-
-
-function getWorkForMarks() {
+        await authFetch(
+            "/api/orgs/gt/students?limit=1000"
+        );
 
 
-    return JSON.parse(
+    if (!response.ok) {
 
-        localStorage.getItem(
-            "gtWork"
-        )
+        return [];
 
-    ) || [];
+    }
+
+
+    gtStudentsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gtStudentsCache;
 
 }
 
 
 
 /* =========================================
-              GET MARKS
+              GET ASSESSMENTS
+
+    NOTE: the backend merges Assignments + Marks + the
+    never-shipped Projects concept into one gt_assessments
+    resource (backend_details.md section 8). There is no
+    separate "work" list to attach marks to any more — this
+    page now browses existing assessment records (of either
+    type) and edits their marks directly. Percentage and
+    grade are computed server-side on every record, never
+    recalculated here.
 ========================================= */
 
 
-function getGTMarks() {
+let gtAssessmentsCache = [];
 
 
-    return JSON.parse(
-
-        localStorage.getItem(
-            "gtMarks"
-        )
-
-    ) || [];
-
-}
+async function getGTAssessments() {
 
 
+    const response =
 
-/* =========================================
-              SAVE MARKS
-========================================= */
-
-
-function saveGTMarks(
-    marks
-) {
+        await authFetch(
+            "/api/orgs/gt/assessments"
+        );
 
 
-    localStorage.setItem(
+    if (!response.ok) {
 
-        "gtMarks",
+        return [];
 
-        JSON.stringify(
-            marks
-        )
+    }
 
-    );
+
+    gtAssessmentsCache =
+
+        unwrapList(
+            await response.json()
+        );
+
+
+    return gtAssessmentsCache;
 
 }
 
@@ -771,7 +768,7 @@ function loadMarksStudents() {
 
 
     const students =
-        getStudentsForMarks();
+        gtStudentsCache;
 
 
     studentSelect.innerHTML = `
@@ -797,12 +794,12 @@ function loadMarksStudents() {
 
 
             option.value =
-                student._id;
+                student.id;
 
 
             option.textContent =
 
-                student.studentId +
+                student.display_id +
 
                 " - " +
 
@@ -822,7 +819,7 @@ function loadMarksStudents() {
 
 
 /* =========================================
-        LOAD ASSIGNMENTS / PROJECTS
+        LOAD ASSESSMENTS (ASSIGNMENTS / PROJECTS)
 ========================================= */
 
 
@@ -844,7 +841,7 @@ function loadMarksWork() {
 
 
     const work =
-        getWorkForMarks();
+        gtAssessmentsCache;
 
 
     workSelect.innerHTML = `
@@ -870,7 +867,7 @@ function loadMarksWork() {
 
 
             option.value =
-                item._id;
+                item.id;
 
 
             option.textContent =
@@ -879,7 +876,7 @@ function loadMarksWork() {
 
                 " - " +
 
-                item.title;
+                item.name;
 
 
             workSelect.appendChild(
@@ -899,7 +896,7 @@ function loadMarksWork() {
 ========================================= */
 
 
-function initializeMarksPage() {
+async function initializeMarksPage() {
 
 
     const marksForm =
@@ -921,6 +918,11 @@ function initializeMarksPage() {
         document.getElementById(
             "marksSearch"
         );
+
+
+    await getStudentsForMarks();
+
+    await getGTAssessments();
 
 
     loadMarksStudents();
@@ -994,7 +996,7 @@ function initializeMarksPage() {
 ========================================= */
 
 
-function handleMarksSubmit(
+async function handleMarksSubmit(
     event
 ) {
 
@@ -1045,8 +1047,6 @@ function handleMarksSubmit(
 
     if (
 
-        !studentId ||
-
         !workId ||
 
         isNaN(obtained) ||
@@ -1093,47 +1093,15 @@ function handleMarksSubmit(
 
 
 
-    const students =
-        getStudentsForMarks();
-
-
-    const work =
-        getWorkForMarks();
-
-
-    const marks =
-        getGTMarks();
-
-
-
-    const student =
-
-        students.find(
-
-            function(item) {
-
-                return (
-
-                    item._id ===
-                    studentId
-
-                );
-
-            }
-
-        );
-
-
-
     const selectedWork =
 
-        work.find(
+        gtAssessmentsCache.find(
 
             function(item) {
 
                 return (
 
-                    item._id ===
+                    item.id ===
                     workId
 
                 );
@@ -1146,8 +1114,6 @@ function handleMarksSubmit(
 
     if (
 
-        !student ||
-
         !selectedWork
 
     ) {
@@ -1155,7 +1121,7 @@ function handleMarksSubmit(
 
         alert(
 
-            "Student or work not found."
+            "Assignment / Project not found."
 
         );
 
@@ -1166,227 +1132,110 @@ function handleMarksSubmit(
 
 
 
-    const percentage =
-
-        (
-
-            obtained /
-
-            total
-
-        ) *
-
-        100;
-
-
-
-    let grade;
-
-
-
     if (
-        percentage >= 90
-    ) {
 
-        grade = "A+";
+        studentId &&
 
-    }
+        studentId !==
+        selectedWork.student_id
 
-    else if (
-        percentage >= 80
-    ) {
-
-        grade = "A";
-
-    }
-
-    else if (
-        percentage >= 70
-    ) {
-
-        grade = "B+";
-
-    }
-
-    else if (
-        percentage >= 60
-    ) {
-
-        grade = "B";
-
-    }
-
-    else if (
-        percentage >= 50
-    ) {
-
-        grade = "C";
-
-    }
-
-    else if (
-        percentage >= 40
-    ) {
-
-        grade = "D";
-
-    }
-
-    else {
-
-        grade = "F";
-
-    }
-
-
-
-    /* =====================================
-                UPDATE MARKS
-    ===================================== */
-
-
-    if (
-        editingMarksId !== null
     ) {
 
 
-        const index =
+        alert(
 
-            marks.findIndex(
+            "The selected student does not match the student on this assignment / project record."
 
-                function(item) {
-
-                    return (
-
-                        item._id ===
-                        editingMarksId
-
-                    );
-
-                }
-
-            );
+        );
 
 
-
-        if (
-            index !== -1
-        ) {
-
-
-            marks[index] = {
-
-                ...marks[index],
-
-                studentId:
-                    studentId,
-
-                workId:
-                    workId,
-
-                obtained:
-                    obtained,
-
-                total:
-                    total,
-
-                percentage:
-                    percentage,
-
-                grade:
-                    grade
-
-            };
-
-
-            saveGTMarks(
-                marks
-            );
-
-
-            alert(
-
-                "Marks updated successfully!"
-
-            );
-
-
-            resetMarksForm();
-
-
-            renderMarks();
-
-
-            return;
-
-        }
+        return;
 
     }
 
 
 
-    /* =====================================
-                ADD MARKS
-    ===================================== */
+    /*
+    NOTE: total_marks and obtained_marks are the only
+    fields changing here — type, name, subject_id and
+    remark are kept as they were on the existing record.
+    Percentage and grade are computed server-side, never
+    here.
+    */
 
 
-    const newMarks = {
+    const payload = {
 
+        student_id:
+            selectedWork.student_id,
 
-        _id:
+        type:
+            selectedWork.type,
 
-            Date.now().toString(),
+        name:
+            selectedWork.name,
 
+        subject_id:
+            selectedWork.subject_id,
 
-        studentId:
-
-            studentId,
-
-
-        workId:
-
-            workId,
-
-
-        obtained:
-
-            obtained,
-
-
-        total:
-
+        total_marks:
             total,
 
+        obtained_marks:
+            obtained,
 
-        percentage:
-
-            percentage,
-
-
-        grade:
-
-            grade
-
+        remark:
+            selectedWork.remark
 
     };
 
 
 
-    marks.push(
-        newMarks
-    );
+    const response =
+
+        await authFetch(
+
+            "/api/orgs/gt/assessments/" +
+            workId,
+
+            {
+
+                method:
+                    "PUT",
+
+                body:
+                    payload
+
+            }
+
+        );
 
 
 
-    saveGTMarks(
-        marks
-    );
+    if (!response.ok) {
+
+        alert(
+
+            await getErrorDetail(
+
+                response,
+
+                "Unable to save marks."
+
+            )
+
+        );
+
+
+        return;
+
+    }
 
 
 
     alert(
 
-        "Marks uploaded successfully!"
+        "Marks saved successfully!"
 
     );
 
@@ -1394,6 +1243,10 @@ function handleMarksSubmit(
 
     resetMarksForm();
 
+
+    await getGTAssessments();
+
+    loadMarksWork();
 
     renderMarks();
 
@@ -1436,15 +1289,11 @@ function renderMarks(
 
 
     const students =
-        getStudentsForMarks();
-
-
-    const work =
-        getWorkForMarks();
+        gtStudentsCache;
 
 
     const marks =
-        getGTMarks();
+        gtAssessmentsCache;
 
 
 
@@ -1471,27 +1320,8 @@ function renderMarks(
 
                             return (
 
-                                item._id ===
-                                mark.studentId
-
-                            );
-
-                        }
-
-                    );
-
-
-
-                const selectedWork =
-
-                    work.find(
-
-                        function(item) {
-
-                            return (
-
-                                item._id ===
-                                mark.workId
+                                item.id ===
+                                mark.student_id
 
                             );
 
@@ -1503,9 +1333,7 @@ function renderMarks(
 
                 if (
 
-                    !student ||
-
-                    !selectedWork
+                    !student
 
                 ) {
 
@@ -1517,7 +1345,7 @@ function renderMarks(
 
                 const studentText =
 
-                    student.studentId +
+                    student.display_id +
 
                     " " +
 
@@ -1527,7 +1355,11 @@ function renderMarks(
 
                 const workText =
 
-                    selectedWork.title;
+                    mark.type +
+
+                    " " +
+
+                    mark.name;
 
 
 
@@ -1598,27 +1430,8 @@ function renderMarks(
 
                         return (
 
-                            item._id ===
-                            mark.studentId
-
-                        );
-
-                    }
-
-                );
-
-
-
-            const selectedWork =
-
-                work.find(
-
-                    function(item) {
-
-                        return (
-
-                            item._id ===
-                            mark.workId
+                            item.id ===
+                            mark.student_id
 
                         );
 
@@ -1642,7 +1455,7 @@ function renderMarks(
 
                     ${student
                         ? escapeHTML(
-                            student.studentId
+                            student.display_id
                         )
                         : "-"
                     }
@@ -1664,30 +1477,29 @@ function renderMarks(
 
                 <td>
 
-                    ${selectedWork
-                        ? escapeHTML(
-                            selectedWork.title
-                        )
-                        : "-"
-                    }
+                    ${escapeHTML(
+                        mark.type +
+                        " - " +
+                        mark.name
+                    )}
 
                 </td>
 
 
                 <td>
 
-                    ${mark.obtained}
+                    ${mark.obtained_marks}
 
                     /
 
-                    ${mark.total}
+                    ${mark.total_marks}
 
                 </td>
 
 
                 <td>
 
-                    ${mark.percentage.toFixed(2)}%
+                    ${Number(mark.percentage).toFixed(2)}%
 
                 </td>
 
@@ -1710,7 +1522,7 @@ function renderMarks(
 
                         class="edit-btn"
 
-                        onclick="editGTMarks('${mark._id}')">
+                        onclick="editGTMarks('${mark.id}')">
 
 
                         <i class="fa-solid fa-pen"></i>
@@ -1724,7 +1536,7 @@ function renderMarks(
 
                         class="delete-btn"
 
-                        onclick="deleteGTMarks('${mark._id}')">
+                        onclick="deleteGTMarks('${mark.id}')">
 
 
                         <i class="fa-solid fa-trash"></i>
@@ -1762,7 +1574,7 @@ function editGTMarks(
 
 
     const marks =
-        getGTMarks();
+        gtAssessmentsCache;
 
 
 
@@ -1774,7 +1586,7 @@ function editGTMarks(
 
                 return (
 
-                    item._id ===
+                    item.id ===
                     marksId
 
                 );
@@ -1797,7 +1609,7 @@ function editGTMarks(
         "marksStudent"
     ).value =
 
-        mark.studentId;
+        mark.student_id;
 
 
 
@@ -1805,7 +1617,7 @@ function editGTMarks(
         "marksWork"
     ).value =
 
-        mark.workId;
+        mark.id;
 
 
 
@@ -1813,7 +1625,7 @@ function editGTMarks(
         "obtainedMarks"
     ).value =
 
-        mark.obtained;
+        mark.obtained_marks;
 
 
 
@@ -1821,7 +1633,7 @@ function editGTMarks(
         "totalMarks"
     ).value =
 
-        mark.total;
+        mark.total_marks;
 
 
 
@@ -1870,7 +1682,7 @@ function editGTMarks(
 ========================================= */
 
 
-function deleteGTMarks(
+async function deleteGTMarks(
     marksId
 ) {
 
@@ -1879,7 +1691,7 @@ function deleteGTMarks(
 
         confirm(
 
-            "Are you sure you want to delete these marks?"
+            "Are you sure you want to delete this assignment / project record?"
 
         );
 
@@ -1893,23 +1705,17 @@ function deleteGTMarks(
 
 
 
-    const marks =
-        getGTMarks();
+    const response =
 
+        await authFetch(
 
+            "/api/orgs/gt/assessments/" +
+            marksId,
 
-    const updatedMarks =
+            {
 
-        marks.filter(
-
-            function(item) {
-
-                return (
-
-                    item._id !==
-                    marksId
-
-                );
+                method:
+                    "DELETE"
 
             }
 
@@ -1917,11 +1723,30 @@ function deleteGTMarks(
 
 
 
-    saveGTMarks(
-        updatedMarks
-    );
+    if (!response.ok) {
+
+        alert(
+
+            await getErrorDetail(
+
+                response,
+
+                "Unable to delete this record."
+
+            )
+
+        );
 
 
+        return;
+
+    }
+
+
+
+    await getGTAssessments();
+
+    loadMarksWork();
 
     renderMarks();
 
@@ -1929,7 +1754,7 @@ function deleteGTMarks(
 
     alert(
 
-        "Marks deleted successfully!"
+        "Record deleted successfully!"
 
     );
 
